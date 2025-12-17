@@ -46,7 +46,7 @@ class _CarsShowRoomState extends State<CarsShowRoom> {
                     Expanded(
                       child:  ListView.builder(
 
-                          padding:  EdgeInsets.symmetric(horizontal: 18.w),
+                          padding:  EdgeInsets.symmetric(horizontal: 22.w),
                           itemCount: controller.showRooms.length,
                           itemBuilder: (context, index) {
                             return ShowroomCard(widget.notificationsController,showroom:  controller.showRooms[index],carCare: widget.carCare,

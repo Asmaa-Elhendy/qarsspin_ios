@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:qarsspin/model/car_category.dart';
 import '../../../controller/ads/ad_getx_controller_create_ad.dart';
 import '../../../controller/ads/data_layer.dart';
+import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/const/colors.dart';
 import '../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../l10n/app_localization.dart';
@@ -21,7 +22,9 @@ import '../../widgets/ads/dialogs/success_dialog.dart';
 import '../../widgets/ads/create_ad_widgets/ad_submission_service.dart';
 import '../../screens/my_ads/my_ads_main_screen.dart';
 import '../../widgets/payments/payment_methods_dialog.dart';
-
+import '../../../controller/payments/payment_controller.dart';
+import '../../../model/payment/payment_initiate_request.dart';
+import '../../../model/payment/payment_method_model.dart';
 
 class SellCarScreen extends StatefulWidget {
   final dynamic postData;
@@ -92,6 +95,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
 
   bool _coverPhotoChanged = false;
   bool _videoChanged = false;
+  late PaymentController paymentController; // 👈 هنا   to get prices of services
 
   final AdCleanController brandController = Get.put(
     AdCleanController(AdRepository()),
@@ -323,6 +327,14 @@ class _SellCarScreenState extends State<SellCarScreen> {
       _previousClassValue = _class_controller.text;
     };
     _class_controller.addListener(_classListener!);
+    // 👇 إضافة PaymentController
+    try {
+      paymentController = Get.find<PaymentController>();
+      print('PaymentController found successfully');
+    } catch (e) {
+      paymentController = Get.put(PaymentController());
+      print('Created new PaymentController instance');
+    }
   }
 
   Future<void> _loadPostDataForModify() async {
@@ -493,6 +505,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
 
   /// Validate form and submit ad
   Future<void> _validateAndSubmitForm({bool shouldPublish = false}) async {
+    var lc = AppLocalizations.of(context)!;
     // Validate form using validation methods
     bool isValid = ValidationMethods.validateForm(
       postData:widget.postData,
@@ -544,51 +557,168 @@ class _SellCarScreenState extends State<SellCarScreen> {
     // Submit the ad using the service
     // _submitAd(shouldPublish: shouldPublish);//handle add post without payment
     //handle add post with payment
-    if(_isRequest360||_isFeauredPost){   //handle payment from here
-      double amount=0;
-      _isRequest360?amount+=100:null;
-      _isFeauredPost?amount+=150:null;
-      // 1. Import the dialog
-//
-// // 2. Show the dialog and handle the result
-//       final contactInfo = await ContactInfoDialog.show(
-//         context: context,
-//
-//       );
-//
-// // 3. Handle the result
-//       if (contactInfo != null) {
-//         // User submitted the form
-//         String name = contactInfo['name']!;
-//         String mobile = contactInfo['mobile']!;
-//         String email = contactInfo['email']!;
-//
-//         // Use the contact information
-//         print('Name: $name, Mobile: $mobile, Email: $email');
-//       }//comment for now
-      final paid = await PaymentMethodDialog.show(context: context,amount:  amount);
+    if (_isRequest360 || _isFeauredPost) {   //handle payment from here
+    //  double amount = 0;
+      final paymentController = Get.find<PaymentController>();
 
-      if (paid == true) {
-        _submitAd(shouldPublish: shouldPublish);
-      }
-      else {
-        dialog.  SuccessDialog.show(
-          request: true,
-          context: context,
-          title: 'Payment Failed',
-          message: 'Payment failed or cancelled.',
-          onClose: () {},
-          onTappp: () {},
-        );
-      }
-    }else{
+      double amount = 0;
+      double featuredAmount=0;
+      double req360Amount=0;
+      //handle payment for now amira
+
+      // كل الخدمات Individual اللي نزلت من الـ API
+      // final services = paymentController.individualQarsServices;
+      // // خدمة 360
+      // final request360Service = services.firstWhereOrNull(
+      //       (s) => s.qarsServiceName == 'Request to 360',
+      // );
+
+
+      // خدمة Feature Ad
+      // final featureService = services.firstWhereOrNull(
+      //       (s) => s.qarsServiceName == 'Request to feature',
+      // );
+      // if (_isRequest360) {
+      //   if (request360Service != null) {
+      //     req360Amount=request360Service.qarsServicePrice.toDouble();
+      //
+      //     amount += request360Service.qarsServicePrice.toDouble();
+      //   }}
+      // if (_isFeauredPost) {
+      //   if (featureService != null) {
+      //     featuredAmount=featureService.qarsServicePrice.toDouble();
+      //     amount += featureService.qarsServicePrice.toDouble();
+      //   }}
+
+
+
+      // _isRequest360 ? amount += 100 : null;
+      // _isFeauredPost ? amount += 150 : null;
+
+      // 1) Collect contact info (dialog closes immediately and returns data only)
+      //handle payment for now amira
+
+      // final contactInfo = await ContactInfoDialog.show(
+      //   req360Amount: req360Amount,
+      //   featuredAmount: featuredAmount,
+      //   totalAmount:amount,
+      //   context: context,
+      //   isRequest360: _isRequest360,
+      //   isFeauredPost: _isFeauredPost,
+      // );
+
+// 3. Handle the result: if payment is confirmed, submit the ad.
+//       if (contactInfo == null) {
+//         // user cancelled contact info
+//       } else
+//       {
+     //   try {
+          // 2) Initiate payment using contact info
+          // final paymentController = Get.find<PaymentController>();
+          // final String customerName = '${(contactInfo['firstName'] ?? '').toString().trim()} ${(contactInfo['lastName'] ?? '').toString().trim()}'.trim();
+          // final String email = (contactInfo['email'] ?? '').toString().trim();
+          // final String mobile = (contactInfo['mobile'] ?? '').toString().trim();
+          //
+          // final result = await paymentController.initiatePayment(
+          //   amount: amount,
+          //   customerName: customerName.isEmpty ? 'Customer' : customerName,
+          //   email: email,
+          //   mobile: mobile,
+          // );
+          // log('Payment Initiation Result: $result');
+          //
+          // if (result?['IsSuccess'] == true &&
+          //     result?['Data'] != null &&
+          //     result?['Data']['PaymentMethods'] != null) {
+          //   // 3) Map methods and open NewPaymentMethodsDialog
+          //   final List<dynamic> methodsRaw = List<dynamic>.from(result!['Data']['PaymentMethods'] as List);
+          //   final methods = methodsRaw
+          //       .map((e) => PaymentMethod.fromJson(Map<String, dynamic>.from(e)))
+          //       .toList();
+          //
+          //   final userInformationRequest = PaymentInitiateRequest(
+          //     amount: amount,
+          //     customerName: customerName.isEmpty ? 'Customer' : customerName,
+          //     email: email,
+          //     mobile: mobile,
+          //   );
+          //
+          //   final methodsPayload = await NewPaymentMethodsDialog.show(
+          //     context: context,
+          //     paymentMethods: methods,
+          //     userInformationRequest: userInformationRequest,
+          //     isArabic: Get.locale?.languageCode == 'ar',
+          //   );
+          //
+          //   if (methodsPayload != null) {
+          //     Map<String, dynamic>? normalized;
+          //     final invoice = methodsPayload['invoice'] as Map<String, dynamic>?;
+          //     if (invoice != null) {
+          //       final invoiceResult = await InvoiceLinkDialog.show(
+          //         context: context,
+          //         invoiceId: (invoice['invoiceId'] ?? '').toString(),
+          //         paymentId: (invoice['paymentId'])?.toString(),
+          //         paymentUrl: (invoice['paymentUrl'] ?? '').toString(),
+          //         isArabic: (invoice['isArabic'] == true),
+          //       );
+          //       normalized = invoiceResult?['normalizedResult'] as Map<String, dynamic>?;
+          //     } else {
+          //       normalized = methodsPayload['normalizedResult'] as Map<String, dynamic>?;
+          //     }
+          //
+          //     final status = normalized?['status']?.toString();
+          //     final paymentId = normalized?['paymentId']?.toString();
+          //     final bool success = (status != null && status.toLowerCase() == 'success') || (paymentId != null && paymentId.isNotEmpty);
+
+            //  if (success) {
+            //     dialog.SuccessDialog.show(
+            //       request: true,
+            //       context: context,
+            //       title: lc.paymentSucceeded,
+            //       message: lc.paymentWasCompleted,
+            //       onClose: () { Navigator.pop(context); },
+            //       onTappp: () { Navigator.pop(context); },
+            //     );
+                _submitAd(shouldPublish: shouldPublish);
+              // } else
+              // {
+              //   dialog.SuccessDialog.show(
+              //     request: true,
+              //     context: context,
+              //     title: lc.payment_failed,
+              //     message: lc.paymentWasNotCompleted,
+              //     onClose: () { },
+              //     onTappp: () { Navigator.pop(context); },
+              //   );
+              // }
+         //   }
+         // }
+          // else {
+          //   dialog.SuccessDialog.show(
+          //     request: true,
+          //     context: context,
+          //     title: lc.payment_failed,
+          //     message: (result?['Message'] ?? lc.failedToLoadPaymentMethods).toString(),
+          //     onClose: () { Navigator.pop(context); },
+          //     onTappp: () { Navigator.pop(context); },
+          //   );
+          // }
+        // } catch (e, st) {
+        //   log('Payment flow error: $e');
+        //   log('Stack: $st');
+        //   dialog.SuccessDialog.show(
+        //     request: true,
+        //     context: context,
+        //     title: lc.payment_failed,
+        //     message: '${lc.paymentflowfailed} $e',
+        //     onClose: () { Navigator.pop(context); },
+        //     onTappp: () { Navigator.pop(context); },
+        //   );
+        // }
+    //  }
+    } else {
       _submitAd(shouldPublish: shouldPublish);//handle add post without payment
-
-     }
-
-
-
-
+    }
   }
 
   /// Show alert for missing fields
@@ -698,7 +828,10 @@ class _SellCarScreenState extends State<SellCarScreen> {
     Get.off(() => const MyAdsMainScreen());
 
     // Refresh My Ads screen
-    Get.find<MyAdCleanController>().fetchMyAds(userName: userName,ourSecret: ourSecret);
+    final auth = Get.find<AuthController>();
+    if (auth.userName != null && auth.userName!.isNotEmpty) {
+      Get.find<MyAdCleanController>().fetchMyAds(userName: auth.userName!, ourSecret: ourSecret);
+    }
   }
 
   /// Unfocus description field to prevent auto-focus
@@ -881,117 +1014,135 @@ class _SellCarScreenState extends State<SellCarScreen> {
                         //   },
                         // ),
 
-                        FormFieldsSection(postData: widget.postData,
-                          // request360Controller: request360Controller,
-                          // requestFeatureController:requestFeatureController ,
-                          isRequest360:_isRequest360,
-                          isFeaturedPost:_isFeauredPost,
-                          makeController: _make_controller,
-                          classController: _class_controller,
-                          modelController: _model_controller,
-                          typeController: _type_controller,
-                          yearController: _year_controller,
-                          warrantyController: _warranty_controller,
-                          askingPriceController: _askingPriceController,
-                          minimumPriceController: _minimumPriceController,
-                          mileageController: _mileageController,
-                          plateNumberController: _plateNumberController,
-                          chassisNumberController: _chassisNumberController,
-                          descriptionController: _descriptionController,
-                          exteriorColor: _exteriorColor ?? Colors.white,
-                          interiorColor: _interiorColor ?? Colors.white,
-                          fuelTypeController:fuelTypeController,
-                          transmissionController: transmissionController,
-                          cylindersController: cylindersController,
-                          onExteriorColorSelected: (color) {
-                            setState(() {//kتن
-                              _exteriorColor = color;
-                              log(color.hashCode.toString());
-                            });
-                          },
-                          onInteriorColorSelected: (color) {
-                            setState(() {
-                              _interiorColor = color;
-                              log(color.hashCode.toString());
-                            });
-                          },
-                          termsAccepted: _termsAccepted,
-                          infoConfirmed: _infoConfirmed,
-                          onTermsChanged: (value) {
-                            if (value != null) {
-                              setState(() {
-                                _termsAccepted = value;
+                        Obx(() {
+                          final service360 = paymentController.individualQarsServices
+                              .firstWhereOrNull((s) => s.qarsServiceName == 'Request to 360');
+
+                          final priceText360 = service360 != null
+                              ? ' ${service360.qarsServicePrice} '
+                              : ' ';
+                          final featureService = paymentController.individualQarsServices
+                              .firstWhereOrNull((s) => s.qarsServiceName == 'Request to feature');
+
+                          final priceTextFeatured = featureService != null
+                              ? ' ${featureService.qarsServicePrice} '
+                              : ' ';
+                          return FormFieldsSection(postData: widget.postData,
+                            // request360Controller: request360Controller,
+                            // requestFeatureController:requestFeatureController ,
+                            isRequest360: _isRequest360,
+                            isFeaturedPost: _isFeauredPost,
+                            makeController: _make_controller,
+                            classController: _class_controller,
+                            modelController: _model_controller,
+                            typeController: _type_controller,
+                            yearController: _year_controller,
+                            warrantyController: _warranty_controller,
+                            askingPriceController: _askingPriceController,
+                            minimumPriceController: _minimumPriceController,
+                            mileageController: _mileageController,
+                            plateNumberController: _plateNumberController,
+                            chassisNumberController: _chassisNumberController,
+                            descriptionController: _descriptionController,
+                            exteriorColor: _exteriorColor ?? Colors.white,
+                            interiorColor: _interiorColor ?? Colors.white,
+                            fuelTypeController: fuelTypeController,
+                            transmissionController: transmissionController,
+                            cylindersController: cylindersController,
+                            onExteriorColorSelected: (color) {
+                              setState(() { //kتن
+                                _exteriorColor = color;
+                                log(color.hashCode.toString());
                               });
-                            }
-                          },
-                          onInfoChanged: (value) {
-                            if (value != null) {
+                            },
+                            onInteriorColorSelected: (color) {
                               setState(() {
-                                _infoConfirmed = value;
+                                _interiorColor = color;
+                                log(color.hashCode.toString());
                               });
-                            }
-                          },
-                          onReq360Changed: (value) {
-                            if(_isRequest360){
+                            },
+                            termsAccepted: _termsAccepted,
+                            infoConfirmed: _infoConfirmed,
+                            onTermsChanged: (value) {
                               if (value != null) {
                                 setState(() {
-                                  _isRequest360 = value;
-                                  log("36000000 $_isRequest360");
+                                  _termsAccepted = value;
                                 });
                               }
-                            }
-                            else{dialog. SuccessDialog.show(
-                              request: false,
-                              context: context,
-                              title: "Ready to showCase your vehicle like a pro?",
-                              message:
-                              "Our 360 photo session will beautifully highlight your post \nclick Confirm, and we'll handle the rest! \n   Additional charges 100 riyal can apply.",
-                              onClose: () {},
-                              onTappp: () async {
-                                Navigator.pop(context);
+                            },
+                            onInfoChanged: (value) {
+                              if (value != null) {
+                                setState(() {
+                                  _infoConfirmed = value;
+                                });
+                              }
+                            },
+                            onReq360Changed: (value) {
+                              if (_isRequest360) {
                                 if (value != null) {
                                   setState(() {
                                     _isRequest360 = value;
+                                    log("36000000 $_isRequest360");
                                   });
                                 }
-
-                              },
-                            );
-                            }
-                          },
-                          onReqFeaturedChanged: (value) {
-                            if(_isFeauredPost){
-                              if (value != null) {
-                                setState(() {
-                                  _isFeauredPost = value;
-                                });
                               }
-                            }
-                            else{
-                              dialog. SuccessDialog.show(
-                                request: false,
-                                context: context,
-                                title: "Let's make your post the center \n of orientation",
-                                message:
-                                "Featuring your post ensures it stands out at the top for everyone to see.\n Additional charges 150 QR can apply.\n Click confirm to proceed!",
-                                onClose: () {},
-                                onTappp: () async {
-                                  Navigator.pop(context);
-                                  if (value != null) {
-                                    setState(() {
-                                      _isFeauredPost = value;
-                                    });
-                                  }
+                              else {
+                                dialog.SuccessDialog.show(
+                                  request: false,
+                                  context: context,
+                                  title: lc.ready_pro,
+                                  message:
+                                  //handle payment for now amira
+                                  // lc.msg_360_first+' ${priceText360} '+lc.msg_360_second,
+                                  lc.msg_360_first+' '+lc.msg_360_second,
+                                  onClose: () {},
+                                  onTappp: () async {
+                                    Navigator.pop(context);
+                                    if (value != null) {
+                                      setState(() {
+                                        _isRequest360 = value;
+                                      });
+                                    }
+                                  },
 
-                                },
-                              );
-                            }
-
-
-                          },
-                          onValidateAndSubmit: _validateAndSubmitForm,
-                          onUnfocusDescription: _unfocusDescription,
-                        ),
+                                );
+                              }
+                            },
+                            onReqFeaturedChanged: (value) {
+                              if (_isFeauredPost) {
+                                if (value != null) {
+                                  setState(() {
+                                    _isFeauredPost = value;
+                                  });
+                                }
+                              }
+                              else {
+                                dialog.SuccessDialog.show(
+                                  request: false,
+                                  context: context,
+                                  title: lc.centered_ad,
+                                  message:
+                                  //handle payment for now amira
+//                                  lc.feature_ad_msg_first+' $priceTextFeatured '+lc.feature_ad_msg_second,
+                                  lc.feature_ad_msg_first+' '+lc.feature_ad_msg_second,
+                                  onClose: () {},
+                                  onTappp: () async {
+                                    Navigator.pop(context);
+                                    if (value != null) {
+                                      setState(() {
+                                        _isFeauredPost = value;
+                                      });
+                                    }
+                                  },
+                                );
+                              }
+                            },
+                            priceReq360Api: priceText360,
+                            priceFeaturedApi: priceTextFeatured,
+                            onValidateAndSubmit: _validateAndSubmitForm,
+                            onUnfocusDescription: _unfocusDescription,
+                          );
+                        }),
                       ],
                     ),
                   ),

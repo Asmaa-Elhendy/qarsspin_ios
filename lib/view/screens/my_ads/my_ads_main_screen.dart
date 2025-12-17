@@ -7,6 +7,7 @@ import '../../../controller/ads/data_layer.dart';
 import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../controller/my_ads/my_ad_data_layer.dart';
+import '../../../controller/payments/payment_controller.dart';
 import '../../../l10n/app_localization.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';
 import '../../widgets/my_ads/my_ad_card.dart';
@@ -22,12 +23,29 @@ class _MyAdsMainScreenState extends State<MyAdsMainScreen> {
   final authController = Get.find<AuthController>();
   late final MyAdCleanController controller;
   bool _isLoading = false;
-
+ double req360Amount=0;
+ double featuredAmount=0;
   @override
   void initState() {
     super.initState();
     _initializeController();
     _setupLoadingListener();
+    final paymentController = Get.find<PaymentController>();
+    final services = paymentController.individualQarsServices;
+    // خدمة 360
+    final request360Service = services.firstWhereOrNull(
+          (s) => s.qarsServiceName == 'Request to 360',
+    );
+    if (request360Service != null) {
+      req360Amount = request360Service.qarsServicePrice.toDouble();
+    }
+    // خدمة Feature Ad
+    final featureService = services.firstWhereOrNull(
+          (s) => s.qarsServiceName == 'Request to feature',
+    );
+    if (featureService != null) {
+      featuredAmount = featureService.qarsServicePrice.toDouble();
+    }
   }
 
   void _setupLoadingListener() {
@@ -59,7 +77,7 @@ class _MyAdsMainScreenState extends State<MyAdsMainScreen> {
   Future<void> _fetchMyAds() async {
     if (authController.userName != null && authController.userName!.isNotEmpty) {
       await controller.fetchMyAds(
-        userName:userName,
+        userName: authController.userFullName!,
         ourSecret: ourSecret,
       );
     }
@@ -181,6 +199,9 @@ class _MyAdsMainScreenState extends State<MyAdsMainScreen> {
                     context,
                     onShowLoader: () => setState(() => _isLoading = true),
                     onHideLoader: () => setState(() => _isLoading = false),
+                    req360Price: req360Amount,
+                    featuredPrice: featuredAmount,
+
                   );
                 },
               ),

@@ -65,9 +65,9 @@ class AdRepository {
   }
 
   /// جلب الموديلات
-  Future<List<CarModelClass>> fetchCarModels(String classId) async {
+  Future<List<CarModelClass>> fetchCarModels(String classId,String makeId) async {
     final url = Uri.parse(
-      '$base_url/BrowsingRelatedApi.asmx/GetListOfCarModels?Class_ID=$classId',
+      '$base_url/BrowsingRelatedApi.asmx/GetListOfCarModels?Class_ID=$classId&Make_ID=$makeId',
     );
 
     final response = await http.get(url, headers: {'Accept': 'application/json'});

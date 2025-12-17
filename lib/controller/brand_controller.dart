@@ -33,6 +33,9 @@ class BrandController extends GetxController{
   CarModel carDetails =
   CarModel(postId: 0, pinToTop: 0, postCode: "postCode", carNamePl: "carNamePl",
       postKind: "",
+      ownerMobile: "",
+      ownerEmail:"",
+      ownerName: "",
       carNameSl: "carNameSl", carNameWithYearPl: "carNameWithYearPl",
       carNameWithYearSl: "carNameWithYearSl", manufactureYear: 0, tag: "tag",
       sourceKind: "sourceKind", mileage: 0, askingPrice: "askingPrice",
@@ -218,6 +221,9 @@ class BrandController extends GetxController{
           myOffersList = offersData.map((offer) {
             print('Processing offer: $offer'); // Debug log
             return CarModel(
+              ownerMobile: "",
+              ownerEmail:"",
+              ownerName: "",
 
               offerId: offer['Offer_ID']??0,
               postId: offer['Post_ID'] ?? 0,
@@ -295,7 +301,9 @@ class BrandController extends GetxController{
     update();
   }
 
+
   getCars({required int make_id, required String makeName,String sourceKind="All",sort = "lb_Sort_By_Post_Date_Desc",}) async {
+    log("call$sort ");
     carsList=[];
     currentSourceKind = sourceKind;
     currentMakeId = make_id;
@@ -329,6 +337,9 @@ class BrandController extends GetxController{
             CarModel(postId: body["Data"][i]["Post_ID"],
                 pinToTop: body["Data"][i]["Pin_To_Top"],
                 postKind: "CarForSale",
+                ownerEmail: body["Data"][0]["Owner_Email"]??"",
+                ownerMobile: body["Data"][0]["Owner_Mobile"]??"",
+                ownerName: body["Data"][0]["Owner_Name"]??"",
 
                 postCode:body["Data"][i]["Post_Code"],
                 carNamePl:body["Data"][i]["Car_Name_PL"],
@@ -369,9 +380,9 @@ class BrandController extends GetxController{
     getOffers(id,context: context);
     if(response.statusCode == 200){
       final body = jsonDecode(response.body);
-      print("detststt$body");
       Color exterior = hexToColor(body["Data"][0]["Color_Exterior"]);
       Color interior = hexToColor(body["Data"][0]["Color_Interior"]);
+
 
       carDetails =
           CarModel(
@@ -399,7 +410,9 @@ class BrandController extends GetxController{
               visitsCount: body["Data"][0]["Visits_Count"],
               classId:body["Data"][0]["Class_ID"] ,
               makeId: body["Data"][0]["Make_ID"],
-
+              ownerEmail: body["Data"][0]["Owner_Email"]??"",
+              ownerMobile: body["Data"][0]["Owner_Mobile"]??"",
+              ownerName: body["Data"][0]["Owner_Name"]??"",
               isFavorite: body["Data"][0]["isFavorite"]==0?false:true
 
           );
@@ -473,7 +486,7 @@ class BrandController extends GetxController{
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: {
-          'UserName': Get.find<AuthController>().userName!,
+          'UserName': Get.find<AuthController>().userFullName!,
           'Post_ID': carDetails.postId.toString(),
           'Offer_Origin': "MobileApp",
           'Our_Secret': ourSecret,
@@ -583,6 +596,9 @@ class BrandController extends GetxController{
                   postCode:body["Data"][i]["Post_Code"],
                   carNamePl:body["Data"][i]["Car_Name_PL"],
                   postKind: "CarForSale",
+                  ownerMobile: "",
+                  ownerEmail:"",
+                  ownerName: "",
 
 
                   carNameSl: body["Data"][i]["Car_Name_SL"],
@@ -641,6 +657,9 @@ class BrandController extends GetxController{
             postCode:body["Data"][i]["Post_Code"],
             carNamePl:body["Data"][i]["Car_Name_PL"],
             postKind: "",
+            ownerMobile: "",
+            ownerEmail:"",
+            ownerName: "",
 
             carNameSl: body["Data"][i]["Car_Name_SL"],
             carNameWithYearPl: body["Data"][i]["Car_Name_With_Year_PL"],
@@ -683,6 +702,9 @@ class BrandController extends GetxController{
       String time = convertToTimeAgo(context,body["Data"][i]["Created_DateTime"]);
       ownersAds.add(CarModel(postId: body["Data"][i]["Post_ID"],
           pinToTop: body["Data"][i]["Pin_To_Top"],
+          ownerMobile: "",
+          ownerEmail:"",
+          ownerName: "",
           postKind: "",
           postCode:body["Data"][i]["Post_Code"],
           carNamePl:body["Data"][i]["Car_Name_PL"],
@@ -758,6 +780,9 @@ class BrandController extends GetxController{
                 postCode:body["Data"][i]["Post_Code"],
                 carNamePl:body["Data"][i]["Car_Name_PL"],
                 carNameSl: body["Data"][i]["Car_Name_SL"],
+                ownerMobile: "",
+                ownerEmail:"",
+                ownerName: "",
                 carNameWithYearPl: body["Data"][i]["Car_Name_With_Year_PL"],
                 carNameWithYearSl: body["Data"][i]["Car_Name_With_Year_SL"],
                 manufactureYear: body["Data"][i]["Manufacture_Year"],

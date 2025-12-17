@@ -42,7 +42,7 @@ Widget carCard({
         print("Good job");
         Get.find<BrandController>().switchOldData();
         Get.find<BrandController>().getCarDetails(postKind, car.postId.toString(),context: context);
-        Get.to(CarDetails(sourcekind:car.sourceKind,postKind: car.postKind,id: car.postId,));
+        Get.to(CarDetails(sourcekind:car.sourceKind,postKind: car.postKind,id: car.postId,mobile: car.ownerMobile));
 
 
       }else{

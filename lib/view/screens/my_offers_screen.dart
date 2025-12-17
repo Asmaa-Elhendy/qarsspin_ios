@@ -127,6 +127,7 @@ class _OffersScreenState extends State<OffersScreen> {
                             sourcekind: offer.sourceKind,
                             postKind: offer.postKind,
                             id: offer.postId,
+                            mobile:offer.ownerMobile ,
                           ),
                         );
                       },
@@ -177,8 +178,8 @@ class _OffersScreenState extends State<OffersScreen> {
                           if (result == true) {
                             try {
                               final response = await _controller.deleteOffer(
-                                offerId: offer.postId.toString(),
-                                loggedInUser: _controller.authController.userFullName ?? 'unknown',context: context
+                                  offerId: offer.postId.toString(),
+                                  loggedInUser: _controller.authController.userFullName ?? 'unknown',context: context
                               );
 
                               if (response['Code'] == 'OK') {
@@ -202,7 +203,7 @@ class _OffersScreenState extends State<OffersScreen> {
                               }
                             } catch (e) {
                               Get.snackbar(
-                               lc.error_lbl,
+                                lc.error_lbl,
                                 lc.error_on_delete,
                                 snackPosition: SnackPosition.BOTTOM,
                                 backgroundColor: Colors.red,

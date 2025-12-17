@@ -35,7 +35,7 @@ void main() async{
   await Firebase.initializeApp();
 
   // Initialize MyFatoorah SDK
-  PaymentService.initialize();
+  //PaymentService.initialize();
   settings();
 
   // Initialize FCM Service and register with GetX

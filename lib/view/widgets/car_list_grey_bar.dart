@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'dart:developer';
 import 'package:qarsspin/controller/brand_controller.dart';
 import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/controller/rental_cars_controller.dart';
@@ -13,6 +14,7 @@ import 'package:qarsspin/view/widgets/showrooms_widgets/sort_by_widgets.dart';
 import '../../controller/const/colors.dart';
 import '../../controller/notifications_controller.dart';
 import '../../l10n/app_localization.dart';
+
 
 Widget carListGreyBar(
     NotificationsController notificationsController,
@@ -121,11 +123,11 @@ Widget carListGreyBar(
                           context: context,
                           partnerKind: partnerKind,
                           forSale: partnerKind != "Rent a Car"&&!carCare,
-                          sort: selectedSort == lc.sort_by_post_count
+                          sort: selectedSort == "sort_by_post_count"
                               ? "lb_Sort_By_Active_Posts_Desc"
-                              : selectedSort == lc.sort_by_rating
+                              : selectedSort == "sort_by_rating"
                               ? "lb_Sort_By_Avg_Rating_Desc"
-                              : selectedSort == lc.sort_by_visits
+                              : selectedSort == "sort_by_visits"
                               ? "lb_Sort_By_Visits_Count_Desc"
                               : "lb_Sort_By_Joining_Date_Asc");
                     }
@@ -149,19 +151,19 @@ Widget carListGreyBar(
                             context: context,
 
                             sort: selectedSort ==
-                                lc.sort_by_post_date_new
+                                "sort_by_post_date_new"
                                 ? "PostDate_Desc"
                                 : selectedSort ==
-                                lc.sort_by_post_date_old
+                                "sort_by_post_date_old"
                                 ? "PostDate_Asc"
                                 : selectedSort ==
-                                lc.sort_by_price_high
+                                "sort_by_price_high"
                                 ? "Price_Desc"
                                 : selectedSort ==
-                                lc.sort_by_price_low
+                                "sort_by_price_low"
                                 ? "Price_Asc"
                                 : selectedSort ==
-                                lc.sort_by_manufacture_year_new
+                                "sort_by_manufacture_year_new"
                                 ? "Year_Desc"
                                 : "Year_Asc");
                       }));
@@ -193,19 +195,15 @@ Widget carListGreyBar(
                   showroom: true,
                   onConfirm: (selectedSort) {
                     if (carCare) {
-                      // "lb_Sort_By_Active_Posts_Desc" - Sort by number of active posts (highest first)
-                      // "lb_Sort_By_Avg_Rating_Desc" - Sort by average rating (highest first)
-                      // "lb_Sort_By_Visits_Count_Desc" - Sort by number of visits (most visited first)
-                      // "lb_Sort_By_Joining_Date_Asc" - Sort by joining date (oldest first)
 
                       Get.find<ShowRoomsController>().fetchShowrooms(
                           context: context,
                           partnerKind: partnerKind,// car Care
-                          sort: selectedSort == lc.sort_by_post_count
+                          sort: selectedSort == "sort_by_post_count"
                               ? "lb_Sort_By_Active_Posts_Desc"
-                              : selectedSort == lc.sort_by_rating
+                              : selectedSort == "sort_by_rating"
                               ? "lb_Sort_By_Avg_Rating_Desc"
-                              : selectedSort == lc.sort_by_visits
+                              : selectedSort == "sort_by_visits"
                               ? "lb_Sort_By_Visits_Count_Desc"
                               : "lb_Sort_By_Joining_Date_Asc", forSale: partnerKind != "Rent a Car"&&!carCare);
                     }
@@ -225,6 +223,7 @@ Widget carListGreyBar(
                 builder: (_) => SortBySheet(
                     carList: true,
                     onConfirm: (selectedSort) {
+                      log("carList ${selectedSort}");
 
                       String currentSourceKind =  Get.find<BrandController>().currentSourceKind;
                       int currentMakeId = Get.find<BrandController>().currentMakeId;
@@ -235,19 +234,19 @@ Widget carListGreyBar(
                       Get.find<BrandController>().getCars(
                           make_id: currentMakeId, makeName: currentMakeName,
                           sort: selectedSort ==
-                              lc.sort_by_post_date_new
+                              "sort_by_post_date_new"
                               ? "PostDate_Desc"
                               : selectedSort ==
-                              lc.sort_by_post_date_old
+                              "sort_by_post_date_old"
                               ? "PostDate_Asc"
                               : selectedSort ==
-                              lc.sort_by_price_high
+                              "sort_by_price_high"
                               ? "Price_Desc"
                               : selectedSort ==
-                              lc.sort_by_price_low
+                              "sort_by_price_low"
                               ? "Price_Asc"
                               : selectedSort ==
-                              lc.sort_by_manufacture_year_new
+                              "sort_by_manufacture_year_new"
                               ? "Year_Desc"
                               : "Year_Asc",
                           sourceKind: currentSourceKind

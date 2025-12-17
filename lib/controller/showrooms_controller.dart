@@ -81,29 +81,29 @@ class ShowRoomsController extends GetxController {
             carsForSale: carsForSale,
             partnerId: body["Data"][i]["Partner_ID"],
             partnerNamePl: body["Data"][i]["Partner_Name_PL"],
-            logoUrl: body["Data"][i]["Logo_URL"],
+            logoUrl: body["Data"][i]["Logo_URL"]??"",
             visitsCount: body["Data"][i]["Visits_Count"],
             avgRating: body["Data"][i]["Avg_Rating"],
             pinToTop: body["Data"][i]["Pin_To_Top"] == 1 ? true : false,
             partnerKind: body["Data"][i]["Avg_Rating"],
             activePosts: body["Data"][i]["Active_Posts"],
-            bannerFileNamePl: body["Data"][i]["Banner_FileName_PL"],
-            bannerFileNameSl: body["Data"][i]["Banner_URL_SL"],
-            bannerUrlPl: body["Data"][i]["Banner_URL_PL"],
-            bannerUrlSl: body["Data"][i]["Banner_URL_SL"],
-            branchNamePl: body["Data"][i]["Branch_Name_PL"],
-            branchNameSl: body["Data"][i]["Branch_Name_SL"],
-            contactPhone: body["Data"][i]["Contact_Phone"],
-            contactWhatsApp: body["Data"][i]["Contact_WhatsApp"],
+            bannerFileNamePl: body["Data"][i]["Banner_FileName_PL"]??"",
+            bannerFileNameSl: body["Data"][i]["Banner_URL_SL"]??"",
+            bannerUrlPl: body["Data"][i]["Banner_URL_PL"]??"",
+            bannerUrlSl: body["Data"][i]["Banner_URL_SL"]??"",
+            branchNamePl: body["Data"][i]["Branch_Name_PL"]??"",
+            branchNameSl: body["Data"][i]["Branch_Name_SL"]??"",
+            contactPhone: body["Data"][i]["Contact_Phone"]??"",
+            contactWhatsApp: body["Data"][i]["Contact_WhatsApp"]??'',
             countryCode: body["Data"][i]["Country_Code"],
             followersCount: body["Data"][i]["Followers_Count"],
             joiningDate: time,
-            logoFileName: body["Data"][i]["Logo_FileName"],
-            mapsUrl: body["Data"][i]["Maps_URL"],
-            partnerDescPl: body["Data"][i]["Partner_Desc_PL"],
-            partnerDescSl: body["Data"][i]["Partner_Desc_SL"],
-            partnerNameSl: body["Data"][i]["Partner_Name_SL"],
-            spin360Url: body["Data"][i]["Spin360_URL"]));
+            logoFileName: body["Data"][i]["Logo_FileName"]??"",
+            mapsUrl: body["Data"][i]["Maps_URL"]??"",
+            partnerDescPl: body["Data"][i]["Partner_Desc_PL"]??"",
+            partnerDescSl: body["Data"][i]["Partner_Desc_SL"]??"",
+            partnerNameSl: body["Data"][i]["Partner_Name_SL"]??"",
+            spin360Url: body["Data"][i]["Spin360_URL"]??""));
       }
       loadingMode = false;
       update();
@@ -116,7 +116,7 @@ class ShowRoomsController extends GetxController {
   //ApI calls
   fetchCarsOfShowRooms({required bool forSale,required String postId,required String sourceKind, required String partnerid,  required String userName,required String showroomName,required BuildContext context}) async {
 
-    log("callalalla");
+    log("callalalla${sourceKind}");
 
     rentalCarsOfShowRoom = [];
     carsForSale = [];
@@ -154,6 +154,9 @@ class ShowRoomsController extends GetxController {
                   pinToTop: body["Data"][i]["Pin_To_Top"],
                   postKind: "",
                   technical_Description_SL: "",
+                  ownerMobile: "",
+                  ownerEmail:"",
+                  ownerName: "",
 
                   postCode:body["Data"][i]["Post_Code"],
                   carNamePl:body["Data"][i]["Car_Name_PL"],

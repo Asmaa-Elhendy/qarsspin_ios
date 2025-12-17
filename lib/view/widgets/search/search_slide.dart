@@ -39,7 +39,7 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
 
   List<GlobalModel> years = List.generate(
     30,
-    (index) {
+        (index) {
       final year = (2024 - index).toString();
       return GlobalModel(id: int.parse(year), name: year);
     },
@@ -89,7 +89,12 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
               ),
             ),
             child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+
               child: Padding(
+
                 padding: EdgeInsets.symmetric(vertical: 6.h),
                 child: Column(
                   children: [
@@ -251,17 +256,17 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
                   case "Qars spin":
                     Get.find<BrandController>().switchLoading();
                     Get.find<BrandController>().searchCar(
-                        make_id: int.parse(selctedMakeId),
-                        makeName: makeController.text,
-                        classId: selectedClassId,
-                        makeId: selctedMakeId,
-                        modelId: selectedModelId,
-                        yearMin: fromYearController.text.isEmpty?"0":fromYearController.text,
-                        yearMax: toYearController.text.isEmpty ? "0" : toYearController.text
-                        ,
-                        priceMin: fromPriceController.text.isEmpty?"0":fromPriceController.text,
-                        priceMax: toPriceController.text.isEmpty?"0":toPriceController.text,
-                        catId: selectedTypeId,
+                      make_id: int.parse(selctedMakeId),
+                      makeName: makeController.text,
+                      classId: selectedClassId,
+                      makeId: selctedMakeId,
+                      modelId: selectedModelId,
+                      yearMin: fromYearController.text.isEmpty?"0":fromYearController.text,
+                      yearMax: toYearController.text.isEmpty ? "0" : toYearController.text
+                      ,
+                      priceMin: fromPriceController.text.isEmpty?"0":fromPriceController.text,
+                      priceMax: toPriceController.text.isEmpty?"0":toPriceController.text,
+                      catId: selectedTypeId,
                       sourceKind: "Qars spin",
 
                     );
@@ -281,7 +286,7 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
                         priceMin: fromPriceController.text.isEmpty?"0":fromPriceController.text,
                         priceMax: toPriceController.text.isEmpty?"0":toPriceController.text,
                         catId: selectedTypeId,
-                      sourceKind: "Individual"
+                        sourceKind: "Individual"
                     );
                     Get.to(CarsBrandList(widget.notificationsController,brandName: makeController.text,postKind:"CarForSale" ,));
 
@@ -292,10 +297,10 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
                 // if(widget.myCase=="makes"){
                 //
                 // }
-                 // selctedMakeId = "";
-                 // selectedClassId = "";
-                 // selectedModelId = "";
-                 // selectedTypeId = "";
+                // selctedMakeId = "";
+                // selectedClassId = "";
+                // selectedModelId = "";
+                // selectedTypeId = "";
               },lc)
             ],
           )
@@ -333,7 +338,7 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
               suggestionsCallback: (pattern) async {
                 return items
                     .where((car) =>
-                        car.name.toLowerCase().contains(pattern.toLowerCase()))
+                    car.name.toLowerCase().contains(pattern.toLowerCase()))
                     .toList();
               },
               builder: (context, textController, focusNode) {
@@ -347,13 +352,13 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
                     );
                   },
                   decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(3),
-                    borderSide: BorderSide(
-                      color: AppColors.mutedGray,
-                      width: .8.w,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(3),
+                      borderSide: BorderSide(
+                        color: AppColors.mutedGray,
+                        width: .8.w,
+                      ),
                     ),
-                  ),
                     focusedBorder: OutlineInputBorder( borderRadius: BorderRadius.circular(3), borderSide: BorderSide( color: AppColors.mutedGray, width: .8.w, ), ),
                     suffixIcon: const Icon( Icons.arrow_drop_down_outlined, color: Colors.black, ),
                     contentPadding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 6.w),
@@ -390,7 +395,7 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
                     break;
 
                   case "Choose Class":
-                    searchController.fetchModels(suggestion.id);
+                    searchController.fetchModels(suggestion.id,selctedMakeId);
                     modelController.clear();
                     typeController.clear();
                     selectedClassId = suggestion.id.toString();
@@ -460,7 +465,7 @@ class _CustomFormSheetState extends State<CustomFormSheet> {
                 ),
                 border: const OutlineInputBorder(),
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.2.h),
+                EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.2.h),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.mutedGray),
                   borderRadius: BorderRadius.circular(6),

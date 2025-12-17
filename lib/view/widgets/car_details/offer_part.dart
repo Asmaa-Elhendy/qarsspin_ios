@@ -45,8 +45,12 @@ class OfferPart extends StatelessWidget {
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
                 final offer = offers[index];
+                log("usern");
+                log(offers[index].userName);
+                log("mine");
+                log(Get.find<AuthController>().userName!);
                 return Slidable(
-                  enabled: offers[index].userName==Get.find<AuthController>().userName!,
+                  enabled: offers[index].userName==Get.find<AuthController>().userFullName!,
                   key: ValueKey(1),
 
                   // السحب لليسار (Swipe Left)
@@ -104,8 +108,9 @@ class OfferPart extends StatelessWidget {
                                 width: 85.w,
                                 child: Text(
                                   overflow: TextOverflow.ellipsis,
-                                  offer.fullName,
+                                  offer.userName,
                                   style: TextStyle(
+                                      color: AppColors.blackColor(context),
                                       fontWeight: FontWeight.bold, fontSize: 14),
                                 ),
                               ),

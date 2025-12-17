@@ -332,11 +332,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             if (userData['Full_Name'] != null) {
                               fullName=userData['Full_Name'];
                               await prefs.setString('fullName', userData['Full_Name']);
+                              await prefs.setString('Mobile', userData['Mobile']);
+                              await prefs.setString('Email', userData['Email']);
                             }
                           }
                           // To get the current value
 // To update the value
-                          Get.find<AuthController>().updateRegisteredStatus(true,_mobileController.text,fullName);  // or false
+                          Get.find<AuthController>().updateRegisteredStatus(true,_mobileController.text,fullName,_mobileController.text,_emailController.text);  // or false
 
                           // Navigate to home and remove all previous routes
                           if (mounted) {

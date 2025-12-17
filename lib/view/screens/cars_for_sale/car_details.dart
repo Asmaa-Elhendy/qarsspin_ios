@@ -22,13 +22,16 @@ import '../../widgets/car_details/tab_bar.dart';
 import '../../widgets/car_image.dart';
 import '../../widgets/offer_dialog.dart';
 import '../../widgets/texts/texts.dart';
+import 'dart:developer';
 
 class CarDetails extends StatefulWidget {
   String postKind;
   int id;
   String sourcekind;
 
-  CarDetails({required this.sourcekind,required this.id,required this.postKind,super.key});
+  String mobile;
+
+  CarDetails({required this.mobile,required this.sourcekind,required this.id,required this.postKind,super.key});
 
   @override
   State<CarDetails> createState() => _CarDetailsState();
@@ -95,11 +98,13 @@ class _CarDetailsState extends State<CarDetails> {
                 :unRegisterFunction(context);
           },
           onWhatsApp: () {
-            openWhatsApp("011", message: "Hello 👋");
+            openWhatsApp(controller.carDetails.ownerMobile, message: "Hello 👋");
+            log("moooo${controller.carDetails.ownerMobile} ${widget.id}");
             // Handle WhatsApp
           },
           onCall: () {
             // Handle call
+            makePhoneCall(controller.carDetails.ownerMobile);
           },
         ),
         body: controller.oldData?
@@ -154,16 +159,16 @@ class _CarDetailsState extends State<CarDetails> {
                 ),
                 Row(
                   children: [
-                    InkWell(
-                      onTap: () {},
-                      child: SizedBox(
-                          width: 25.w,
-                          child: Image.asset(
-                            "assets/images/share.png",
-                            fit: BoxFit.cover,
-                            color: AppColors.blackColor(context),
-                          )),
-                    ),
+                    // InkWell(
+                    //   onTap: () {},
+                    //   child: SizedBox(
+                    //       width: 25.w,
+                    //       child: Image.asset(
+                    //         "assets/images/share.png",
+                    //         fit: BoxFit.cover,
+                    //         color: AppColors.blackColor(context),
+                    //       )),
+                    // ),
                     12.horizontalSpace,
                     InkWell(
                         onTap: () {
@@ -211,7 +216,7 @@ class _CarDetailsState extends State<CarDetails> {
                           blueText(
                               "${controller.carDetails.visitsCount} ${lc.people_view}"),
                           4.verticalSpace,
-                          headerText(Get.locale?.languageCode=='ar'?controller.carDetails.carNameSl:controller.carDetails.carNamePl,context),
+                          headerText(Get.locale?.languageCode=='ar'?controller.carDetails.carNameSl.trim():controller.carDetails.carNamePl.trim(),context),
                           4.verticalSpace,
                           description(Get.locale?.languageCode=='ar'?controller.carDetails.technical_Description_SL:controller.carDetails.description,context: context),
                           12.verticalSpace,

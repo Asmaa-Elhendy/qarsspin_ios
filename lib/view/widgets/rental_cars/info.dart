@@ -11,7 +11,7 @@ import '../../../l10n/app_localization.dart';
 
 class RentalCarInfo extends StatelessWidget {
   RentalCar car;
-   RentalCarInfo({required this.car,super.key});
+  RentalCarInfo({required this.car,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,42 +23,55 @@ class RentalCarInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(Icons.remove_red_eye,color: AppColors.accent,size: 14.w,),
-                  4.horizontalSpace,
-                  blueText(car.visitsCount.toString())
-                ],
-              ),
-              Container(
-                width: 55.w,
-                height: 23.h,
-               // padding: EdgeInsets.symmetric(horizontal: 4.w,vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: AppColors.success,
-                  borderRadius: BorderRadius.circular(4).r
+          Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 6.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.remove_red_eye,color: AppColors.accent,size: 16.w,),
+                    4.horizontalSpace,
+                    blueText(car.visitsCount.toString())
+                  ],
                 ),
-                child: Center(
-                  child: Text(lc.tag_New,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                    fontFamily: fontFamily,
-                    fontWeight: FontWeight.w700
+                car.tag=="New"? Container(
+                  width: 55.w,
+                  height: 23.h,
+                  // padding: EdgeInsets.symmetric(horizontal: 4.w,vertical: 4.h),
+                  decoration: BoxDecoration(
+                      color: AppColors.success,
+                      borderRadius: BorderRadius.circular(4).r
                   ),
+                  child: Center(
+                    child: Text(lc.tag_New,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          fontFamily: fontFamily,
+                          fontWeight: FontWeight.w700
+                      ),
+                    ),
                   ),
-                ),
-              )
+                ):SizedBox()
 
-            ],
+              ],
+            ),
           ),
           20.verticalSpace,
-          headerText(Get.locale?.languageCode=='ar'?car.carNameSL:car.carNamePL,context),
+          Padding(            padding:  EdgeInsets.symmetric(horizontal: 6.w),
+            child:           headerText(Get.locale?.languageCode=='ar'?car.carNameSL.trim():car.carNamePL.trim(),context),
+
+          ),
+
           16.verticalSpace,
-          description(Get.locale?.languageCode=='ar'?car.technicalDescriptionSL:car.technicalDescriptionPL,context: context),
+          Padding(            padding:  EdgeInsets.symmetric(horizontal: 6.w),
+            child:           description(Get.locale?.languageCode=='ar'?car.technicalDescriptionSL:car.technicalDescriptionPL,context: context),
+
+
+
+          ),
+
           25.verticalSpace,
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,12 +87,12 @@ class RentalCarInfo extends StatelessWidget {
                 children: [
                   35.verticalSpace,
                   Text(car.createdDateTime,
-                  style: TextStyle(
-                    color: AppColors.gray,
-                    fontFamily: fontFamily,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w800,
-                  ),
+                    style: TextStyle(
+                      color: AppColors.gray,
+                      fontFamily: fontFamily,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w800,
+                    ),
 
                   )
 

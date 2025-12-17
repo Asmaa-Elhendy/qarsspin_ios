@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../../controller/ads/ad_getx_controller_create_ad.dart';
 import '../../../../controller/ads/data_layer.dart';
+import '../../../../controller/auth/auth_controller.dart';
 import '../../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../../controller/my_ads/my_ad_data_layer.dart';
 import '../../../../controller/specs/specs_controller.dart';
@@ -150,6 +151,9 @@ class AdSubmissionService {
 
       // Create the ad data model
       CreateAdModel adData = CreateAdModel(
+        Owner_Name: Get.find<AuthController>().userFullName,
+        Owner_Mobile: Get.find<AuthController>().ownerMobile,
+        Owner_Email: Get.find<AuthController>().ownerEmail,
         makeId: selectedMake?.id.toString() ?? '',
         classId: selectedClass?.id.toString() ?? '',
         modelId: selectedModel?.id.toString() ?? '',
@@ -318,6 +322,9 @@ class AdSubmissionService {
 
       // Create the ad data model
       CreateAdModel adData = CreateAdModel(
+        Owner_Name: Get.find<AuthController>().userFullName,
+        Owner_Mobile: Get.find<AuthController>().ownerMobile,
+        Owner_Email: Get.find<AuthController>().ownerEmail,
         makeId: selectedMake?.id?.toString() ?? '',
         classId: selectedClass?.id?.toString() ?? '',
         modelId: selectedModel?.id?.toString() ?? '',

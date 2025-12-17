@@ -1,6 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-import 'app_localization.dart';
+import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
@@ -81,8 +81,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get find_me_car => 'Find Me A Car';
 
   @override
-  String get find_car_notify =>
-      'Get notified when a car of your choice is\\n                   added to our showroom.';
+  String get find_car_notify => 'Get notified when a car of your choice is\\n                   added to our showroom.';
 
   @override
   String get any_comment => 'Any Comments?';
@@ -94,19 +93,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get success_request => 'your Request has been sent successfully ';
 
   @override
-  String get comment_hint =>
-      'eg.exterior or interior color of the car, options,\\nengine...';
+  String get comment_hint => 'eg.exterior or interior color of the car, options,\\nengine...';
 
   @override
   String get no_result => 'No Result Found';
 
   @override
-  String get sorry =>
-      'Unfortunately what you are looking for is\\ncurrently not available. Please activate a';
+  String get sorry => 'Unfortunately what you are looking for is\\ncurrently not available. Please activate a';
 
   @override
-  String get sorry_notify =>
-      'notification using\\\"Find me a car\\\"yp be updates';
+  String get sorry_notify => 'notification using\\\"Find me a car\\\"yp be updates';
 
   @override
   String get sort_result => 'Sort Results';
@@ -136,12 +132,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sort_by_price_low => 'Sort By Price (From Low To High)';
 
   @override
-  String get sort_by_manufacture_year_new =>
-      'Sort By Manufacture Year (Newest First)';
+  String get sort_by_manufacture_year_new => 'Sort By Manufacture Year (Newest First)';
 
   @override
-  String get sort_by_manufacture_year_old =>
-      'Sort By Manufacture Year (Oldest First)';
+  String get sort_by_manufacture_year_old => 'Sort By Manufacture Year (Oldest First)';
 
   @override
   String get make_name => 'Make Name';
@@ -261,8 +255,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get what_offer => 'What is your offer?';
 
   @override
-  String get request_buy_text =>
-      'You are making an offer matching the request price';
+  String get request_buy_text => 'You are making an offer matching the request price';
 
   @override
   String get condition_agreement => 'You agree to Qars Spin Terms & Conditions';
@@ -271,8 +264,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inspection_report => 'Request Inspection Report';
 
   @override
-  String get inspection_text =>
-      'Are you sure you want to request new car inspection for this car? (this is a prepaid service. Our team will contact you soon to get more details.)';
+  String get inspection_text => 'Are you sure you want to request new car inspection for this car? (this is a prepaid service. Our team will contact you soon to get more details.)';
 
   @override
   String get get_loan => 'Get a Loan';
@@ -308,8 +300,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get total_loan_value => 'Total Loan Value';
 
   @override
-  String get loan_figure =>
-      'These figures are estimates, the accurate and\\n    final figures will be sent to you by email.';
+  String get loan_figure => 'These figures are estimates, the accurate and\\n    final figures will be sent to you by email.';
 
   @override
   String get re_calculate => 'Re-Calculate';
@@ -321,8 +312,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wnt_wrg => 'Something went wrong please try again later';
 
   @override
-  String get invalid_loan =>
-      'Invalid loan amount. Check price and down payment.';
+  String get invalid_loan => 'Invalid loan amount. Check price and down payment.';
 
   @override
   String get daily => 'Daily';
@@ -355,8 +345,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dark_mode => 'Dark Mode';
 
   @override
-  String get terms_list =>
-      'A car sale request on our website must be submitted by the owner or someone with an authorization letter.|Car sale requests from companies or showrooms must be submitted by the licensed person in that company or showroom.|Priority is given to cars with an inspection report or to those willing to bring their cars to the recommended inspection center by the Qars Spin team.|Acceptance and approval of the terms and conditions that will be shared with you via WhatsApp as the car owner or as an authorized person for individuals and companies.|Our commission is 1.8% from the seller and 1.8% from the buyer, with a minimum of 1000 QAR.|If the buyer wants a specific inspection for a certain car, the inspection fee must be paid in advance, and the Qars Spin team will share the report once it’s ready.|After all parties agree to purchase the car and sign the contracts, the funds will be transferred to the Qars Spin bank account.|Once an oral, written, or voice expression of intent to buy the car is made, Qars Spin is not allowed to continue presenting the car to other potential buyers.|Car registration fees at Metrash are paid by the buyer as is customary in Qatar.';
+  String get terms_list => 'A car sale request on our website must be submitted by the owner or someone with an authorization letter.|Car sale requests from companies or showrooms must be submitted by the licensed person in that company or showroom.|Priority is given to cars with an inspection report or to those willing to bring their cars to the recommended inspection center by the Qars Spin team.|Acceptance and approval of the terms and conditions that will be shared with you via WhatsApp as the car owner or as an authorized person for individuals and companies.|Our commission is 1.8% from the seller and 1.8% from the buyer, with a minimum of 1000 QAR.|If the buyer wants a specific inspection for a certain car, the inspection fee must be paid in advance, and the Qars Spin team will share the report once it’s ready.|After all parties agree to purchase the car and sign the contracts, the funds will be transferred to the Qars Spin bank account.|Once an oral, written, or voice expression of intent to buy the car is made, Qars Spin is not allowed to continue presenting the car to other potential buyers.|Car registration fees at Metrash are paid by the buyer as is customary in Qatar.';
 
   @override
   String get active_ads => 'Active Ads:';
@@ -374,15 +363,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get person_notification => 'Personalized Notifications';
 
   @override
-  String get specialized_techno =>
-      'Specialized in selling cars using 360° technology';
+  String get specialized_techno => 'Specialized in selling cars using 360° technology';
 
   @override
   String get live_chat => 'Live Chat';
 
   @override
-  String get cnt_reason =>
-      'To sell your car, buy a car, or any other questions';
+  String get cnt_reason => 'To sell your car, buy a car, or any other questions';
 
   @override
   String get for_business => 'For Business Inquiries';
@@ -445,8 +432,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get after_sale_commission => '1.8% after sale on the sold price.';
 
   @override
-  String get private_seller_info =>
-      'Seller information stay private (Buyers can\'t see your contact details).';
+  String get private_seller_info => 'Seller information stay private (Buyers can\'t see your contact details).';
 
   @override
   String get standard_advertise => 'Standard advertise.';
@@ -560,17 +546,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get make_360_second => 'riyal only for full shooting session)';
 
   @override
-  String get pin_ad_first => 'Pin your advertisement at the top';
+  String get pin_ad_first => 'Pin your advertisement at the top for ';
 
   @override
-  String get pin_ad_second => ') QR only';
+  String get pin_ad_second => ',) QR only';
 
   @override
   String get agreement => 'I agree to the Terms and Conditions';
 
   @override
-  String get confirm_info =>
-      'I confirm the accuracy of the information provided';
+  String get confirm_info => 'I confirm the accuracy of the information provided';
 
   @override
   String get save_draft => 'Save as draft';
@@ -594,12 +579,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get creating_ad => 'Creating Ad';
 
   @override
-  String get please_wait_update =>
-      'Please wait while your ad is being updated...';
+  String get please_wait_update => 'Please wait while your ad is being updated...';
 
   @override
-  String get please_wait_create =>
-      'Please wait while your ad is being created...';
+  String get please_wait_create => 'Please wait while your ad is being created...';
 
   @override
   String get ok_lbl => 'OK';
@@ -620,8 +603,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_ad => 'Delete Ad';
 
   @override
-  String get delete_ad_confirm_msg =>
-      'Are you sure you want to delete this ad?';
+  String get delete_ad_confirm_msg => 'Are you sure you want to delete this ad?';
 
   @override
   String get delete => 'Delete';
@@ -639,7 +621,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ready_pro => 'Ready to showCase your vehicle like a pro?';
 
   @override
-  String get msg_360_first => 'Our 360 photo session will beautifully highlight your post \nclick Confirm, and we\'ll handle the rest! \n   Additional charges';
+  String get msg_360_first => 'Our 360 photo session will beautifully highlight your post \nclick Confirm, and we \'ll handle the rest! \n   Additional charges';
 
   @override
   String get msg_360_second => 'can apply.';
@@ -666,13 +648,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get feature_ad => 'Feature Your Ad';
 
   @override
-  String get centered_ad =>
-      'Let\'s make your post the center \n of orientation';
+  String get centered_ad => 'Let\'s make your post the center \\n of orientation';
+
   @override
   String get feature_ad_msg_first => 'Featuring your post ensures it stands out at the top for everyone to see.\n Additional charges';
 
   @override
   String get feature_ad_msg_second => 'can apply.\n Click confirm to proceed!';
+
   @override
   String get payment => 'Payment';
 
@@ -686,8 +669,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get info => 'Information';
 
   @override
-  String get waiting_ad_approval =>
-      'This ad is pending approval, Please wait \\n while we review your ad';
+  String get waiting_ad_approval => 'This ad is pending approval, Please wait \\n while we review your ad';
 
   @override
   String get creation_date => 'Creation Date:';
@@ -723,15 +705,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get video_not_play => 'Video cannot be played';
 
   @override
-  String get over_video =>
-      'This video may be too high resolution for your device';
+  String get over_video => 'This video may be too high resolution for your device';
 
   @override
   String get open_external_player => 'Open in External Player';
 
   @override
-  String get no_video_app =>
-      'Could not play video. Please check your video player app.';
+  String get no_video_app => 'Could not play video. Please check your video player app.';
 
   @override
   String get field_video => 'Failed to play video. Please try again.';
@@ -800,15 +780,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_notification_title => 'Delete Notification';
 
   @override
-  String get delete_notification_message =>
-      'Are you sure you want to delete this notification?';
+  String get delete_notification_message => 'Are you sure you want to delete this notification?';
 
   @override
   String get clear_all_notifications_title => 'Clear All Notifications';
 
   @override
-  String get clear_all_notifications_message =>
-      'Are you sure you want to delete all notifications?';
+  String get clear_all_notifications_message => 'Are you sure you want to delete all notifications?';
 
   @override
   String get btn_delete_all => 'Delete All';
@@ -925,12 +903,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tv_DatePicker_Dialog_Title => 'Please Choose Date';
 
   @override
-  String get msg_Working_Hard_To_Make_Feature_Ready =>
-      'We are working hard to make this feature ready, please check here after a while';
+  String get msg_Working_Hard_To_Make_Feature_Ready => 'We are working hard to make this feature ready, please check here after a while';
 
   @override
-  String get msg_This_Version_is_Very_Old =>
-      'This version is old, we recommend updating to the newest version available from Google Play Store';
+  String get msg_This_Version_is_Very_Old => 'This version is old, we recommend updating to the newest version available from Google Play Store';
 
   @override
   String get msg_Please_Confirm => 'Please Confirm';
@@ -942,12 +918,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_Request_Received => 'Your request was received successfully';
 
   @override
-  String get msg_This_car_is_not_available_for_sale_anymore =>
-      'This car is not available for sale anymore!';
+  String get msg_This_car_is_not_available_for_sale_anymore => 'This car is not available for sale anymore!';
 
   @override
-  String get msg_You_Are_Not_Registered_Yet =>
-      'You are not registered yet! please go to My Account section to register and verify your mobile number.';
+  String get msg_You_Are_Not_Registered_Yet => 'You are not registered yet! please go to My Account section to register and verify your mobile number.';
 
   @override
   String get btn_Cancel => 'Cancel';
@@ -1004,8 +978,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lbl_sign_out => 'Sign Out';
 
   @override
-  String get msg_Sign_Out =>
-      'By clicking on the confirm button you will be signed out from this mobile device, are you sure?';
+  String get msg_Sign_Out => 'By clicking on the confirm button you will be signed out from this mobile device, are you sure?';
 
   @override
   String get title_create_new_account => 'Create New Account';
@@ -1026,8 +999,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_Please_Choose_Country => 'Please Choose Your Country';
 
   @override
-  String get msg_Please_Provide_Mobile_Number =>
-      'Please Provide Your Mobile Number';
+  String get msg_Please_Provide_Mobile_Number => 'Please Provide Your Mobile Number';
 
   @override
   String get msg_registering_new_user => 'Creating New Account';
@@ -1036,69 +1008,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_Verification_In_Progress => 'Verifying Your Mobile Number';
 
   @override
-  String get msg_Requesting_Verification_Code =>
-      'Requesting Verification Code, Please Wait...';
+  String get msg_Requesting_Verification_Code => 'Requesting Verification Code, Please Wait...';
 
   @override
-  String get tv_Verify_Mobile_Number_Dialog_Title =>
-      'Verify Your Mobile Number';
+  String get tv_Verify_Mobile_Number_Dialog_Title => 'Verify Your Mobile Number';
 
   @override
   String get msg_Verification_Code_Is_Empty => 'Verification Code is Empty!';
 
   @override
   String get msg_Verification_Code_Is_wrong => 'Verification Code is Wrong!';
-  // In app_localization_en.dart
+
   @override
   String get youHaveRequestedThisServiceBefore => 'You Have Requested This Service Before';
-  // In app_localization_en.dart
+
   @override
   String get note => 'Note';
-  // In app_localization_en.dart
+
   @override
   String get serviceFee => 'Service Fee';
+
   @override
   String get qarOnlyForRequest360Session => 'QAR Only For Request 360 Session.';
+
   @override
   String get qarOnlyForFeaturePost => 'QAR Only For Feature Post.';
+
   @override
   String get contactInformation => 'Contact Information';
+
   @override
   String get pleaseFillAllInformationBelow => 'Please fill all information below';
+
   @override
   String get firstName => 'First Name';
+
   @override
   String get enterFirstName => 'Enter first name';
+
   @override
   String get requiredField => 'Required';
+
   @override
   String get lastName => 'Last Name';
+
   @override
   String get enterLastName => 'Enter last name';
+
   @override
   String get mobile => 'Mobile';
+
   @override
   String get enterPhoneNumber => 'Enter phone number';
+
   @override
   String get invalidPhoneNumber => 'Invalid phone number';
+
   @override
   String get enterEmailAddress => 'Enter email address';
+
   @override
   String get cemail => 'Email';
+
   @override
   String get proceedToPayment => 'PROCEED TO PAYMENT';
-  // In app_localization_en.dart
+
   @override
   String get invalidEmailAddress => 'Invalid email address';
-  // In app_localization_en.dart
+
   @override
   String get paymentSucceeded => 'Payment Succeeded';
+
   @override
   String get paymentWasCompleted => 'Payment was completed.';
+
   @override
   String get paymentWasNotCompleted => 'Payment was not completed.';
+
   @override
   String get failedToLoadPaymentMethods => 'Failed to load payment methods';
+
   @override
-  String get paymentflowfailed => 'Payment flow failed:';
+  String get paymentflowfailed => 'Payment flow failed';
 }

@@ -47,6 +47,12 @@ class MyAdCleanController extends GetxController {
   final Rxn<String> deleteError = Rxn<String>();
   final RxBool deleteSuccess = RxBool(false);
 
+
+  // Qars request status state (optional)
+  final RxBool isCheckingRequestStatus = false.obs;
+  final Rxn<String> requestStatusError = Rxn<String>();
+
+
   @override
   void onInit() {
     super.onInit();
@@ -534,4 +540,32 @@ class MyAdCleanController extends GetxController {
       isSubmittingRequest.value = false;
     }
   }
+
+  /// Check if there is an existing 360 request for this post.
+  /// Returns true if API returns non-empty list, false if [].
+  Future<bool> hasExisting360Request({
+    required int postId,
+    required String requestType,
+  }) async {
+    try {
+      isCheckingRequestStatus.value = true;
+      requestStatusError.value = null;
+
+      final result = await repository.getQarsRequestStatus(
+        postId: postId,
+        requestType:requestType,
+      );
+
+      log('🔍 360 Request status for post $postId: ${result.length} item(s)');
+      // لو result.isEmpty → [] (لا يوجد طلب)، لو فيها elements → فيه طلبات قديمة
+      return result.isNotEmpty;
+    } catch (e) {
+      requestStatusError.value = e.toString();
+      log('❌ Error checking 360 request status: $e');
+      return false;
+    } finally {
+      isCheckingRequestStatus.value = false;
+    }
+  }
+
 }

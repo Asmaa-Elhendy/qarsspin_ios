@@ -180,8 +180,10 @@
   "under_warranty": "في الضمان",
   "car_desc": "وصف السيارة",
   "enter_desc": "ادخل وصف للسيارة...",
-  "make_360": "اجعل إعلانك مميزًا بجلسة تصوير 360 درجة (100 ريال فقط لجلسة التصوير الكاملة)",
-  "pin_ad": "قم بتثبيت إعلانك في الأعلى مقابل (150) ريال فقط",
+  "make_360_first" : "اجعل إعلانك مميزًا بجلسة تصوير 360 درجة ",
+  "make_360_second": "ريال فقط لجلسة التصوير الكاملة)",
+  "pin_ad_first" : "قم بتثبيت إعلانك في الأعلى  ",
+  "pin_ad_second" : ") ريال فقط",
   "agreement": "أوافق على الشروط والأحكام",
   "confirm_info": "أؤكد صحة المعلومات المقدمة",
   "save_draft": "حفظ كمسودة",
@@ -205,7 +207,8 @@
   "update": "تحديث السومة",
   "request_360": "طلب خدمة 360",
   "ready_pro": "هل أنت مستعد لعرض سيارتك كالمحترفين؟",
-  "msg_360": "ستبرز جلسة التصوير بزاوية 360 درجة منشورك بشكل رائع \n انقر فوق\"تأكيد\"،\n وسنتولى الباقي!\n قد يتم تطبيق رسوم إضافية قدرها 100 ريال. ",
+  "msg_360_first": "جلسة التصوير 360 درجة الخاصة بنا ستبرز منشورك بشكل جميل \\nانقر فوق تأكيد، وسنقوم بالباقي! \\n   رسوم إضافية",
+  "msg_360_second" : " يمكن أن تنطبق.",
   "confirmation": "تأكيد",
   "receive_request_msg": "تم إستلام طلبك",
   "cancellation": "إلغاء",
@@ -214,8 +217,8 @@
   "payment_failed_or_cancelled": "\"فشلت عملية الدفع أو تم إلغاؤها",
   "feature_ad": "إجعل اعلانك مميزا",
   "centered_ad": "لنجعل منشورك مركز التوجه",
-  "feature_ad_msg": "إن عرض منشورك يضمن ظهوره في الأعلى ليراه الجميع \n  قد تُطبق رسوم إضافية قدرها 150 ريالًا قطريًا.\n انقر فوق \"تأكيد\" للمتابعة!",
-  "payment": "الدفع",
+  "feature_ad_msg_first" : "سيضمن تمييز منشورك ظهوره في المقدمة للجميع لرؤيته.\\n رسوم إضافية",
+  "feature_ad_msg_second" : " يمكن أن تنطبق.\\n انقر فوق تأكيد للمتابعة!",
   "modify": "تعديل",
   "specs": "المواصفات",
   "info": "البيانات",
@@ -453,6 +456,52 @@
   "msg_Requesting_Verification_Code": "جاري إرسال رمز التحقق، يرجى الانتظار...",
   "tv_Verify_Mobile_Number_Dialog_Title": "تأكيد رقم الجوال",
   "msg_Verification_Code_Is_Empty": "رمز التحقق مطلوب!",
-  "msg_Verification_Code_Is_wrong": "رمز التحقق غير صحيح!"
+  "msg_Verification_Code_Is_wrong": "رمز التحقق غير صحيح!",
+
+   "note" : "ملاحظة",
+
+   "serviceFee" : "رسوم الخدمة",
+
+   "qarOnlyForRequest360Session" : "ريال فقط لطلب جلسة 360 درجة.",
+
+   "qarOnlyForFeaturePost" : "ريال فقط للمنشور المميز.",
+
+   "contactInformation" : "معلومات الاتصال",
+
+   "pleaseFillAllInformationBelow" : "الرجاء ملء جميع المعلومات أدناه",
+
+   "firstName" : "الاسم الأول",
+
+   "enterFirstName" : "أدخل الاسم الأول",
+
+   "requiredField" : "مطلوب",
+
+   "lastName" : "الاسم الأخير",
+
+   "enterLastName" : "أدخل الاسم الأخير",
+
+   "mobile" : "الجوال",
+
+   "enterPhoneNumber" : "أدخل رقم الهاتف",
+
+   "invalidPhoneNumber" : "رقم هاتف غير صالح",
+
+   "enterEmailAddress" : "أدخل عنوان البريد الإلكتروني",
+
+   "cemail" : "البريد الإلكتروني",
+
+   "proceedToPayment" : "المتابعة للدفع",
+
+   "invalidEmailAddress" : "عنوان بريد إلكتروني غير صالح",
+
+   "paymentSucceeded" : "تمت عملية الدفع بنجاح",
+
+   "paymentWasCompleted" : "تم إكمال عملية الدفع.",
+
+   "paymentWasNotCompleted" : "لم تكتمل عملية الدفع.",
+
+   "failedToLoadPaymentMethods" : "فشل تحميل طرق الدفع",
+
+   "paymentflowfailed" : "فشل تدفق الدفع:"
 }
 

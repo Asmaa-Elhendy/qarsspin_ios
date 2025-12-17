@@ -46,6 +46,9 @@ class CarModel{
   bool? isFavorite;
   int? classId;
   int? makeId;
+  String ownerMobile;
+  String ownerName;
+  String ownerEmail;
 
   CarModel({
     this.offerId=null,
@@ -73,11 +76,12 @@ class CarModel{
     required this.askingPrice,
     required this.rectangleImageFileName,
     required this.rectangleImageUrl,
-});
+    required this.ownerMobile,required this.ownerName,required this.ownerEmail
+  });
 
 
 }
-  /// Converts a string to CarType enum
+/// Converts a string to CarType enum
 //   factory CarType.fromString(String value) {
 //   switch (value.toLowerCase()) {
 //     case 'forrent':

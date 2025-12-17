@@ -20,7 +20,7 @@
   "create_car_ads": "Create Car Ads",
   "cars": "Cars",
   "personal_cars": "Personal Cars",
-  "qar_spin_showroom": "Qars Spin \n Showroom",
+  "qar_spin_showroom": "Qars Spin Showroom",
   "cars_showroom": "Cars Showrooms",
   "all_rental_cars": "All Rental Cars",
   "rental_showroom": "Rental Showrooms",
@@ -180,8 +180,11 @@
   "under_warranty": "Under Warranty",
   "car_desc": "Car Description",
   "enter_desc": "Enter car description...",
-  "make_360": "Make Your Advertisement special by 360 session (100 riyal only for full shooting session)",
-  "pin_ad": "Pin your advertisement at the top for (150) QR only",
+
+  "make_360_first" : "Make Your Advertisement special by 360 session",
+  "make_360_second": "riyal only for full shooting session)",
+  "pin_ad_first" : "Pin your advertisement at the top for ",
+  "pin_ad_second" : ",) QR only",
   "agreement": "I agree to the Terms and Conditions",
   "confirm_info": "I confirm the accuracy of the information provided",
   "save_draft": "Save as draft",
@@ -205,7 +208,8 @@
   "update": "Update Offer",
   "request_360": "Request 360 Service",
   "ready_pro": "Ready to showCase your vehicle like a pro?",
-  "msg_360": "Our 360 photo session will beautifully highlight your post \\nclick Confirm, and we'll handle the rest! \\n   Additional charges 100 riyal can apply.",
+  "msg_360_first": "Our 360 photo session will beautifully highlight your post \nclick Confirm, and we 'll handle the rest! \n   Additional charges",
+  "msg_360_second" : "can apply.",
   "confirmation": "Confirmation",
   "receive_request_msg": "We Have Received Your Request",
   "cancellation": "Cancellation",
@@ -214,7 +218,8 @@
   "payment_failed_or_cancelled": "Payment failed or cancelled.",
   "feature_ad": "Feature Your Ad",
   "centered_ad": "Let's make your post the center \\n of orientation",
-  "feature_ad_msg": "Featuring your post ensures it stands out at the top for everyone to see.\\n Additional charges 150 QR can apply.\\n Click confirm to proceed!",
+  "feature_ad_msg_first" : "Featuring your post ensures it stands out at the top for everyone to see.\n Additional charges",
+  "feature_ad_msg_second" : "can apply.\n Click confirm to proceed!",
   "payment": "Payment",
   "modify": "Modify",
   "specs": "Specs",
@@ -336,6 +341,56 @@
   "msg_Requesting_Verification_Code": "Requesting Verification Code, Please Wait...",
   "tv_Verify_Mobile_Number_Dialog_Title": "Verify Your Mobile Number",
   "msg_Verification_Code_Is_Empty": "Verification Code is Empty!",
-  "msg_Verification_Code_Is_wrong": "Verification Code is Wrong!"
+  "msg_Verification_Code_Is_wrong": "Verification Code is Wrong!",
+   "youHaveRequestedThisServiceBefore":  "You Have Requested This Service Before",
+
+
+   "note" : "Note",
+
+   "serviceFee" : "Service Fee",
+
+   "qarOnlyForRequest360Session" : "QAR Only For Request 360 Session.",
+
+   "qarOnlyForFeaturePost" : "QAR Only For Feature Post.",
+
+   "contactInformation" : "Contact Information",
+
+   "pleaseFillAllInformationBelow" : "Please fill all information below",
+
+   "firstName" : "First Name",
+
+   "enterFirstName" : "Enter first name",
+
+   "requiredField" : "Required",
+
+   "lastName" :"Last Name",
+
+   "enterLastName" :"Enter last name",
+
+   "mobile" :"Mobile",
+
+   "enterPhoneNumber" :"Enter phone number",
+
+   "invalidPhoneNumber" :"Invalid phone number",
+
+   "enterEmailAddress" :"Enter email address",
+
+   "cemail" :"Email",
+
+   "proceedToPayment" :"PROCEED TO PAYMENT",
+
+   "invalidEmailAddress" :"Invalid email address",
+
+   "paymentSucceeded" :"Payment Succeeded",
+
+   "paymentWasCompleted" :"Payment was completed.",
+
+   "paymentWasNotCompleted" :"Payment was not completed.",
+
+   "failedToLoadPaymentMethods" :"Failed to load payment methods",
+
+   "paymentflowfailed" : "Payment flow failed"
 }
+
+
 

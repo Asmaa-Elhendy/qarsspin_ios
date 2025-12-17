@@ -8,6 +8,7 @@ import '../../../../controller/ads/ad_getx_controller_create_ad.dart';
 import '../../../../controller/ads/data_layer.dart';
 import '../../../../controller/const/base_url.dart';
 import '../../../../controller/const/colors.dart';
+import '../../../../controller/payments/payment_controller.dart';
 import '../../../../controller/specs/specs_controller.dart';
 import '../../../../controller/specs/specs_data_layer.dart';
 import '../../../../l10n/app_localization.dart';
@@ -51,6 +52,8 @@ class FormFieldsSection extends StatefulWidget {
   final ValueChanged<bool?>? onReqFeaturedChanged;
   final Function({bool shouldPublish}) onValidateAndSubmit;
   final VoidCallback? onUnfocusDescription;
+  final String priceReq360Api;
+  final String priceFeaturedApi;
 
   const FormFieldsSection({
     Key? key,
@@ -87,6 +90,8 @@ class FormFieldsSection extends StatefulWidget {
     required this.onReqFeaturedChanged,
     required this.onValidateAndSubmit,
     this.onUnfocusDescription,
+    required this.priceReq360Api,
+    required this.priceFeaturedApi
   }) : super(key: key);
 
   @override
@@ -96,6 +101,7 @@ class FormFieldsSection extends StatefulWidget {
 class _FormFieldsSectionState extends State<FormFieldsSection> {
   late SpecsController specsController;
   late FocusNode _descriptionFocusNode;
+  String selected_makeID='0';
 
   bool _isGlobalLoading = false;
 
@@ -117,6 +123,7 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
   // Variables to store results of request 360 service and feature your ad
   bool? request360ServiceResult;
   bool? featureYourAdResult;
+  late PaymentController paymentController; // 👈 هنا   to get prices of services
 
   @override
   void initState() {
@@ -137,6 +144,14 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
       // Fallback: create a new instance
       brandController = Get.put(AdCleanController(AdRepository()));
       print('Created new AdCleanController instance');
+    }
+    // 👇 إضافة PaymentController
+    try {
+      paymentController = Get.find<PaymentController>();
+      print('PaymentController found successfully');
+    } catch (e) {
+      paymentController = Get.put(PaymentController());
+      print('Created new PaymentController instance');
     }
   }
 
@@ -188,6 +203,7 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
                 widget.makeController.text = selected.name;
                 log("heee   ${widget.makeController.text}");
                 brandController.fetchCarClasses(selected.id.toString());
+                 selected_makeID=selected.id.toString();
                 widget.classController.clear();
                 brandController.selectedClass.value = null;
                 setState(() {});
@@ -220,7 +236,7 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
               );
               if (selected != null) {
                 brandController.selectedClass.value = selected;
-                brandController.fetchCarModels(selected.id.toString());
+                brandController.fetchCarModels(selected.id.toString(),selected_makeID);
                 widget.modelController.clear();
                 brandController.selectedModel.value = null;
                 setState(() {});
@@ -544,50 +560,9 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
             ),
           ),
         ),
-        SizedBox(height: height * .01),
+        SizedBox(height: height * .015),
 
-        // request 360 and feature
-
-        // CustomDropDownTyping(
-        //   label: "Request 360 Service",
-        //   controller: widget.request360Controller,
-        //   options: ["No", "Yes"],
-        //   enableSearch: false,
-        //   hintText: "",
-        //   onChanged: (value) {
-        //     setState(() {
-        //
-        //       // Handle warranty selection if needed
-        //     });
-        //   },
-        // ),
-        // SizedBox(height: height * .01),
-
-        // CustomDropDownTyping(
-        //   label: "Feature Your Ad",
-        //   controller: widget.requestFeatureController,
-        //   options: ["No", "Yes"],
-        //   enableSearch: false,
-        //   hintText: "",
-        //   onChanged: (value) {
-        //     setState(() {
-        //       // Handle warranty selection if needed
-        //     });
-        //   },
-        // ),
-        // CustomDropDownTyping(
-        //   label: "Feature Your Ad",
-        //   controller: widget.requestFeatureController,
-        //   options: ["No", "Yes"],
-        //   enableSearch: false,
-        //   hintText: "",
-        //   onChanged: (value) {
-        //     setState(() {
-        //       // Handle warranty selection if needed
-        //     });
-        //   },
-        // ),
-        // Terms and Conditions Checkbox
+    //  comment payment for now amira
         widget.postData == null
             ? Column(
           children: [
@@ -600,15 +575,21 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
                   onChanged: widget.onReq360Changed,
                   activeColor: Colors.black,
                 ),
+
                 Expanded(
-                  child: Text(
-                    lc.make_360,
-                    style: TextStyle(
-                      fontSize: 14.4.w,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child:
+                   Text(
+                      // مثال: "Make 360 (150 QAR) Your Ad ..." حسب النصوص عندك
+                      // lc.make_360_first + widget.priceReq360Api + lc.make_360_second,
+                     lc.make_360_first ,
+                      style: TextStyle(
+                        fontSize: 14.4.w,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+
                 ),
+
               ],
             ),
             SizedBox(height: height * .01),
@@ -621,15 +602,21 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
                   onChanged: widget.onReqFeaturedChanged,
                   activeColor: Colors.black,
                 ),
+
                 Expanded(
-                  child: Text(
-                    lc.pin_ad,
-                    style: TextStyle(
-                      fontSize: 14.4.w,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child:
+                    Text(
+                      // lc.pin_ad_first + widget.priceFeaturedApi+ lc.pin_ad_second,
+                      lc.pin_ad_first ,
+
+                      style: TextStyle(
+                        fontSize: 14.4.w,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+
                 ),
+
               ],
             ),
           ],

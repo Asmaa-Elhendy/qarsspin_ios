@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
+import 'package:qarsspin/controller/payments/payment_controller.dart';
 import 'package:qarsspin/controller/rental_cars_controller.dart';
 import 'package:qarsspin/controller/search_controller.dart';
 import 'package:qarsspin/controller/showrooms_controller.dart';
@@ -32,8 +33,9 @@ class MyBinding implements Bindings {
     Get.lazyPut(() => AdCleanController(AdRepository()), fenix: true);
     Get.lazyPut(() => MyAdCleanController(MyAdDataLayer()), fenix: true);
     Get.lazyPut(() => MySearchController(), fenix: true);
-
-    // Initialize FCM Service
+    Get.put(PaymentController(), permanent: true);
+  
+     // Initialize FCM Service
     Get.lazyPut(() => FCMService(), fenix: true);
     
     // Initialize NotificationsController last since it might depend on other controllers

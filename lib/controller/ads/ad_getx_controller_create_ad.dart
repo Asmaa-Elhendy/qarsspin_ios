@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:qarsspin/controller/auth/auth_controller.dart';
 import '../../model/car_brand.dart';
 import '../../model/car_category.dart';
 import '../../model/class_model.dart';
@@ -76,13 +77,13 @@ class AdCleanController extends GetxController {
     }
   }
 
-  void fetchCarModels(String classId) async {
+  void fetchCarModels(String classId,String makeId) async {
     isLoadingModels.value = true;
     carModels.clear();
     selectedModel.value = null;
 
     try {
-      final models = await repository.fetchCarModels(classId);
+      final models = await repository.fetchCarModels(classId,makeId);
       carModels.assignAll(models);
     } catch (e) {//k
       print("Error fetching models: $e");
@@ -129,6 +130,9 @@ class AdCleanController extends GetxController {
 
       // Update the adData with selected make, class, and model
       CreateAdModel updatedAdData = CreateAdModel(
+          Owner_Name: Get.find<AuthController>().userFullName,
+          Owner_Mobile: Get.find<AuthController>().ownerMobile,
+          Owner_Email: Get.find<AuthController>().ownerEmail,
         makeId: selectedMake.value!.id.toString(),
         classId: selectedClass.value!.id.toString(),
         modelId: selectedModel.value!.id.toString(),

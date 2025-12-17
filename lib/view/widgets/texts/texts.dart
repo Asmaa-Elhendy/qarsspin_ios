@@ -8,12 +8,12 @@ import '../../../controller/const/colors.dart';
 blueText(text){
 
   return Text(text,
-  style: TextStyle(
-    fontFamily: fontFamily,
-    color: AppColors.accent,
-    fontSize: 12.sp,
+    style: TextStyle(
+      fontFamily: fontFamily,
+      color: AppColors.accent,
+      fontSize: 12.sp,
 
-  ),
+    ),
 
   );
 
@@ -59,8 +59,8 @@ price(text,{bool small =false}) {
     style: TextStyle(
       color: AppColors.primary,
       fontFamily: fontFamily,
-      fontSize: small?16.sp:18.sp,
-      fontWeight: FontWeight.w700,
+      fontSize: small?16.sp:20.sp,
+      fontWeight: FontWeight.w800,
     ),
 
   );

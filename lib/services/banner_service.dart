@@ -91,10 +91,10 @@ class BannerService {
     final requestBody = {
       'Client_Date':clientDate //'01-25-2025',
     };//tk
-
-    log('🔵 ==== BANNER FETCH STARTED ====');//k
-    log('🔗 URL: $url');
-    log('📝 Request body: $requestBody');
+    //
+    // log('🔵 ==== BANNER FETCH STARTED ====');//k
+    // log('🔗 URL: $url');
+    // log('📝 Request body: $requestBody');
 //k
     try {
       final response = await http.post(
@@ -106,69 +106,69 @@ class BannerService {
         body: requestBody,
       );
 
-      log('\n📥 Response received');
-      log('Status: ${response.statusCode}');
-      log('Headers: ${response.headers}');
+      // log('\n📥 Response received');
+      // log('Status: ${response.statusCode}');
+      // log('Headers: ${response.headers}');
 
       // Log response body (first 500 chars)
       final responsePreview = response.body.length > 500
           ? '${response.body.substring(0, 500)}...'
           : response.body;
-      log('Response (first 500 chars):\n$responsePreview');
+    //  log('Response (first 500 chars):\n$responsePreview');
 
       if (response.statusCode == 200) {
         try {
           // Parse the response
           final dynamic jsonResponse = json.decode(response.body);
-          log('\n🔍 Parsed JSON type: ${jsonResponse.runtimeType}');
+      //    log('\n🔍 Parsed JSON type: ${jsonResponse.runtimeType}'); comment banners now
 
           final bannerResponse = BannerResponse.fromJson(jsonResponse);
 
-          log('\n📊 Parsed response:');
-          log('Code: ${bannerResponse.code}');
-          log('Description: ${bannerResponse.desc}');
-          log('Count: ${bannerResponse.count}');
-          log('Banners found: ${bannerResponse.data.length}');
+          // log('\n📊 Parsed response:');
+          // log('Code: ${bannerResponse.code}');
+          // log('Description: ${bannerResponse.desc}');
+          // log('Count: ${bannerResponse.count}');
+          // log('Banners found: ${bannerResponse.data.length}');
 
           if (bannerResponse.code == 'OK' || bannerResponse.code == '200') {
             if (bannerResponse.data.isNotEmpty) {
-              log('✅ Success! Found ${bannerResponse.data.length} banners');
+         //     log('✅ Success! Found ${bannerResponse.data.length} banners');
               // Log first banner details for verification
               if (bannerResponse.data.isNotEmpty) {
                 final firstBanner = bannerResponse.data.first;
-                log('\n📌 First banner details:');
-                log('ID: ${firstBanner.bannerId}');
-                log('Type: ${firstBanner.bannerType}');
-                log('Target: ${firstBanner.targetType}');
-                log('Image URL (PL): ${firstBanner.imageUrlPl}');
+                // log('\n📌 First banner details:');
+                // log('ID: ${firstBanner.bannerId}');
+                // log('Type: ${firstBanner.bannerType}');
+                // log('Target: ${firstBanner.targetType}');
+                // log('Image URL (PL): ${firstBanner.imageUrlPl}');
               }
               return bannerResponse.data;
             } else {
-              log('⚠️  No banners found in response');
+           //   log('⚠️  No banners found in response');
             }
           } else {
-            log('❌ API Error:');
-            log('   Code: ${bannerResponse.code}');
-            log('   Desc: ${bannerResponse.desc}');
+            // log('❌ API Error:');
+            // log('   Code: ${bannerResponse.code}');
+            // log('   Desc: ${bannerResponse.desc}');
           }
         } catch (e, stackTrace) {
-          log('❌ Error parsing response:');
-          log('   Error: $e');
-          log('   Stack trace: $stackTrace');
-          log('   Response body: ${response.body}');
+          // log('❌ Error parsing response:');
+          // log('   Error: $e');
+          // log('   Stack trace: $stackTrace');
+          // log('   Response body: ${response.body}');
         }
       } else {
-        log('❌ HTTP Error:');
-        log('   Status: ${response.statusCode}');
-        log('   Body: ${response.body}');
+        // log('❌ HTTP Error:');
+        // log('   Status: ${response.statusCode}');
+        // log('   Body: ${response.body}');
       }
     } catch (e, stackTrace) {
-      log('❌ Network error:');
-      log('   Error: $e');
-      log('   Stack trace: $stackTrace');
+      //log('❌ Network error:');
+      //log('   Error: $e');
+    //  log('   Stack trace: $stackTrace');
     }
 
-    log('\n🔴 Returning empty banner list');
+   // log('\n🔴 Returning empty banner list');
     return [];
   }
 
@@ -186,7 +186,7 @@ class BannerService {
       {'type': '${lowerType}filler', 'target': 'global'},
     ];
 
-    log('🔍 Looking for banner with type: $type and page: $page (case-insensitive)');
+ //   log('🔍 Looking for banner with type: $type and page: $page (case-insensitive)');
 
     for (var priority in priorityOrder) {
       final matches = banners.where((b) {
@@ -202,17 +202,17 @@ class BannerService {
       }).toList();
 
       if (matches.isNotEmpty) {
-        log('🎯 Found ${matches.length} matches for ${priority['type']} - ${priority['target']}');
+     //   log('🎯 Found ${matches.length} matches for ${priority['type']} - ${priority['target']}');
         matches.shuffle();
         final selected = matches.first;
-        log('🖼️ Selected banner ID: ${selected.bannerId}');
+      //  log('🖼️ Selected banner ID: ${selected.bannerId}');
         return selected;
       } else {
-        log('ℹ️ No match for ${priority['type']} - ${priority['target']}');
+      //  log('ℹ️ No match for ${priority['type']} - ${priority['target']}');
       }
     }
 
-    log('⚠️ No banner found matching criteria');
+  //  log('⚠️ No banner found matching criteria');
     return null;
   }
 }

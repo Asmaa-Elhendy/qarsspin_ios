@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:qarsspin/controller/const/base_url.dart';
 import '../../controller/const/colors.dart';
 import '../../l10n/app_localization.dart';
 
@@ -84,9 +85,9 @@ class HomeServiceCard extends StatelessWidget {
                   child: Text(
                     title,
                     style: TextStyle(
-                      // fontFamily: AppFonts.gilroy,
+                      fontFamily: fontFamily,
                       fontWeight: FontWeight.w600,
-                      fontSize:brand?12.w: 14.w, //update asmaa
+                      fontSize:brand?12.w: 13.5.w, //update asmaa
                       color: Colors.white,
                     ),
                   ),
@@ -189,10 +190,12 @@ class HomeServiceCard extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 title,
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  // fontFamily: AppFonts.gilroy,
+                  fontFamily: fontFamily,
+                  overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.w600,
-                  fontSize:brand?12.w: 14.w, //update asmaa
+                  fontSize:brand?12.w: 13.5.w, //update asmaa
                   color: Colors.white,
                 ),
               ),

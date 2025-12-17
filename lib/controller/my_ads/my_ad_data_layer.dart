@@ -617,4 +617,57 @@ class MyAdDataLayer {
       };
     }
   }
+
+  /// Get Qars request status for a post (feature / 360 / ...).
+  /// This calls:
+  /// GET https://qarspartnersportalapitest.smartvillageqatar.com/api/v1/QarsRequests/Get-Request
+  /// and returns the decoded JSON list ([] if no records).
+  Future<List<dynamic>> getQarsRequestStatus({
+    required int postId,
+    required String requestType,
+  }) async {
+    // بنبني الـ URL بالـ query parameters
+    final uri = Uri.https(
+      'qarspartnersportalapitest.smartvillageqatar.com',
+      '/api/v1/QarsRequests/Get-Request',
+      <String, String>{
+        'postId': postId.toString(),
+        'RequestType': requestType,
+        'RequestFrom': 'Individual',
+      },
+    );
+
+    log('🔍 Calling Get-Request: $uri');
+
+    try {
+      final response = await http.get(
+        uri,
+        headers: {
+          'accept': '*/*',
+        },
+      );
+
+      log('🔍 Get-Request status: ${response.statusCode}');
+      log('🔍 Get-Request body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
+
+        // الـ API بيرجع [] أو List من الـ requests
+        if (decoded is List) {
+          return decoded;
+        } else {
+          log('⚠️ Unexpected Get-Request response type: ${decoded.runtimeType}');
+          return [];
+        }
+      } else {
+        log('❌ Get-Request HTTP error: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      log('❌ Exception in getQarsRequestStatus: $e');
+      return [];
+    }
+  }
+
 }

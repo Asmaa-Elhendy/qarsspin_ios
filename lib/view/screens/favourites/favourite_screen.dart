@@ -103,6 +103,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                             () => CarDetails(
                           sourcekind: fav.sourceKind,
                           postKind: fav.postKind,
+                          mobile: fav.ownerMobile,
                           id: fav.postId,
                         ),
                       );

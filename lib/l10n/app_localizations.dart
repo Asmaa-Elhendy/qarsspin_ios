@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localization_ar.dart';
-import 'app_localization_en.dart';
+import 'app_localizations_ar.dart';
+import 'app_localizations_en.dart';
 
 // ignore_for_file: type=lint
 
@@ -18,7 +18,7 @@ import 'app_localization_en.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'l10n/app_localization.dart';
+/// import 'l10n/app_localizations.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -62,8 +62,7 @@ import 'app_localization_en.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-  _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,8 +82,7 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-  <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -95,7 +92,7 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
-    Locale('en'),
+    Locale('en')
   ];
 
   /// The current Language
@@ -1163,7 +1160,7 @@ abstract class AppLocalizations {
   /// No description provided for @make_360_first.
   ///
   /// In en, this message translates to:
-  /// **'Make Your Advertisement special by 360 session('**
+  /// **'Make Your Advertisement special by 360 session'**
   String get make_360_first;
 
   /// No description provided for @make_360_second.
@@ -1175,13 +1172,13 @@ abstract class AppLocalizations {
   /// No description provided for @pin_ad_first.
   ///
   /// In en, this message translates to:
-  /// **'Pin your advertisement at the top for ('**
+  /// **'Pin your advertisement at the top for '**
   String get pin_ad_first;
 
   /// No description provided for @pin_ad_second.
   ///
   /// In en, this message translates to:
-  /// **') QR only'**
+  /// **',) QR only'**
   String get pin_ad_second;
 
   /// No description provided for @agreement.
@@ -1322,12 +1319,16 @@ abstract class AppLocalizations {
   /// **'Ready to showCase your vehicle like a pro?'**
   String get ready_pro;
 
-  /// No description provided for @msg_360.
+  /// No description provided for @msg_360_first.
   ///
   /// In en, this message translates to:
-  /// **'Our 360 photo session will beautifully highlight your post \nclick Confirm, and we\'ll handle the rest! \n   Additional charges 100 riyal can apply.'**
- /// In app_localization.dart, replace the msg_360 getter with:
+  /// **'Our 360 photo session will beautifully highlight your post \nclick Confirm, and we \'ll handle the rest! \n   Additional charges'**
   String get msg_360_first;
+
+  /// No description provided for @msg_360_second.
+  ///
+  /// In en, this message translates to:
+  /// **'can apply.'**
   String get msg_360_second;
 
   /// No description provided for @confirmation.
@@ -1378,12 +1379,16 @@ abstract class AppLocalizations {
   /// **'Let\'s make your post the center \\n of orientation'**
   String get centered_ad;
 
-  /// No description provided for @feature_ad_msg.
+  /// No description provided for @feature_ad_msg_first.
   ///
   /// In en, this message translates to:
-  /// **'Featuring your post ensures it stands out at the top for everyone to see.\n Additional charges 150 QR can apply.\n Click confirm to proceed!'**
-  /// In app_localization.dart, replace the feature_ad_msg getter with:
+  /// **'Featuring your post ensures it stands out at the top for everyone to see.\n Additional charges'**
   String get feature_ad_msg_first;
+
+  /// No description provided for @feature_ad_msg_second.
+  ///
+  /// In en, this message translates to:
+  /// **'can apply.\n Click confirm to proceed!'**
   String get feature_ad_msg_second;
 
   /// No description provided for @payment.
@@ -2111,39 +2116,153 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verification Code is Wrong!'**
   String get msg_Verification_Code_Is_wrong;
-  // In app_localization.dart
+
+  /// No description provided for @youHaveRequestedThisServiceBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'You Have Requested This Service Before'**
   String get youHaveRequestedThisServiceBefore;
-  // In app_localization.dart
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
   String get note;
-  // In app_localization.dart
+
+  /// No description provided for @serviceFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Service Fee'**
   String get serviceFee;
+
+  /// No description provided for @qarOnlyForRequest360Session.
+  ///
+  /// In en, this message translates to:
+  /// **'QAR Only For Request 360 Session.'**
   String get qarOnlyForRequest360Session;
+
+  /// No description provided for @qarOnlyForFeaturePost.
+  ///
+  /// In en, this message translates to:
+  /// **'QAR Only For Feature Post.'**
   String get qarOnlyForFeaturePost;
+
+  /// No description provided for @contactInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Information'**
   String get contactInformation;
+
+  /// No description provided for @pleaseFillAllInformationBelow.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all information below'**
   String get pleaseFillAllInformationBelow;
+
+  /// No description provided for @firstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
   String get firstName;
+
+  /// No description provided for @enterFirstName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter first name'**
   String get enterFirstName;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
   String get requiredField;
+
+  /// No description provided for @lastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
   String get lastName;
+
+  /// No description provided for @enterLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter last name'**
   String get enterLastName;
+
+  /// No description provided for @mobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile'**
   String get mobile;
+
+  /// No description provided for @enterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
   String get enterPhoneNumber;
+
+  /// No description provided for @invalidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number'**
   String get invalidPhoneNumber;
+
+  /// No description provided for @enterEmailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter email address'**
   String get enterEmailAddress;
+
+  /// No description provided for @cemail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
   String get cemail;
+
+  /// No description provided for @proceedToPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'PROCEED TO PAYMENT'**
   String get proceedToPayment;
-  // In app_localization.dart
+
+  /// No description provided for @invalidEmailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email address'**
   String get invalidEmailAddress;
-  // In app_localization.dart
+
+  /// No description provided for @paymentSucceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Succeeded'**
   String get paymentSucceeded;
+
+  /// No description provided for @paymentWasCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment was completed.'**
   String get paymentWasCompleted;
+
+  /// No description provided for @paymentWasNotCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment was not completed.'**
   String get paymentWasNotCompleted;
+
+  /// No description provided for @failedToLoadPaymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load payment methods'**
   String get failedToLoadPaymentMethods;
+
+  /// No description provided for @paymentflowfailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment flow failed'**
   String get paymentflowfailed;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2152,26 +2271,25 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['ar', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['ar', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar':
-      return AppLocalizationsAr();
-    case 'en':
-      return AppLocalizationsEn();
+    case 'ar': return AppLocalizationsAr();
+    case 'en': return AppLocalizationsEn();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-        'an issue with the localizations generation tool. Please file an issue '
-        'on GitHub with a reproducible sample app and the gen-l10n configuration '
-        'that was used.',
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.'
   );
 }

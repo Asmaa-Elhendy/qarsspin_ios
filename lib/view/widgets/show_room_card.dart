@@ -50,170 +50,203 @@ class ShowroomCard extends StatelessWidget {
 
             ],
           ),
-        Container(
-          height: 235.h,
-          margin: EdgeInsets.only(bottom: 24.h),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AppColors.background(context),
-
-            border: Border.all(
+        Card(
+          margin: EdgeInsets.only(bottom: 16.h),
+          color: AppColors.carCardBackground(context),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+              topLeft: Get.locale?.languageCode == 'ar'
+                  ? Radius.circular(10)
+                  : (showroom.pinToTop ? Radius.zero : Radius.circular(20)),
+              topRight: Get.locale?.languageCode != 'ar'
+                  ? Radius.circular(10)
+                  : (showroom.pinToTop ? Radius.zero : Radius.circular(20)),
+            ),
+            side: BorderSide(
               width: 1.w,
-              color:
-              showroom.pinToTop
-                  ? AppColors.danger
-                  : Colors.grey,
+              color: showroom.pinToTop ? AppColors.danger : Colors.grey,
             ),
           ),
+          child: Container(
 
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            height: 190.h,
 
-              Image.network(
-                showroom.logoUrl,
-                fit: BoxFit.fill,
-                height: 160.h,
-                scale: 6,
+            //clipBehavior: Clip.antiAlias,
 
-                width: double.infinity,
+            // margin: EdgeInsets.only(bottom: 14.h),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.only(
+            //
+            //
+            //   bottomRight:  Radius.circular(20),
+            //   bottomLeft:  Radius.circular(20),
+            //   topLeft: Get.locale?.languageCode=='ar'?Radius.circular(20):showroom.pinToTop?Radius.zero:Radius.circular(20),
+            //     topRight: Get.locale?.languageCode!='ar'?Radius.circular(20):showroom.pinToTop?Radius.zero:Radius.circular(20),
+            //
+            //   ),
+            //
+            //   color: AppColors.background(context),
+            //
+            //   border: Border.all(
+            //     width: 1.w,
+            //     color:
+            //     showroom.pinToTop
+            //         ? AppColors.danger
+            //         : Colors.grey,
+            //   ),
+            // ),
+            //
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-
-                //height: 60,
-
-              ),
-              Container(
-                height: 65.h,
-                color: AppColors.background(context),
-                padding:  EdgeInsets.symmetric( vertical: 8.h,horizontal: 8.w),
-                child: carCare?
-                Row(
-                  children: [
-                    // Buttons
-
-                    40.horizontalSpace,
-                    yellowButtons(context:context,title: lc.details,w: 100.w,onTap: (){
-
-                      // Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
-
-                      Get.find<ShowRoomsController>().getShowRoomRating(showroom.partnerId);
-                      Get.find<ShowRoomsController>().getPartnerGallery(showroom.partnerId);
-                      Get.find<ShowRoomsController>().checkFollowing(showroom.partnerId);
-                      Get.to(CarCareDetails(rental,notificationsController,carCare: showroom,isCarCare: carCare,));}),
-
-
-                    35.horizontalSpace,
-                    Container(
-                      height: 40.h,
-                      width: 2.w,
-                      color: Colors.grey,
-                    ),
-                    25.horizontalSpace,
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Get.locale?.languageCode == 'ar'
+                        ? Radius.circular(10)
+                        : (showroom.pinToTop ? Radius.zero : Radius.circular(20)),
+                    topRight: Get.locale?.languageCode != 'ar'
+                        ? Radius.circular(10)
+                        : (showroom.pinToTop ? Radius.zero : Radius.circular(20)),
+                  ),
 
 
-                    //Spacer(),
-                    // 10.horizontalSpace,
-                    Row(
-                      children: [
-                        Icon(Icons.remove_red_eye, size: 18, color: Colors.blue),
-                        SizedBox(width: 2),
-                        Text("${showroom.visitsCount}"),
-                      ],
-                    ),
-                    25.horizontalSpace,
-                    Container(
-                      // margin:EdgeInsets.symmetric(horizontal: 3.w),
-                      height: 40.h,
-                      width: 2.w,
-                      color: Colors.grey,
-                    ),
-                    25.horizontalSpace,
-                    Row(
-                      children: [
-                        Icon(Icons.star, size: 25.w, color: Colors.amber),
-                        const SizedBox(width: 2),
-                        Text("${showroom.avgRating}"),
-                        10.horizontalSpace,
+                  child: Image.network(
 
-                      ],
-                    ),
-                  ],
-                ):
-                Row(
-                  children: [
-                    // Buttons
+                    showroom.logoUrl,
+                    fit: BoxFit.fill,
+                    height: 130.h,
 
-                    yellowButtons(title: lc.details,w: 100.w,onTap: (){
-                      // Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
-                      Get.find<ShowRoomsController>().getShowRoomRating(showroom.partnerId);
-                      Get.find<ShowRoomsController>().getPartnerGallery(showroom.partnerId);
-                      Get.find<ShowRoomsController>().checkFollowing(showroom.partnerId);
-                      Get.to(CarCareDetails(rental,notificationsController,carCare: showroom,isCarCare: carCare,));},context: context),
+                    width: double.infinity,
 
-
-                    10.horizontalSpace,
-                    Container(
-                      height: 40.h,
-                      width: 2.5.w,
-                      color: Colors.grey,
-                    ),
-                    10.horizontalSpace,
-
-                    yellowButtons(context:context,title: "${lc.cars} (${showroom.carsCount})",w: 100.w,onTap: (){
-                      Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
-
-                      if(rental){
-
-                        // Get.find<RentalCarsController>().setRentalCars(showroom.rentalCars!);
-                        Get.to(AllRentalCars(notificationsController));
-                      }else{
-
-//                        Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
-                        Get.find<BrandController>().switchLoading();
-                        // Get.find<BrandController>().setCars(showroom.carsForSale!,showroom.partnerNamePl);
-                        //
-                        Get.to(CarsBrandList(notificationsController,brandName: showroom.partnerNamePl,postKind: "CarForSale",));
-                      }
-                    }),
-                    10.horizontalSpace,
-                    Container(
-                      height: 40.h,
-                      width: 2.5.w,
-                      color: Colors.grey,
-                    ),
-
-
-                    //Spacer(),
-                    25.horizontalSpace,
-                    Row(
-                      children: [
-                        const Icon(Icons.remove_red_eye, size: 18, color: Colors.blue),
-                        const SizedBox(width: 2),
-                        Text("${showroom.visitsCount}"),
-                      ],
-                    ),
-                    10.horizontalSpace,
-                    Container(
-                      // margin:EdgeInsets.symmetric(horizontal: 3.w),
-                      height: 40.h,
-                      width: 2.5.w,
-                      color: Colors.grey,
-                    ),
-                    10.horizontalSpace,
-                    Row(
-                      children: [
-                        Icon(Icons.star, size: 25.w, color: Colors.amber),
-                        8.horizontalSpace,
-                        Text("${showroom.avgRating}"),
-                        10.horizontalSpace,
-
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  height: 55.h,
+                  color: AppColors.background(context),
+                  padding:  EdgeInsets.symmetric( vertical: 6.h,horizontal: 8.w),
+                  child: carCare?
+                  Row(
+                    children: [
+                      // Buttons
+
+                      10.horizontalSpace,
+                      yellowButtons(context:context,title: lc.details,w: 145.w,onTap: (){
+
+                        // Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
+
+                        Get.find<ShowRoomsController>().getShowRoomRating(showroom.partnerId);
+                        Get.find<ShowRoomsController>().getPartnerGallery(showroom.partnerId);
+                        Get.find<ShowRoomsController>().checkFollowing(showroom.partnerId);
+                        Get.to(CarCareDetails(rental,notificationsController,carCare: showroom,isCarCare: carCare,));}),
+
+
+                      10.horizontalSpace,
+                      Container(
+                        height: 40.h,
+                        width: 2.w,
+                        color: Colors.grey,
+                      ),
+                      25.horizontalSpace,
+
+
+                      //Spacer(),
+                      // 10.horizontalSpace,
+                      Row(
+                        children: [
+                          Icon(Icons.remove_red_eye, size: 18, color: Colors.blue),
+                          SizedBox(width: 2),
+                          Text("${showroom.visitsCount}"),
+                        ],
+                      ),
+                      25.horizontalSpace,
+                      Container(
+                        // margin:EdgeInsets.symmetric(horizontal: 3.w),
+                        height: 40.h,
+                        width: 2.w,
+                        color: Colors.grey,
+                      ),
+                      25.horizontalSpace,
+                      Row(
+                        children: [
+                          Icon(Icons.star, size: 25.w, color: Colors.amber),
+                          const SizedBox(width: 2),
+                          Text("${showroom.avgRating}"),
+                          10.horizontalSpace,
+
+                        ],
+                      ),
+                    ],
+                  ):
+                  Row(
+                    children: [
+                      // Buttons
+
+                      yellowButtons(title: lc.details,w: 95.w,onTap: (){
+                        // Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
+                        Get.find<ShowRoomsController>().getShowRoomRating(showroom.partnerId);
+                        Get.find<ShowRoomsController>().getPartnerGallery(showroom.partnerId);
+                        Get.find<ShowRoomsController>().checkFollowing(showroom.partnerId);
+                        Get.to(CarCareDetails(rental,notificationsController,carCare: showroom,isCarCare: carCare,));},context: context),
+
+
+                      10.horizontalSpace,
+                      Container(
+                        height: 40.h,
+                        width: 2.5.w,
+                        color: Colors.grey,
+                      ),
+                      10.horizontalSpace,
+
+                      yellowButtons(context:context,title: "${lc.cars} (${showroom.carsCount})",w: 100.w,onTap: (){
+                        Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
+
+                        if(rental){
+                          Get.to(AllRentalCars(notificationsController));
+                        }else{
+                          Get.find<BrandController>().switchLoading();
+                          Get.to(CarsBrandList(notificationsController,brandName: showroom.partnerNamePl,postKind: "CarForSale",));
+                        }
+                      }),
+                      10.horizontalSpace,
+                      Container(
+                        height: 40.h,
+                        width: 2.5.w,
+                        color: Colors.grey,
+                      ),
+
+                      12.horizontalSpace,
+                      Row(
+                        children: [
+                          const Icon(Icons.remove_red_eye, size: 18, color: Colors.blue),
+                          const SizedBox(width: 2),
+                          Text("${showroom.visitsCount}"),
+                        ],
+                      ),
+                      8.horizontalSpace,
+                      Container(
+                        // margin:EdgeInsets.symmetric(horizontal: 3.w),
+                        height: 40.h,
+                        width: 2.5.w,
+                        color: Colors.grey,
+                      ),
+                      10.horizontalSpace,
+                      Row(
+                        children: [
+                          Icon(Icons.star, size: 25.w, color: Colors.amber),
+                          2.horizontalSpace,
+                          Text("${showroom.avgRating}"),
+                          10.horizontalSpace,
+
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
