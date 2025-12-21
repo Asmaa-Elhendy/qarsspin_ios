@@ -1,8 +1,8 @@
 
 
 import '../../model/specs.dart';
-
-String base_url = "https://qarsspintest.smartvillageqatar.com/QarsSpinAPI";
+//Production
+String base_url = "https://qarsspinapp.smartvillageqatar.com";//"https://qarsspintest.smartvillageqatar.com/QarsSpinAPI"; test
 String fontFamily = "Gilroy";
 
 

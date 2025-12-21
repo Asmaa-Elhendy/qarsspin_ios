@@ -760,50 +760,112 @@ class BrandController extends GetxController{
     favoriteList.remove(car);
     update();
   }
-  getFavList()async{
-    favoriteList=[];
+  // getFavList()async{
+  //   favoriteList=[];
+  //   print("Authhh${authController.userFullName}");
+  //   final uri = Uri.parse(
+  //     "$base_url/BrowsingRelatedApi.asmx/GetFavoritesByUser?UserName=${authController.userFullName}&Our_Secret=$ourSecret",
+  //   );
+  //
+  //   final response = await http.get(uri);
+  //
+  //   if (response.statusCode == 200) {
+  //     final body = jsonDecode(response.body);
+  //     print("favvvv${body["Data"]}");
+  //     for(int i = 0; i<body["Data"].length;i++){
+  //       favoriteList.add(
+  //           CarModel(postId: body["Data"][i]["Post_ID"],
+  //               pinToTop: body["Data"][i]["Pin_To_Top"],
+  //               postKind: body["Data"][i]["Post_Kind"],
+  //               postCode:body["Data"][i]["Post_Code"],
+  //               carNamePl:body["Data"][i]["Car_Name_PL"],
+  //               carNameSl: body["Data"][i]["Car_Name_SL"],
+  //               ownerMobile: "",
+  //               ownerEmail:"",
+  //               ownerName: "",
+  //               carNameWithYearPl: body["Data"][i]["Car_Name_With_Year_PL"],
+  //               carNameWithYearSl: body["Data"][i]["Car_Name_With_Year_SL"],
+  //               manufactureYear: body["Data"][i]["Manufacture_Year"],
+  //               tag: body["Data"][i]["Tag"],
+  //               sourceKind: body["Data"][i]["Source_Kind"],
+  //               mileage: body["Data"][i]["Mileage"],
+  //               askingPrice:  body["Data"][i]["Asking_Price"],
+  //
+  //
+  //               rectangleImageFileName:  body["Data"][i]["Rectangle_Image_FileName"],
+  //               rectangleImageUrl:  body["Data"][i]["Rectangle_Image_URL"]));
+  //
+  //     }
+  //     loadingMode =false;
+  //     update();
+  //
+  //
+  //   }
+  //
+  //
+  // }
+  getFavList() async {
+    favoriteList = [];
     print("Authhh${authController.userFullName}");
+
     final uri = Uri.parse(
       "$base_url/BrowsingRelatedApi.asmx/GetFavoritesByUser?UserName=${authController.userFullName}&Our_Secret=$ourSecret",
     );
 
-    final response = await http.get(uri);
+    try {
+      final response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      print("favvvv${body["Data"]}");
-      for(int i = 0; i<body["Data"].length;i++){
-        favoriteList.add(
-            CarModel(postId: body["Data"][i]["Post_ID"],
-                pinToTop: body["Data"][i]["Pin_To_Top"],
-                postKind: body["Data"][i]["Post_Kind"],
-                postCode:body["Data"][i]["Post_Code"],
-                carNamePl:body["Data"][i]["Car_Name_PL"],
-                carNameSl: body["Data"][i]["Car_Name_SL"],
-                ownerMobile: "",
-                ownerEmail:"",
-                ownerName: "",
-                carNameWithYearPl: body["Data"][i]["Car_Name_With_Year_PL"],
-                carNameWithYearSl: body["Data"][i]["Car_Name_With_Year_SL"],
-                manufactureYear: body["Data"][i]["Manufacture_Year"],
-                tag: body["Data"][i]["Tag"],
-                sourceKind: body["Data"][i]["Source_Kind"],
-                mileage: body["Data"][i]["Mileage"],
-                askingPrice:  body["Data"][i]["Asking_Price"],
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
 
+        final data = body["Data"]; // ممكن تكون null
+        print("favvvv$data");
 
-                rectangleImageFileName:  body["Data"][i]["Rectangle_Image_FileName"],
-                rectangleImageUrl:  body["Data"][i]["Rectangle_Image_URL"]));
+        if (data == null || data is! List || data.isEmpty) {
+          loadingMode = false;
+          update();
+          return;
+        }
 
+        for (int i = 0; i < data.length; i++) {
+          favoriteList.add(
+            CarModel(
+              postId: data[i]["Post_ID"],
+              pinToTop: data[i]["Pin_To_Top"],
+              postKind: data[i]["Post_Kind"],
+              postCode: data[i]["Post_Code"],
+              carNamePl: data[i]["Car_Name_PL"],
+              carNameSl: data[i]["Car_Name_SL"],
+              ownerMobile: "",
+              ownerEmail: "",
+              ownerName: "",
+              carNameWithYearPl: data[i]["Car_Name_With_Year_PL"],
+              carNameWithYearSl: data[i]["Car_Name_With_Year_SL"],
+              manufactureYear: data[i]["Manufacture_Year"],
+              tag: data[i]["Tag"],
+              sourceKind: data[i]["Source_Kind"],
+              mileage: data[i]["Mileage"],
+              askingPrice: data[i]["Asking_Price"],
+              rectangleImageFileName: data[i]["Rectangle_Image_FileName"],
+              rectangleImageUrl: data[i]["Rectangle_Image_URL"],
+            ),
+          );
+        }
+
+        loadingMode = false;
+        update();
+      } else {
+        loadingMode = false;
+        update();
+        print("GetFavoritesByUser failed: ${response.statusCode}");
       }
-      loadingMode =false;
+    } catch (e) {
+      loadingMode = false;
       update();
-
-
+      print("Error in getFavList: $e");
     }
-
-
   }
+
   getPostMedia(id)async{
     postMedia = [
       carDetails.rectangleImageUrl

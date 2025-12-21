@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:qarsspin/controller/const/base_url.dart';
 
 class NotificationDatabase {
   static final NotificationDatabase _instance = NotificationDatabase._internal();
@@ -14,7 +15,7 @@ class NotificationDatabase {
   }) async {
     try {
       final url = Uri.parse(
-        'https://qarsspintest.smartvillageqatar.com/QarsSpinAPI/BrowsingRelatedApi.asmx/GetNotificationsListByUser',
+        '$base_url/BrowsingRelatedApi.asmx/GetNotificationsListByUser',
       );
 
       final response = await http.post(
