@@ -551,12 +551,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enter_desc => 'ادخل وصف للسيارة...';
 
   @override
-  String get make_360_first => 'اجعل إعلانك مميزًا بجلسة تصوير 360 درجة ';
+  String get make_360_first => 'اجعل إعلانك مميزًا بجلسة تصوير 360 درجة (';
 
   @override
   String get make_360_second => 'ريال فقط لجلسة التصوير الكاملة)';
 
-  String get pin_ad_first => 'قم بتثبيت إعلانك في الأعلى مقابل ';
+  String get pin_ad_first => 'قم بتثبيت إعلانك في الأعلى مقابل (';
   String get pin_ad_second => ') ريال فقط';
   @override
   String get agreement => 'أوافق على الشروط والأحكام';
@@ -631,7 +631,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get msg_360_first => 'جلسة التصوير 360 درجة الخاصة بنا ستبرز منشورك بشكل جميل \nانقر فوق تأكيد، وسنقوم بالباقي! \n   رسوم إضافية';
 
   @override
-  String get msg_360_second => ' يمكن أن تنطبق.';
+  String get msg_360_second => 'ريال يمكن أن تنطبق.';
   @override
   String get confirmation => 'تأكيد';
 
@@ -651,6 +651,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get payment_failed_or_cancelled => '\"فشلت عملية الدفع أو تم إلغاؤها';
 
   @override
+  String get missingMasterIdError => 'معرف masterId مفقود في استجابة التحقق من الطلب';
+
+  @override
+  String get noPaymentMethodsError => 'لا توجد طرق دفع متاحة لهذه المعاملة';
+
+  @override
+  String get noTransactionUrlError => 'رابط المعاملة غير متوفر';
+
+  @override
+  String get unhandledStatusError => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';
+
+  @override
   String get feature_ad => 'إجعل اعلانك مميزا';
 
   @override
@@ -660,7 +672,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get feature_ad_msg_first => 'سيضمن تمييز منشورك ظهوره في المقدمة للجميع لرؤيته.\n رسوم إضافية';
 
   @override
-  String get feature_ad_msg_second => ' يمكن أن تنطبق.\n انقر فوق تأكيد للمتابعة!';
+  String get feature_ad_msg_second => 'ريال يمكن أن تنطبق.\n انقر فوق تأكيد للمتابعة!';
   @override
   String get payment => 'الدفع';
 
@@ -1035,7 +1047,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get msg_Verification_Code_Is_wrong => 'رمز التحقق غير صحيح!';
   // In app_localization_ar.dart
   @override
-  String get youHaveRequestedThisServiceBefore => 'لقد طلبت هذه الخدمة من قبل';
+  String get youHaveRequestedThisServiceBefore => 'انت بالفعل لديك هذه الميزة';
   // In app_localization_ar.dart
   @override
   String get note => 'ملاحظة';
@@ -1086,5 +1098,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get failedToLoadPaymentMethods => 'فشل تحميل طرق الدفع';
   @override
   String get paymentflowfailed => 'فشل تدفق الدفع:';
+  @override
+  String get wait_admin_approval=> 'لقد طلبت ذلك سابقاً، يرجى الانتظار حتى تتم الموافقة من قبل الإدارة.';
 
 }

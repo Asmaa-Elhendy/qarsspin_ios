@@ -25,7 +25,7 @@ class ValidationMethods {
     required Function() showMissingCoverImageDialog, required postData,
   }) {
     // Check if all mandatory fields are filled
-    if (make.isEmpty ||
+    if(postData==null){  if (make.isEmpty ||
         carClass.isEmpty ||
         model.isEmpty ||
         type.isEmpty ||
@@ -39,7 +39,22 @@ class ValidationMethods {
     ) {
       showMissingFieldsDialog("Please fill all (*)  mandatory fields");
       return false;
+    }}else{
+      if (make.isEmpty ||
+          carClass.isEmpty ||
+          model.isEmpty ||
+          type.isEmpty ||
+          year.isEmpty ||
+          askingPrice.isEmpty ||
+          mileage.isEmpty
+
+      //  ||  description.isEmpty
+      ) {
+        showMissingFieldsDialog("Please fill all (*)  mandatory fields");
+        return false;
+      }
     }
+
 
     // Check if cover image is selected
     if (coverImage.isEmpty) {
@@ -86,18 +101,18 @@ class ValidationMethods {
     }
 
     // Validate minimum price
-    if (minimumPrice.isNotEmpty) {
-      try {
-        double minPrice = double.parse(minimumPrice);
-        if (minPrice <= 0) {
-          showErrorDialog("Minimum bidding price must be greater than 0");
-          return false;
-        }
-      } catch (e) {
-        showErrorDialog("Please enter a valid minimum bidding price");
-        return false;
-      }
-    }
+    // if (minimumPrice.isNotEmpty) {
+    //   try {
+    //     double minPrice = double.parse(minimumPrice);
+    //     if (minPrice <= 0) {
+    //       showErrorDialog("Minimum bidding price must be greater than 0");
+    //       return false;
+    //     }
+    //   } catch (e) {
+    //     showErrorDialog("Please enter a valid minimum bidding price");
+    //     return false;
+    //   }
+    // }
 
     // Validate mileage
     if (mileage.isNotEmpty) {

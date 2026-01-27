@@ -52,8 +52,8 @@ class FormFieldsSection extends StatefulWidget {
   final ValueChanged<bool?>? onReqFeaturedChanged;
   final Function({bool shouldPublish}) onValidateAndSubmit;
   final VoidCallback? onUnfocusDescription;
-  final String priceReq360Api;
-  final String priceFeaturedApi;
+  // final String priceReq360Api;
+  // final String priceFeaturedApi;
 
   const FormFieldsSection({
     Key? key,
@@ -90,8 +90,8 @@ class FormFieldsSection extends StatefulWidget {
     required this.onReqFeaturedChanged,
     required this.onValidateAndSubmit,
     this.onUnfocusDescription,
-    required this.priceReq360Api,
-    required this.priceFeaturedApi
+    // required this.priceReq360Api,
+    // required this.priceFeaturedApi
   }) : super(key: key);
 
   @override
@@ -580,8 +580,8 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
                   child:
                    Text(
                       // مثال: "Make 360 (150 QAR) Your Ad ..." حسب النصوص عندك
-                      // lc.make_360_first + widget.priceReq360Api + lc.make_360_second,
-                     lc.make_360_first ,
+                 lc.make_360_first + ' ${paymentController.request360ServicePrice.toString()} ' + lc.make_360_second,
+                  //   lc.make_360_first ,
                       style: TextStyle(
                         fontSize: 14.4.w,
                         fontWeight: FontWeight.bold,
@@ -606,8 +606,8 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
                 Expanded(
                   child:
                     Text(
-                      // lc.pin_ad_first + widget.priceFeaturedApi+ lc.pin_ad_second,
-                      lc.pin_ad_first ,
+                       lc.pin_ad_first + paymentController.featuredServicePrice.toString()+ lc.pin_ad_second,
+                     // lc.pin_ad_first ,
 
                       style: TextStyle(
                         fontSize: 14.4.w,

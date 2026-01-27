@@ -1366,6 +1366,30 @@ abstract class AppLocalizations {
   /// **'Payment failed or cancelled.'**
   String get payment_failed_or_cancelled;
 
+  /// No description provided for @missingMasterIdError.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing masterId in check-order-flow response'**
+  String get missingMasterIdError;
+
+  /// No description provided for @noPaymentMethodsError.
+  ///
+  /// In en, this message translates to:
+  /// **'No payment methods available for this transaction'**
+  String get noPaymentMethodsError;
+
+  /// No description provided for @noTransactionUrlError.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction URL is missing'**
+  String get noTransactionUrlError;
+
+  /// No description provided for @unhandledStatusError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again.'**
+  String get unhandledStatusError;
+
   /// No description provided for @feature_ad.
   ///
   /// In en, this message translates to:
@@ -2140,6 +2164,7 @@ abstract class AppLocalizations {
   String get paymentWasNotCompleted;
   String get failedToLoadPaymentMethods;
   String get paymentflowfailed;
+  String get wait_admin_approval;
 }
 
 class _AppLocalizationsDelegate

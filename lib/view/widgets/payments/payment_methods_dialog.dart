@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import 'package:qarsspin/controller/const/base_url.dart';
 import 'payment_webview_page.dart';
 
 import 'package:get/get.dart';
@@ -251,7 +252,7 @@ class _InvoiceLinkDialogState extends State<InvoiceLinkDialog> {
   Future<void> _openUrl(String url) async {
     if (url.isEmpty) return;
     // Open dedicated in-app webview that auto-detects returnUrl and closes with normalized result
-    const String returnBase = "https://qarspartnersportalapitest.smartvillageqatar.com/api/Payment/payment-result";
+    const String returnBase = "$baseUrlWeb/api/Payment/result";
     final normalized = await PaymentWebViewPage.open(
       context,
       url: url,
@@ -259,6 +260,7 @@ class _InvoiceLinkDialogState extends State<InvoiceLinkDialog> {
     );
     if (!mounted) return;
     if (normalized is Map<String, dynamic>) {
+      log("normalized herr $normalized");
       final status = normalized['status']?.toString();
       final paid = status != null && status.toLowerCase() == 'success';
       debugPrint(' [InvoiceLinkDialog] WebView returned normalized=$normalized, paid=$paid');
@@ -458,22 +460,40 @@ class _InvoiceLinkDialogState extends State<InvoiceLinkDialog> {
 
 class NewPaymentMethodsDialog extends StatefulWidget {
   final List<PaymentMethod> paymentMethods;
-  final PaymentInitiateRequest userInformationRequest;
+  final PaymentInitiateRequest? userInformationRequest;
   final bool isArabic;
+  final int orderMasterId;
+  final Map<String, dynamic> initiateResponse;
 
   const NewPaymentMethodsDialog({
     Key? key,
     required this.paymentMethods,
-    required this.userInformationRequest,
+    this.userInformationRequest,
     this.isArabic = true,
-  }) : super(key: key);
+    required this.orderMasterId,
+    required this.initiateResponse,
+  })  : assert(
+          (userInformationRequest != null) ||
+          (orderMasterId != null && initiateResponse != null),
+          'Either userInformationRequest or both orderMasterId and initiateResponse must be provided'
+        ),
+        super(key: key);
 
   static Future<Map<String, dynamic>?> show({
     required BuildContext context,
     required List<PaymentMethod> paymentMethods,
-    required PaymentInitiateRequest userInformationRequest,
+    PaymentInitiateRequest? userInformationRequest,
     bool isArabic = true,
+    int? orderMasterId,
+    Map<String, dynamic>? initiateResponse,
   }) async {
+    // Validate that we have either userInformationRequest or both orderMasterId and initiateResponse
+    if (userInformationRequest == null && (orderMasterId == null || initiateResponse == null)) {
+      throw ArgumentError(
+        'Either userInformationRequest or both orderMasterId and initiateResponse must be provided'
+      );
+    }
+
     final paymentController = Get.find<PaymentController>();
     final supportedCurrencies = paymentController.currencies
         .map((currency) => currency.toUpperCase())
@@ -486,8 +506,10 @@ class NewPaymentMethodsDialog extends StatefulWidget {
       barrierColor: Colors.black87,
       builder: (_) => NewPaymentMethodsDialog(
         paymentMethods: paymentMethods,
-        isArabic: isArabic,
         userInformationRequest: userInformationRequest,
+        isArabic: isArabic,
+        orderMasterId: orderMasterId!,
+        initiateResponse: initiateResponse!,
       ),
     );
   }
@@ -521,7 +543,8 @@ class _NewPaymentMethodsDialogState extends State<NewPaymentMethodsDialog> {
       final currencyIso = method.paymentCurrencyIso.toUpperCase();
       final isSupported = supportedCurrencies.contains(currencyIso);
       print('Method: ${method.paymentMethodEn} - Currency: $currencyIso - Supported: $isSupported');
-      return isSupported;
+    //  return isSupported; comment payment methods by currencies for now because get currencies 404
+      return true;
     }).toList();
 
     log('Filtered Payment Methods: ${filteredPaymentMethods.length}');
@@ -537,36 +560,67 @@ class _NewPaymentMethodsDialogState extends State<NewPaymentMethodsDialog> {
 
     try {
       final paymentController = Get.find<PaymentController>();
-
-      // Extract selected payment method id
       final int paymentMethodId = method.paymentMethodId;
+      const String returnUrl = "$baseUrlWeb/api/Payment/result";
 
-      // Provide a return URL for the gateway to redirect back to the app/site
-      // Add a default status=Success to satisfy backend validation on redirect
-      const String returnUrl = "https://qarspartnersportalapitest.smartvillageqatar.com/api/Payment/payment-result?status=Success";
+      // We must have both orderMasterId and initiateResponse from the parent
+      if (widget.orderMasterId == null || widget.initiateResponse == null) {
+        throw Exception('Payment initiation data is missing. Please provide both orderMasterId and initiateResponse');
+      }
 
+      log('Executing payment for order ${widget.orderMasterId} with method $paymentMethodId');
+      
       final executeResponse = await paymentController.executePayment(
-        amount: widget.userInformationRequest.amount,
-        customerName: widget.userInformationRequest.customerName,
-        email: widget.userInformationRequest.email,
-        mobile: widget.userInformationRequest.mobile,
+        orderMasterId: widget.orderMasterId!,
         paymentMethodId: paymentMethodId,
         returnUrl: returnUrl,
       );
-      log('execute $executeResponse');
-      // Show invoice dialog with the payment URL
-      final data = (executeResponse ?? const <String, dynamic>{})['Data'] as Map<String, dynamic>?;
-      final invoiceId = data?['InvoiceId']?.toString() ?? '';
-      final paymentId = data?['PaymentId']?.toString() ?? data?['PaymentID']?.toString() ?? '';
-      final paymentUrl = (data == null)
-          ? ''
-          : (data['RedirectUrl'] ?? data['PaymentURL'] ?? data['InvoiceURL'] ?? '').toString();
+
+      log('Payment execution response: $executeResponse');
+      
+      // Process the response
+      final data = executeResponse as Map<String, dynamic>? ?? {};
+      
+      // Add debug logging for the response
+      log('Processing payment response: $data');
+      if (data['raw'] != null) {
+        log('Raw payment data: ${data['raw']}');
+        log('Payment URL from raw: ${(data['raw'] as Map)['PaymentUrl']}');
+      }
+      
+      // Get the raw data if it exists, otherwise use the root object
+      final rawData = (data['raw'] as Map<String, dynamic>?) ?? {};
+      log(rawData.toString());
+      // Try to get values from rawData first, then fall back to root object
+      final invoiceId = rawData['InvoiceId']?.toString() ?? 
+                       data['invoiceId']?.toString() ?? 
+                       data['InvoiceId']?.toString() ?? 
+                       data['orderId']?.toString() ??
+                       '';
+                       
+      final paymentId = rawData['PaymentId']?.toString() ??
+                       data['paymentId']?.toString() ?? 
+                       data['PaymentId']?.toString() ?? 
+                       data['paymentID']?.toString() ??
+                       '';
+                       
+      final paymentUrl = rawData['PaymentUrl']?.toString() ??
+                        rawData['paymentUrl']?.toString() ??
+                        data['paymentUrl']?.toString() ??
+                        data['PaymentUrl']?.toString() ??
+                        data['paymentURL']?.toString() ??
+                        data['redirectUrl']?.toString() ??
+                        data['RedirectUrl']?.toString() ??
+                        '';
+                        
+      log('Extracted payment URL: $paymentUrl');
 
       // Sequential flow: close this dialog first, let parent open the invoice dialog next
       if (mounted) {
         final payload = {
           'paymentMethod': method,
           'executeResponse': executeResponse,
+          'initiateResponse': widget.initiateResponse,
           'invoice': {
             'invoiceId': invoiceId,
             'paymentId': paymentId.isNotEmpty ? paymentId : null,
@@ -574,11 +628,12 @@ class _NewPaymentMethodsDialogState extends State<NewPaymentMethodsDialog> {
             'isArabic': widget.isArabic,
           },
         };
-        debugPrint(' [NewPaymentMethodsDialog] returning payload (to open invoice next) =$payload');
+        debugPrint(' [NewPaymentMethodsDialog] returning payload = $payload');
         Navigator.pop(context, payload);
         return;
       }
     } catch (e) {
+      log("fail $e");
       setState(() {
         errorMessage = widget.isArabic
             ? 'حدث خطأ أثناء تنفيذ عملية الدفع'

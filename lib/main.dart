@@ -13,6 +13,7 @@ import 'package:qarsspin/view/screens/home_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'controller/Theme_controller.dart';
+import 'controller/auth/auth_controller.dart';
 import 'controller/auth/secret.dart';
 import 'controller/binding.dart';
 import 'controller/const/app_theme.dart';
@@ -42,6 +43,7 @@ void main() async{
   final fcmService = FCMService();
   await fcmService.initialize();
   Get.put(fcmService);  // Register the instance with GetX
+  Get.put(AuthController(), permanent: true);
 
   // Initialize Notifications Controller
   Get.put(NotificationsController());

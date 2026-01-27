@@ -50,6 +50,22 @@ class PaymentController extends GetxController {
   final RxList<QarsService> individualQarsServices = <QarsService>[].obs;
   final RxBool isLoadingQarsServices = false.obs;
   final RxString qarsServicesErrorMessage = ''.obs;
+  
+  // Service details for easy access
+  final Rx<QarsService?> featuredService = Rx<QarsService?>(null);
+  final Rx<QarsService?> request360Service = Rx<QarsService?>(null);
+  
+  // Convenience getters with null safety
+  int? get featuredServiceId => featuredService.value?.qarsServiceId;
+  double? get featuredServicePrice => featuredService.value?.qarsServicePrice.toDouble();
+  int? get request360ServiceId => request360Service.value?.qarsServiceId;
+  double? get request360ServicePrice => request360Service.value?.qarsServicePrice.toDouble();
+
+
+  // ---------- Check Order Flow ----------
+  final RxBool isCheckingOrderFlow = false.obs;
+  final Rxn<Map<String, dynamic>> lastCheckOrderFlowResponse = Rxn<Map<String, dynamic>>();
+  final RxString checkOrderFlowErrorMessage = ''.obs;
 
 
   @override
@@ -57,11 +73,11 @@ class PaymentController extends GetxController {
     super.onInit();
     print('🔄 PaymentController initialized');
     // Load currencies when controller is initialized
-    loadSupportedCurrencies().then((_) {
-      print('💰 Currencies loaded successfully: ${currencies.length} items');
-    }).catchError((error) {
-      print('❌ Failed to load currencies: $error');
-    });
+    // loadSupportedCurrencies().then((_) {
+    //   print('💰 Currencies loaded successfully: ${currencies.length} items');
+    // }).catchError((error) {
+    //   print('❌ Failed to load currencies: $error');
+    // });
     // Load Qars services (Individual)
     loadIndividualQarsServices().then((_) {
       print(
@@ -73,62 +89,89 @@ class PaymentController extends GetxController {
 
 
   /// GET /api/Payment/supported-currencies
-  Future<void> loadSupportedCurrencies({String env = 'Sandbox'}) async {
-    try {
-      print('⏳ Loading supported currencies...');
-      isLoadingCurrencies.value = true;
-      currenciesErrorMessage.value = '';
-
-      print('🌍 Environment: $env');
-      final SupportedCurrenciesResponse response =
-          await _service.getSupportedCurrencies(env: env);
-
-      environment.value = response.environment;
-      print('🌐 Environment set to: ${environment.value}');
-      
-      print('🔄 Updating currencies list...');
-      currencies.assignAll(response.currencies);
-      print('✅ Successfully loaded ${currencies.length} currencies');
-      
-    } catch (e, stackTrace) {
-      final errorMsg = '❌ Error loading currencies: $e';
-      print(errorMsg);
-      print('📜 Stack trace: $stackTrace');
-      
-      currenciesErrorMessage.value = errorMsg;
-      // Re-throw to allow callers to handle the error if needed
-      rethrow;
-    } finally {
-      isLoadingCurrencies.value = false;
-      print('🏁 Currency loading completed. isError: ${currenciesErrorMessage.isNotEmpty}');
-    }
-  }
+  // Future<void> loadSupportedCurrencies({String env = 'Sandbox'}) async {
+  //   try {
+  //     print('⏳ Loading supported currencies...');
+  //     isLoadingCurrencies.value = true;
+  //     currenciesErrorMessage.value = '';
+  //
+  //     print('🌍 Environment: $env');
+  //     final SupportedCurrenciesResponse response =
+  //         await _service.getSupportedCurrencies(env: env);
+  //
+  //     environment.value = response.environment;
+  //     print('🌐 Environment set to: ${environment.value}');
+  //
+  //     print('🔄 Updating currencies list...');
+  //     currencies.assignAll(response.currencies);
+  //     print('✅ Successfully loaded ${currencies.length} currencies');
+  //
+  //   } catch (e, stackTrace) {
+  //     final errorMsg = '❌ Error loading currencies: $e';
+  //     print(errorMsg);
+  //     print('📜 Stack trace: $stackTrace');
+  //
+  //     currenciesErrorMessage.value = errorMsg;
+  //     // Re-throw to allow callers to handle the error if needed
+  //     rethrow;
+  //   } finally {
+  //     isLoadingCurrencies.value = false;
+  //     print('🏁 Currency loading completed. isError: ${currenciesErrorMessage.isNotEmpty}');
+  //   }
+  // }
 
   /// POST /api/Payment/initiate
+  /// 
+  /// Initiates a payment for a specific post with the given services
+  /// 
+  /// [postId] - The ID of the post to make payment for
+  /// [serviceIds] - List of Qars service IDs to apply to the post
+  /// [amount] - The total amount to be paid
+  /// [customerName] - Name of the customer making the payment
+  /// [email] - Email of the customer
+  /// [mobile] - Mobile number of the customer
+  /// [externalUser] - Optional external user identifier
   Future<Map<String, dynamic>?> initiatePayment({
+    required int postId,
+    required List<int> serviceIds,
     required num amount,
     required String customerName,
     required String email,
     required String mobile,
-  }) async
-  {
+    String? externalUser,
+  }) async {
     try {
       isInitiatingPayment.value = true;
       paymentErrorMessage.value = '';
       lastPaymentInitiateResponse.value = null;
 
+      log('💳 Initializing payment for post $postId with services: $serviceIds');
+      
       final request = PaymentInitiateRequest(
+        postId: postId,
+        qarsServiceIds: serviceIds,
         amount: amount,
         customerName: customerName,
         email: email,
         mobile: mobile,
       );
 
-      final response = await _service.initiatePayment(request);
+      log('📦 Payment request created: ${request.toJson()}');
+      
+      final response = await _service.initiatePayment(
+        request,
+        externalUser: externalUser,
+      );
 
+      log('✅ Payment initiated successfully');
       lastPaymentInitiateResponse.value = response;
       return response;
-    } catch (e) {
+      
+    } catch (e, stackTrace) {
+      final errorMsg = '❌ Failed to initiate payment: $e';
+      log(errorMsg);
+      log('📜 Stack trace: $stackTrace');
+      
       paymentErrorMessage.value = e.toString();
       return null;
     } finally {
@@ -137,34 +180,50 @@ class PaymentController extends GetxController {
   }
 
   /// POST /api/Payment/execute
+  /// 
+  /// Executes a payment for a specific order with the selected payment method
+  /// 
+  /// [orderMasterId] - The ID of the order from the initiate payment response
+  /// [paymentMethodId] - The ID of the selected payment method
+  /// [returnUrl] - The URL to return to after payment completion
+  /// [externalUser] - Optional external user identifier
   Future<Map<String, dynamic>?> executePayment({
-    required num amount,
-    required String customerName,
-    required String email,
-    required String mobile,
+    required int orderMasterId,
     required int paymentMethodId,
     required String returnUrl,
+    String? externalUser,
   }) async {
     try {
       isExecutingPayment.value = true;
       executePaymentErrorMessage.value = '';
       lastPaymentExecuteResponse.value = null;
 
+      log('💳 Executing payment for order $orderMasterId with method $paymentMethodId');
+      
       final request = PaymentExecuteRequest(
-        amount: 1,//amount, amount 1 pound
-        customerName: customerName,
-        email: email,
-        mobile: mobile,
+        orderMasterId: orderMasterId,
         paymentMethodId: paymentMethodId,
         returnUrl: returnUrl,
       );
-     log('execute payment request $request');
-      final response = await _service.executePayment(request);
+      
+      log('📦 Payment execution request: ${request.toJson()}');
+      
+      final response = await _service.executePayment(
+        request,
+        externalUser: externalUser,
+      );
 
+      log('✅ Payment executed successfully');
+      log('response of execute is $response');
       lastPaymentExecuteResponse.value = response;
       return response;
-    } catch (e) {
-      executePaymentErrorMessage.value = e.toString();
+      
+    } catch (e, stackTrace) {
+      final errorMsg = '❌ Failed to execute payment: $e';
+      log(errorMsg);
+      log('📜 Stack trace: $stackTrace');
+      
+      executePaymentErrorMessage.value = errorMsg;
       return null;
     } finally {
       isExecutingPayment.value = false;
@@ -231,25 +290,68 @@ class PaymentController extends GetxController {
     try {
       isLoadingQarsServices.value = true;
       qarsServicesErrorMessage.value = '';
-      individualQarsServices.clear();
-
-      print('⏳ Loading Qars services (Individual)...');
-
-      final services =
-      await _service.getQarsServices(serviceTypeFilter: 'Individual');
-
-      individualQarsServices.assignAll(services);
-      print('✅ Loaded ${individualQarsServices.length} Individual services');
-    } catch (e, stackTrace) {
-      final errorMsg = '❌ Error loading Qars services: $e';
-      print(errorMsg);
-      print('📜 Stack trace: $stackTrace');
+      
+      final services = await _service.getQarsServices();
+      
+      // Filter for Individual services only
+      final individualServices = services
+          .where((service) => service.qarsServiceType == 'Individual')
+          .toList();
+      
+      individualQarsServices.assignAll(individualServices);
+      
+      // Extract and store specific services
+      for (var service in individualServices) {
+        if (service.qarsServiceName.toLowerCase().contains('feature')) {
+          featuredService.value = service;
+          print('⭐ Featured service stored - ID: ${service.qarsServiceId}, Name: ${service.qarsServiceName}, Price: ${service.qarsServicePrice}');
+        } else if (service.qarsServiceName.toLowerCase().contains('360')) {
+          request360Service.value = service;
+          print('🔄 360 service stored - ID: ${service.qarsServiceId}, Name: ${service.qarsServiceName}, Price: ${service.qarsServicePrice}');
+        }
+      }
+      
+    } catch (e) {
+      final errorMsg = 'Failed to load Qars services: $e';
       qarsServicesErrorMessage.value = errorMsg;
+      rethrow;
     } finally {
       isLoadingQarsServices.value = false;
       print(
           '🏁 Qars services loading completed. isError: ${qarsServicesErrorMessage.isNotEmpty}');
     }
   }
+
+
+  Future<Map<String, dynamic>?> checkOrderFlow({
+    required int postId,
+    required int qarsServiceId,
+  }) async {
+    try {
+      isCheckingOrderFlow.value = true;
+      checkOrderFlowErrorMessage.value = '';
+      lastCheckOrderFlowResponse.value = null;
+
+      log('🧭 Checking order flow for postId=$postId, serviceId=$qarsServiceId');
+
+      final resp = await _service.checkOrderFlow(
+        postId: postId,
+        qarsServiceId: qarsServiceId,
+      );
+
+      lastCheckOrderFlowResponse.value = resp;
+      log('✅ checkOrderFlow success: $resp');
+      return resp;
+    } catch (e, st) {
+      final msg = '❌ checkOrderFlow failed: $e';
+      log(msg);
+      log('📜 Stack trace: $st');
+      checkOrderFlowErrorMessage.value = msg;
+      return null;
+    } finally {
+      isCheckingOrderFlow.value = false;
+    }
+  }
+
 
 }

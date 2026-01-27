@@ -543,29 +543,95 @@ class MyAdCleanController extends GetxController {
 
   /// Check if there is an existing 360 request for this post.
   /// Returns true if API returns non-empty list, false if [].
-  Future<bool> hasExisting360Request({
+  // Future<bool> hasExisting360Request({
+  //   required int postId,
+  //   required String requestType,
+  // }) async
+  // {
+  //   try {
+  //     isCheckingRequestStatus.value = true;
+  //     requestStatusError.value = null;
+  //
+  //     final result = await repository.getQarsRequestStatus(
+  //       postId: postId,
+  //       requestType:requestType,
+  //     );
+  //
+  //     log('🔍 360 Request status for post $postId: ${result.length} item(s)');
+  //     // لو result.isEmpty → [] (لا يوجد طلب)، لو فيها elements → فيه طلبات قديمة
+  //     return result.isNotEmpty;
+  //   } catch (e) {
+  //     requestStatusError.value = e.toString();
+  //     log('❌ Error checking 360 request status: $e');
+  //     return false;
+  //   } finally {
+  //     isCheckingRequestStatus.value = false;
+  //   }
+  // }
+  Future<QarsDecision> checkQarsDecision({
     required int postId,
     required String requestType,
   }) async {
+
     try {
       isCheckingRequestStatus.value = true;
       requestStatusError.value = null;
 
-      final result = await repository.getQarsRequestStatus(
+      final list = await repository.getQarsRequestStatus(
         postId: postId,
-        requestType:requestType,
+        requestType: requestType,
       );
 
-      log('🔍 360 Request status for post $postId: ${result.length} item(s)');
-      // لو result.isEmpty → [] (لا يوجد طلب)، لو فيها elements → فيه طلبات قديمة
-      return result.isNotEmpty;
+      // 1) [] => يقدر يطلب
+      if (list.isEmpty) return QarsDecision.canRequest;
+
+      final now = DateTime.now();
+
+      bool isExpired(Map<String, dynamic> item) {
+        final endStr = (item['endServiceDate'] ?? '').toString().trim();
+        final endDate = DateTime.tryParse(endStr);
+        // لو مش موجود/مش قابل للبارس، اعتبره "مش منتهي" عشان ما نفتحش طلبات غلط
+        if (endDate == null) return false;
+        return endDate.isBefore(now);
+      }
+
+      bool isActive(Map<String, dynamic> item) => !isExpired(item);
+
+      // 1) لو كل اللي راجع منتهي => يقدر يطلب
+      final allExpired = list.every((e) => isExpired(Map<String, dynamic>.from(e)));
+      if (allExpired) return QarsDecision.canRequest;
+
+      // 3) Pending (لو فيه أي Pending فعال)
+      final hasActivePending = list.any((e) {
+        final item = Map<String, dynamic>.from(e);
+        final status = (item['requestStatus'] ?? '').toString().trim().toLowerCase();
+        return status == 'pending' && isActive(item);
+      });
+      if (hasActivePending) return QarsDecision.pending;
+
+      // 2) Completed (لو فيه أي Completed فعال)
+      final hasActiveCompleted = list.any((e) {
+        final item = Map<String, dynamic>.from(e);
+        final status = (item['requestStatus'] ?? '').toString().trim().toLowerCase();
+        return status == 'completed' && isActive(item);
+      });
+      if (hasActiveCompleted) return QarsDecision.completed;
+
+      // غير كده => يقدر يطلب
+      return QarsDecision.canRequest;
     } catch (e) {
       requestStatusError.value = e.toString();
-      log('❌ Error checking 360 request status: $e');
-      return false;
+      return QarsDecision.canRequest;
     } finally {
       isCheckingRequestStatus.value = false;
     }
   }
 
+
+
+}
+enum QarsDecision {
+  canRequest,
+  pending,
+  completed,
 }

@@ -645,6 +645,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payment_failed_or_cancelled => 'Payment failed or cancelled.';
 
   @override
+  String get noPaymentMethodsError => 'No payment methods available for this transaction';
+
+  @override
+  String get noTransactionUrlError => 'Transaction URL is missing';
+
+  @override
+  String get unhandledStatusError => 'An unexpected error occurred. Please try again.';
+
+  @override
+  String get missingMasterIdError => 'Missing masterId in check-order-flow response';
+
+  @override
   String get feature_ad => 'Feature Your Ad';
 
   @override
@@ -1020,7 +1032,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_Verification_Code_Is_wrong => 'Verification Code is Wrong!';
 
   @override
-  String get youHaveRequestedThisServiceBefore => 'You Have Requested This Service Before';
+  String get youHaveRequestedThisServiceBefore => 'You Already Have This Service';
 
   @override
   String get note => 'Note';

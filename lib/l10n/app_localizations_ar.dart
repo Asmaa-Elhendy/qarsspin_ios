@@ -645,6 +645,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get payment_failed_or_cancelled => '\"فشلت عملية الدفع أو تم إلغاؤها';
 
   @override
+  String get noPaymentMethodsError => 'لا توجد طرق دفع متاحة لهذه المعاملة';
+
+  @override
+  String get noTransactionUrlError => 'رابط المعاملة غير متوفر';
+
+  @override
+  String get unhandledStatusError => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get missingMasterIdError => 'معرف masterId مفقود في استجابة التحقق من الطلب';
+
+  @override
   String get feature_ad => 'إجعل اعلانك مميزا';
 
   @override
@@ -1020,7 +1032,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get msg_Verification_Code_Is_wrong => 'رمز التحقق غير صحيح!';
 
   @override
-  String get youHaveRequestedThisServiceBefore => 'You Have Requested This Service Before';
+  String get youHaveRequestedThisServiceBefore => 'You Already Have This Service';
 
   @override
   String get note => 'ملاحظة';
@@ -1090,4 +1102,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get paymentflowfailed => 'فشل تدفق الدفع:';
+  @override
+  String get wait_admin_approval=> 'لقد طلبت ذلك سابقاً، يرجى الانتظار حتى تتم الموافقة من قبل الإدارة.';
 }

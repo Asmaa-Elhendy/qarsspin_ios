@@ -1,3 +1,4 @@
+import 'dart:async'; // ✅ ADDED: for Completer (to wait for dialogs)
 import 'dart:developer';
 import 'dart:io';
 
@@ -9,18 +10,21 @@ import '../../../../controller/ads/data_layer.dart';
 import '../../../../controller/auth/auth_controller.dart';
 import '../../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../../controller/my_ads/my_ad_data_layer.dart';
+import '../../../../controller/payments/payment_controller.dart';
 import '../../../../controller/specs/specs_controller.dart';
+import '../../../../l10n/app_localization.dart';
 import '../../../../model/create_ad_model.dart';
+import '../../../../model/payment/payment_method_model.dart';
+
+import '../../my_ads/dialog.dart' as dialog;
+import '../../payments/payment_methods_dialog.dart';
+import '../dialogs/contact_info_dialog.dart';
 
 class AdSubmissionService {
-  // User credentials - these should be moved to a proper configuration/session management
-
   static Future<void> submitAd({
     required bool shouldPublish,
-    // required TextEditingController request360controller,
-    // required TextEditingController featureyouradcontroller,
-    required bool  isRequest360,
-    required bool  isFeaturedPost,
+    required bool isRequest360,
+    required bool isFeaturedPost,
     required BuildContext context,
     required List<String> images,
     required String coverImage,
@@ -45,28 +49,16 @@ class AdSubmissionService {
     required Function(String) showErrorDialog,
     required Function() hideLoadingDialog,
     required Function() navigateToMyAds,
-
     String? postId,
     bool coverPhotoChanged = false,
   }) async {
     try {
       showLoadingDialog();
 
-      // Get the controller instance
-      final AdCleanController brandController = Get.find<AdCleanController>();
-
-      // Get selected IDs from the controller
-      final selectedMake = brandController.selectedMake.value;
-      final selectedClass = brandController.selectedClass.value;
-      final selectedModel = brandController.selectedModel.value;
-      final selectedCategory = brandController.selectedCategory.value;
-
       await _submitOrUpdateAd(
         shouldPublish: shouldPublish,
-        isRequest360:  isRequest360,
-        isFeaturedPost:  isFeaturedPost,
-        // request360controller:  request360controller,
-        // featureyouradcontroller:  featureyouradcontroller,
+        isRequest360: isRequest360,
+        isFeaturedPost: isFeaturedPost,
         context: context,
         images: images,
         coverImage: coverImage,
@@ -100,6 +92,7 @@ class AdSubmissionService {
     }
   }
 
+  // ✅ updateAd untouched (زي ما هو عندك) — سيبته كما هو
   static Future<void> updateAd({
     required String PostStaus,
     required BuildContext context,
@@ -128,28 +121,23 @@ class AdSubmissionService {
     required Function(String, String, {bool isPublished}) showSuccessDialog,
     required Function(String) showErrorDialog,
     required Function() hideLoadingDialog,
-  }) async
-  {
+  }) async {
     try {
       showLoadingDialog();
 
-      // Get the controller instance
       final AdCleanController brandController = Get.find<AdCleanController>();
-
-      // Get selected IDs from the controller
       final selectedMake = brandController.selectedMake.value;
       final selectedClass = brandController.selectedClass.value;
       final selectedModel = brandController.selectedModel.value;
       final selectedCategory = brandController.selectedCategory.value;
 
-      // Convert warranty to boolean
       bool warrantyAvailable = warranty.toLowerCase() == 'yes';
 
-      // Get color values as proper hex strings
-      String exteriorColorHex = '#${exteriorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
-      String interiorColorHex = '#${interiorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+      String exteriorColorHex =
+          '#${exteriorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+      String interiorColorHex =
+          '#${interiorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
 
-      // Create the ad data model
       CreateAdModel adData = CreateAdModel(
         Owner_Name: Get.find<AuthController>().userFullName,
         Owner_Mobile: Get.find<AuthController>().ownerMobile,
@@ -175,7 +163,6 @@ class AdSubmissionService {
 
       log('Updating ad with data: ${adData.toJson()}');
 
-      // Submit the ad update to the backend
       final adRepository = AdRepository();
       final response = await adRepository.updateCarAd(
         postId: postId,
@@ -185,12 +172,11 @@ class AdSubmissionService {
       log('API Response: $response');
 
       if (response['Code'] == 'OK' || response['Code']?.toString().toLowerCase() == 'ok') {
-        // Upload cover photo if we have a post ID and cover image AND it was changed
         if (postId.isNotEmpty && coverImage.isNotEmpty && coverPhotoChanged) {
           log('Uploading cover photo for post ID: $postId');
           await adRepository.uploadCoverPhoto(
             postId: postId,
-            ourSecret: ourSecret, // Using the same secret as in ad creation
+            ourSecret: ourSecret,
             imagePath: coverImage,
           );
           log('Cover photo upload completed');
@@ -198,80 +184,99 @@ class AdSubmissionService {
           log('Cover photo not changed, skipping upload');
         }
 
-        // Upload video if we have a post ID and video path AND it was changed
         if (postId.isNotEmpty && videoPath != null && videoPath.isNotEmpty && videoChanged) {
           log('Uploading video for post ID: $postId');
-          var res= await adRepository.uploadVideoForPost(
+          await adRepository.uploadVideoForPost(
             postId: postId,
-            ourSecret: ourSecret, // Using the same secret as in ad creation
+            ourSecret: ourSecret,
             videoPath: videoPath,
           );
-          log('Video upload completed ${res}');
+          log('Video upload completed');
         } else if (!videoChanged) {
           log('Video not changed, skipping upload');
         }
 
-        // Note: Gallery photos are NOT uploaded during update - only during create
-
-        // Hide loading dialog only after all operations are complete
         hideLoadingDialog();
 
         String successMessage = "Ad updated successfully!\nPost ID: $postId";
-        log("pooooooooooooooooooooooooo $PostStaus");
-        // Publish again approved/ pending approval posts (for modify mode)
-        if (PostStaus=="Approved"||PostStaus=="Pending Approval") { //here if approved
-          log('📤 [PUBLISH] Requesting publish for ad: $postId (Mode: Modify)');
 
-          // Request publish after a short delay
-          Future.delayed(Duration(milliseconds: 300), () async {
+        if (PostStaus == "Approved" || PostStaus == "Pending Approval") {
+          log('📤 [PUBLISH] Requesting publish for ad: $postId (Mode: Modify)');
+          Future.delayed(const Duration(milliseconds: 300), () async {
             try {
               final MyAdCleanController myAdController = Get.find<MyAdCleanController>();
               bool publishSuccess = await myAdController.requestPublishAd(
-                userName: userName, // This should come from user session
+                userName: userName,
                 postId: postId,
-                ourSecret: ourSecret, // This should come from app config
+                ourSecret: ourSecret,
               );
 
               if (publishSuccess) {
-                log('✅ [PUBLISH] Publish request sent successfully for ad: $postId');
-                // Update success message to include publish info
                 String publishSuccessMessage = "$successMessage\n\n📤 Publish request sent successfully!";
                 showSuccessDialog(publishSuccessMessage, postId, isPublished: true);
               } else {
-                log('❌ [PUBLISH] Failed to send publish request for ad: $postId');
                 String publishErrorMessage = "$successMessage\n\n⚠️ Failed to send publish request.";
                 showSuccessDialog(publishErrorMessage, postId, isPublished: true);
               }
             } catch (e) {
-              log('❌ [PUBLISH] Error sending publish request: ${e.toString()}');
               String publishErrorMessage = "$successMessage\n\n⚠️ Error sending publish request.";
               showSuccessDialog(publishErrorMessage, postId, isPublished: true);
             }
           });
-        }
-        else {
-          // Show success dialog for draft save
+        } else {
           showSuccessDialog(successMessage, postId, isPublished: false);
         }
       } else {
         String errorMessage = response['Desc'] ?? 'Failed to update ad';
-        log('Error response: Code=${response['Code']}, Desc=$errorMessage');
         showErrorDialog(errorMessage);
       }
-
     } catch (e) {
       hideLoadingDialog();
-      log('Error updating ad: $e');
       showErrorDialog('An error occurred while updating your ad. Please try again.');
     }
   }
 
+  // ✅ ADDED: show dialog and WAIT until user closes it (so navigation happens after)
+  static Future<void> _showInfoThenContinue({
+    required BuildContext context,
+    required String title,
+    required String message,
+  }) async {
+    final completer = Completer<void>();
+
+    dialog.SuccessDialog.show(
+      request: true,
+      context: context,
+      title: title,
+      message: message,
+      onClose: () {
+        if (!completer.isCompleted) completer.complete();
+      },
+      onTappp: () {
+        if (!completer.isCompleted) completer.complete();
+      },
+    );
+
+    await completer.future;
+  }
+
+  // ✅ ADDED: payment status dialog (success/fail) + wait
+  static Future<void> _showPaymentStatusThenContinue({
+    required BuildContext context,
+    required bool success,
+    required AppLocalizations lc,
+  }) async {
+    await _showInfoThenContinue(
+      context: context,
+      title: success ? lc.paymentSucceeded : lc.payment_failed,
+      message: success ? lc.paymentWasCompleted : lc.paymentWasNotCompleted,
+    );
+  }
+
   static Future<void> _submitOrUpdateAd({
-    required shouldPublish,
-    // required request360controller,
-    // required featureyouradcontroller,
-    required bool  isRequest360,
-    required bool  isFeaturedPost,
+    required bool shouldPublish,
+    required bool isRequest360,
+    required bool isFeaturedPost,
     required BuildContext context,
     required List<String> images,
     required String coverImage,
@@ -298,30 +303,33 @@ class AdSubmissionService {
     required Function() navigateToMyAds,
     String? postId,
     bool coverPhotoChanged = false,
-  }) async
-  {
+  }) async {
     try {
-      // Convert warranty to boolean
-      bool warrantyAvailable = warranty.toLowerCase() == 'yes';
+      final lc = AppLocalizations.of(context)!;
 
-      // Get color values as proper hex strings
-      String exteriorColorHex = '#${exteriorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
-      String interiorColorHex = '#${interiorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+      // ✅ IMPORTANT: prevent double pop of loader dialog
+      bool loaderHidden = false;
+      void hideLoaderOnce() {
+        if (!loaderHidden) {
+          hideLoadingDialog();
+          loaderHidden = true;
+        }
+      }
 
-      // Define user credentials (these should be properly configured)
+      final bool warrantyAvailable = warranty.toLowerCase() == 'yes';
 
+      final String exteriorColorHex =
+          '#${exteriorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+      final String interiorColorHex =
+          '#${interiorColor.value.toRadixString(16).padLeft(8, '0').substring(2)}';
 
-      // Get the controller instance
       final AdCleanController brandController = Get.find<AdCleanController>();
-
-      // Get selected IDs from the controller
       final selectedMake = brandController.selectedMake.value;
       final selectedClass = brandController.selectedClass.value;
       final selectedModel = brandController.selectedModel.value;
       final selectedCategory = brandController.selectedCategory.value;
 
-      // Create the ad data model
-      CreateAdModel adData = CreateAdModel(
+      final CreateAdModel adData = CreateAdModel(
         Owner_Name: Get.find<AuthController>().userFullName,
         Owner_Mobile: Get.find<AuthController>().ownerMobile,
         Owner_Email: Get.find<AuthController>().ownerEmail,
@@ -346,156 +354,276 @@ class AdSubmissionService {
 
       log('Submitting ad with data: ${adData.toJson()}');
 
-      // Submit the ad to the backend
       final adRepository = AdRepository();
-      final response;
-
-      if (postId == null) {
-        // Create mode
-        response = await adRepository.createCarAd(adModel: adData);
-      } else {
-        // Update mode
-        response = await adRepository.updateCarAd(
-          postId: postId,
-          adModel: adData,
-        );
-      }
+      final response = (postId == null)
+          ? await adRepository.createCarAd(adModel: adData)
+          : await adRepository.updateCarAd(postId: postId, adModel: adData);
 
       log('API Response: $response');
 
-      if (response['Code'] == 'OK' || response['Code']?.toString().toLowerCase() == 'ok') {
-        String responsePostId = postId ?? response['ID']?.toString() ?? '';
-
-        // Upload cover photo if we have a post ID and cover image
-        if (responsePostId.isNotEmpty && coverImage.isNotEmpty) {
-          // Only upload cover photo if it's a new post or if cover photo was changed
-          if (postId == null || coverPhotoChanged) {
-            log('Uploading cover photo for post ID: $responsePostId');
-            await adRepository.uploadCoverPhoto(
-              postId: responsePostId,
-              ourSecret: ourSecret, // Using the same secret as in ad creation
-              imagePath: coverImage,
-            );
-            log('Cover photo upload completed');
-          } else {
-            log('Cover photo not changed, skipping upload');
-          }
-        }
-
-        // Upload gallery photos (all images except cover photo) - ONLY IN CREATE MODE
-        if (postId == null && responsePostId.isNotEmpty && images.isNotEmpty) {
-          log('Uploading gallery photos for post ID: $responsePostId');
-          await _uploadGalleryPhotos(
-            postId: responsePostId,
-            images: images,
-            coverImage: coverImage,
-          );
-          log('Gallery photos upload completed');
-        }//k
-        // Upload modified specs after gallery photos - ONLY IN CREATE MODE
-        log('Uploading modified specs for post ID: $responsePostId');
-        // Get the SpecsController instance that was used for the form
-        final specsController = Get.find<SpecsController>(tag: 'specs_0');
-        await _uploadModifiedSpecs(
-          postId: responsePostId,
-          specsController: specsController,
-        );
-        log('Modified specs upload completed');
-
-        // Request 360 photo session - ONLY IN CREATE MODE
-        if (postId == null &&
-            isRequest360//request360controller.text == "Yes"
-            && responsePostId.isNotEmpty) {
-          log('Requesting 360 photo session for post ID: $responsePostId');
-          await _request360Session(postId: responsePostId);
-        }
-
-        // Request to feature ad - ONLY IN CREATE MODE
-        if (postId == null &&
-            isFeaturedPost//  featureyouradcontroller.text == "Yes"
-            && responsePostId.isNotEmpty) {
-          log('Requesting to feature ad for post ID: $responsePostId');
-          await _requestFeatureAd(postId: responsePostId);
-          log('Feature ad request completed');
-        }
-
-        // Upload video if we have a post ID and video path
-        if (responsePostId.isNotEmpty && videoPath != null && videoPath.isNotEmpty) {
-          // Only upload video if it's a new post or if video was changed
-          if (postId == null || videoChanged) {
-            log('Uploading video for post ID: $responsePostId');
-            await adRepository.uploadVideoForPost(
-              postId: responsePostId,
-              ourSecret: ourSecret, // Using the same secret as in ad creation
-              videoPath: videoPath,
-            );
-            log('Video upload completed');
-          } else {
-            log('Video not changed, skipping upload');
-          }
-        }
-
-
-
-        // Hide loading dialog only after both operations are complete
-        hideLoadingDialog();
-
-        String successMessage = responsePostId.isNotEmpty
-            ? "Ad ${postId == null ? 'created' : 'updated'} successfully!\nPost ID: $responsePostId"
-            : "Ad ${postId == null ? 'created' : 'updated'} successfully!";
-
-        // Check if we should also request publish (for both create and modify modes)
-        if (shouldPublish && responsePostId.isNotEmpty) {
-          log('📤 [PUBLISH] Requesting publish for ad: $responsePostId (Mode: ${postId == null ? 'Create' : 'Modify'})');
-
-          // Request publish after a short delay
-          Future.delayed(Duration(milliseconds: 300), () async {
-            try {
-              final MyAdCleanController myAdController = Get.find<MyAdCleanController>();
-              bool publishSuccess = await myAdController.requestPublishAd(
-                userName: userName, // This should come from user session
-                postId: responsePostId,
-                ourSecret: ourSecret, // This should come from app config
-              );
-
-              if (publishSuccess) {
-                log('✅ [PUBLISH] Publish request sent successfully for ad: $responsePostId');
-                // Update success message to include publish info
-                String publishSuccessMessage = "$successMessage\n\n📤 Publish request sent successfully!";
-                showSuccessDialog(publishSuccessMessage, responsePostId, isPublished: true);
-              } else {
-                log('❌ [PUBLISH] Failed to send publish request for ad: $responsePostId');
-                String publishErrorMessage = "$successMessage\n\n⚠️ Failed to send publish request.";
-                showSuccessDialog(publishErrorMessage, responsePostId, isPublished: true);
-              }
-            } catch (e) {
-              log('❌ [PUBLISH] Error sending publish request: ${e.toString()}');
-              String publishErrorMessage = "$successMessage\n\n⚠️ Error sending publish request.";
-              showSuccessDialog(publishErrorMessage, responsePostId, isPublished: true);
-            }
-
-            // Navigate after showing publish result
-            Future.delayed(Duration(milliseconds: 500), () {
-              log('🧭 [NAVIGATION] Executing navigation after publish request');
-              navigateToMyAds();
-            });
-          });
-        } else {
-          // Show success dialog first
-          showSuccessDialog(successMessage, responsePostId, isPublished: shouldPublish);
-
-          // Add a small delay to ensure dialog is shown, then navigate
-          Future.delayed(Duration(milliseconds: 500), () {
-            log('🧭 [NAVIGATION] Executing navigation after delay');
-            navigateToMyAds();
-          });
-        }
-      } else {
-        String errorMessage = response['Desc'] ?? 'Failed to ${postId == null ? 'create' : 'update'} ad';
-        log('Error response: Code=${response['Code']}, Desc=$errorMessage');
+      if (!(response['Code'] == 'OK' || response['Code']?.toString().toLowerCase() == 'ok')) {
+        final errorMessage =
+            response['Desc'] ?? 'Failed to ${postId == null ? 'create' : 'update'} ad';
+        hideLoaderOnce();
         showErrorDialog(errorMessage);
+        return;
       }
 
+      // ✅ we have a postId now
+      final String responsePostId = postId ?? response['ID']?.toString() ?? '';
+
+      // =========================
+      // ✅ 1) Upload cover
+      // =========================
+      if (responsePostId.isNotEmpty && coverImage.isNotEmpty) {
+        if (postId == null || coverPhotoChanged) {
+          log('Uploading cover photo for post ID: $responsePostId');
+          await adRepository.uploadCoverPhoto(
+            postId: responsePostId,
+            ourSecret: ourSecret,
+            imagePath: coverImage,
+          );
+          log('Cover photo upload completed');
+        } else {
+          log('Cover photo not changed, skipping upload');
+        }
+      }
+
+      // =========================
+      // ✅ 2) Upload gallery (create only)
+      // =========================
+      if (postId == null && responsePostId.isNotEmpty && images.isNotEmpty) {
+        log('Uploading gallery photos for post ID: $responsePostId');
+        await _uploadGalleryPhotos(
+          postId: responsePostId,
+          images: images,
+          coverImage: coverImage,
+        );
+        log('Gallery photos upload completed');
+      }
+
+      // =========================
+      // ✅ 3) Upload specs (create only) — BEFORE payment
+      // =========================
+      if (postId == null && responsePostId.isNotEmpty) {
+        try {
+          log('Uploading modified specs for post ID: $responsePostId');
+          final specsController = Get.find<SpecsController>(tag: 'specs_0');
+          await _uploadModifiedSpecs(
+            postId: responsePostId,
+            specsController: specsController,
+          );
+          log('Modified specs upload completed');
+        } catch (e) {
+          log('❌ [SPECS] Could not upload specs: $e');
+        }
+      }
+
+      // =========================
+      // ✅ 4) Upload video — BEFORE payment
+      // =========================
+      if (responsePostId.isNotEmpty && videoPath != null && videoPath.isNotEmpty) {
+        if (postId == null || videoChanged) {
+          log('Uploading video for post ID: $responsePostId');
+          await adRepository.uploadVideoForPost(
+            postId: responsePostId,
+            ourSecret: ourSecret,
+            videoPath: videoPath,
+          );
+          log('Video upload completed');
+        } else {
+          log('Video not changed, skipping upload');
+        }
+      }
+
+      // =========================
+      // ✅ 5) PAYMENT AFTER ALL UPLOADS
+      // =========================
+      if ((isRequest360 || isFeaturedPost) && responsePostId.isNotEmpty) {
+        final paymentController = Get.find<PaymentController>();
+
+        double amount = 0;
+        if (isRequest360) amount += (paymentController.request360ServicePrice ?? 0);
+        if (isFeaturedPost) amount += (paymentController.featuredServicePrice ?? 0);
+
+        final contactInfo = await ContactInfoDialog.show(
+          req360Amount: paymentController.request360ServicePrice ?? 0,
+          featuredAmount: paymentController.featuredServicePrice ?? 0,
+          totalAmount: amount,
+          context: context,
+          isRequest360: isRequest360,
+          isFeauredPost: isFeaturedPost,
+        );
+
+        if (contactInfo != null) {
+          try {
+            final String customerName =
+            '${(contactInfo['firstName'] ?? '').toString().trim()} ${(contactInfo['lastName'] ?? '').toString().trim()}'
+                .trim();
+            final String email = (contactInfo['email'] ?? '').toString().trim();
+            final String mobile = (contactInfo['mobile'] ?? '').toString().trim();
+
+            final List<int> selectedServiceIDs = [];
+            if (isRequest360) selectedServiceIDs.add(paymentController.request360ServiceId!);
+            if (isFeaturedPost) selectedServiceIDs.add(paymentController.featuredServiceId!);
+
+            final result = await paymentController.initiatePayment(
+              postId: int.parse(responsePostId),
+              serviceIds: selectedServiceIDs,
+              externalUser: Get.find<AuthController>().userName!,
+              amount: amount,
+              customerName: customerName.isEmpty ? 'Customer' : customerName,
+              email: email,
+              mobile: mobile,
+            );
+
+            log('Payment Initiation Result: $result');
+
+            // ✅ FIX: read methods from myFatoorahRawJson
+            final bool isOk = result?['myFatoorahRawJson']?['IsSuccess'] == true;
+            final methodsRaw = result?['myFatoorahRawJson']?['Data']?['PaymentMethods'];
+
+            if (isOk && methodsRaw is List) {
+              final methods = methodsRaw
+                  .map((e) => PaymentMethod.fromJson(Map<String, dynamic>.from(e)))
+                  .toList();
+
+              final orderMasterId = result?['masterOrderId'] as int?;
+              if (orderMasterId == null) {
+                throw Exception('No masterOrderId in payment initiation response');
+              }
+
+              // ✅ CLOSE LOADER BEFORE opening payment dialogs
+              hideLoaderOnce();
+
+              final methodsPayload = await NewPaymentMethodsDialog.show(
+                context: context,
+                paymentMethods: methods,
+                isArabic: Get.locale?.languageCode == 'ar',
+                orderMasterId: orderMasterId,
+                initiateResponse: result,
+              );
+
+              // ✅ Show payment status dialog BEFORE navigation (and WAIT)
+              if (methodsPayload != null) {
+                Map<String, dynamic>? normalized;
+                final invoice = methodsPayload['invoice'] as Map<String, dynamic>?;
+                if (invoice != null) {
+                  final invoiceResult = await InvoiceLinkDialog.show(
+                    context: context,
+                    invoiceId: (invoice['invoiceId'] ?? '').toString(),
+                    paymentId: (invoice['paymentId'] ?? '').toString(),
+                    paymentUrl: (invoice['paymentUrl'] ?? '').toString(),
+                    isArabic: (invoice['isArabic'] == true),
+                  );
+                  normalized = invoiceResult?['normalizedResult'] as Map<String, dynamic>?;
+                } else {
+                  normalized = methodsPayload['normalizedResult'] as Map<String, dynamic>?;
+                }
+
+                final status = normalized?['status']?.toString();
+                final paymentId = normalized?['paymentId']?.toString();
+
+                final bool success =
+                    (status != null && status.toLowerCase() == 'success') &&
+                        (paymentId != null && paymentId.isNotEmpty);
+
+                // ✅ HERE: show success/fail dialog BEFORE navigation and WAIT
+                await _showPaymentStatusThenContinue(
+                  context: context,
+                  success: success,
+                  lc: lc,
+                );
+              } else {
+                // user backed out of payment methods dialog
+                await _showInfoThenContinue(
+                  context: context,
+                  title: lc.payment_failed,
+                  message: lc.paymentWasNotCompleted,
+                );
+              }
+            } else {
+              // ❌ Methods not available
+              log('❌ Payment methods missing or initiation failed.');
+
+              // ✅ CLOSE LOADER ONCE (if still open)
+              hideLoaderOnce();
+
+              // ✅ Show fail dialog BEFORE navigation and WAIT
+              await _showInfoThenContinue(
+                context: context,
+                title: lc.payment_failed,
+                message: (result?['myFatoorahRawJson']?['Message'] ??
+                    result?['Message'] ??
+                    lc.failedToLoadPaymentMethods)
+                    .toString(),
+              );
+            }
+          } catch (e, st) {
+            log('Payment flow error: $e');
+            log('Stack: $st');
+
+            hideLoaderOnce();
+
+            // ✅ Show fail dialog BEFORE navigation and WAIT
+            await _showInfoThenContinue(
+              context: context,
+              title: lc.payment_failed,
+              message: '${lc.paymentflowfailed} $e',
+            );
+          }
+        } else {
+          log('User cancelled contact info dialog.');
+          // لو المستخدم cancel هنا، هنكمل عادي (بدون ما نكسر الفلو)
+        }
+      }
+
+      // =========================
+      // ✅ 6) NOW do publish + success + navigation (ONE TIME ONLY)
+      // =========================
+      hideLoaderOnce();
+
+      String successMessage = responsePostId.isNotEmpty
+          ? "Ad ${postId == null ? 'created' : 'updated'} successfully!\nPost ID: $responsePostId"
+          : "Ad ${postId == null ? 'created' : 'updated'} successfully!";
+
+      if (shouldPublish && responsePostId.isNotEmpty) {
+        log('📤 [PUBLISH] Requesting publish for ad: $responsePostId');
+
+        Future.delayed(const Duration(milliseconds: 300), () async {
+          try {
+            final MyAdCleanController myAdController = Get.find<MyAdCleanController>();
+            bool publishSuccess = await myAdController.requestPublishAd(
+              userName: userName,
+              postId: responsePostId,
+              ourSecret: ourSecret,
+            );
+
+            if (publishSuccess) {
+              String publishSuccessMessage =
+                  "$successMessage\n\n📤 Publish request sent successfully!";
+              showSuccessDialog(publishSuccessMessage, responsePostId, isPublished: true);
+            } else {
+              String publishErrorMessage =
+                  "$successMessage\n\n⚠️ Failed to send publish request.";
+              showSuccessDialog(publishErrorMessage, responsePostId, isPublished: true);
+            }
+          } catch (e) {
+            String publishErrorMessage =
+                "$successMessage\n\n⚠️ Error sending publish request.";
+            showSuccessDialog(publishErrorMessage, responsePostId, isPublished: true);
+          }
+
+          Future.delayed(const Duration(milliseconds: 500), () {
+            navigateToMyAds();
+          });
+        });
+      } else {
+        showSuccessDialog(successMessage, responsePostId, isPublished: shouldPublish);
+        Future.delayed(const Duration(milliseconds: 500), () {
+          navigateToMyAds();
+        });
+      }
     } catch (e) {
       hideLoadingDialog();
       log('Error submitting ad: $e');
@@ -507,20 +635,16 @@ class AdSubmissionService {
     required String postId,
     required List<String> images,
     required String coverImage,
-  }) async
-  {
+  }) async {
     try {
-      // Get the MyAdCleanController instance
-      final MyAdCleanController  myAdController = Get.put(
-        MyAdCleanController (MyAdDataLayer()),
+      final MyAdCleanController myAdController = Get.put(
+        MyAdCleanController(MyAdDataLayer()),
       );
 
-      // Filter out cover photo from images list
       final galleryImages = images.where((image) => image != coverImage).toList();
 
       log('Gallery images to upload: ${galleryImages.length} (excluding cover photo)');
 
-      // Upload each gallery photo sequentially
       for (int i = 0; i < galleryImages.length; i++) {
         final imagePath = galleryImages[i];
         final file = File(imagePath);
@@ -531,7 +655,7 @@ class AdSubmissionService {
           final success = await myAdController.uploadPostGalleryPhoto(
             postId: postId,
             photoFile: file,
-            ourSecret: ourSecret, // Using the same secret as in ad creation
+            ourSecret: ourSecret,
           );
 
           if (success) {
@@ -539,7 +663,7 @@ class AdSubmissionService {
           } else {
             log('❌ Failed to upload gallery photo ${i + 1}: ${myAdController.uploadError.value}');
           }
-        } else {//l
+        } else {
           log('❌ Gallery photo file not found: $imagePath');
         }
       }
@@ -559,8 +683,7 @@ class AdSubmissionService {
     required String askingPrice,
     required int imageCount,
     required bool hasVideo,
-  })
-  {
+  }) {
     log('=== Ad Submission Log ===');
     log('Make: $make');
     log('Class: $carClass');
@@ -578,36 +701,29 @@ class AdSubmissionService {
     required String coverImage,
     required String? videoPath,
     required Function(String) showErrorDialog,
-  }) async
-  {
-    // Check if there are any images
+  }) async {
     if (images.isEmpty) {
       showErrorDialog("Please upload at least one image");
       return false;
     }
 
-    // Check if cover image exists in the images list
     if (coverImage.isNotEmpty && !images.contains(coverImage)) {
       showErrorDialog("Cover image must be one of the uploaded images");
       return false;
-    }//j
+    }
 
-    // Check maximum images limit
     if (images.length > 15) {
       showErrorDialog("Maximum 15 images allowed");
       return false;
     }
 
-    // Check video limit
     if (videoPath != null && videoPath.isNotEmpty) {
-      // You can add additional video validation here if needed
       log('Video path provided: $videoPath');
     }
 
     return true;
   }
 
-  /// Upload modified specs to the server after gallery photos upload
   static Future<void> _uploadModifiedSpecs({
     required String postId,
     required SpecsController specsController,
@@ -615,32 +731,14 @@ class AdSubmissionService {
     try {
       log('🔧 [SPECS] Starting upload of modified specs for post ID: $postId');
 
-      // Log the current state of the controller
-      log('🔧 [SPECS] Controller instance: ${specsController.hashCode}');
-      log('🔧 [SPECS] Current modified specs count: ${specsController.getModifiedSpecs().length}');
-
-      // Get only the specs that have been modified (non-empty values)
       final modifiedSpecs = specsController.getModifiedSpecs();
-
       if (modifiedSpecs.isEmpty) {
         log('🔧 [SPECS] No modified specs to upload');
         return;
       }
 
-      log('🔧 [SPECS] Uploading ${modifiedSpecs.length} modified specs');
-
-      // Log all modified specs before uploading
-      log('🔧 [SPECS] Modified specs to upload:');
-      for (final spec in modifiedSpecs) {
-        log('   - ${spec.specId}: ${spec.specHeaderPl} = "${spec.specValuePl}"');
-      }
-
-      // Upload each modified spec
       for (final spec in modifiedSpecs) {
         try {
-          log('🔧 [SPECS] Uploading spec: ${spec.specHeaderPl} = "${spec.specValuePl}"');
-
-          // Use the existing API method to update spec value
           final success = await specsController.updateSpecValue(
             postId: postId,
             specId: spec.specId,
@@ -660,62 +758,6 @@ class AdSubmissionService {
       log('✅ [SPECS] Completed uploading modified specs');
     } catch (e) {
       log('❌ [SPECS] Error in _uploadModifiedSpecs: $e');
-    }
-  }
-
-  /// Request 360 photo session for the newly created ad
-  static Future<void> _request360Session({
-    required String postId,
-  }) async
-  {
-    try {
-      log('🔄 [360] Starting 360 photo session request for post ID: $postId');
-
-      // Get the MyAdCleanController instance
-      final myAdController = Get.find<MyAdCleanController>();
-
-      // Request 360 photo session
-      final success = await myAdController.request360Session(
-        userName: userName, // You might want to get this from user session
-        postId: postId,
-        ourSecret: ourSecret, // Using the same secret as in ad creation
-      );
-
-      if (success) {
-        log('✅ [360] Successfully requested 360 photo session');
-      } else {
-        log('❌ [360] Failed to request 360 photo session');
-      }
-    } catch (e) {
-      log('❌ [360] Error in _request360Session: $e');
-    }
-  }
-
-  /// Request to feature the newly created ad
-  static Future<void> _requestFeatureAd({
-    required String postId,
-  }) async
-  {
-    try {
-      log('⭐ [FEATURE] Starting feature ad request for post ID: $postId');
-
-      // Get the MyAdCleanController instance
-      final myAdController = Get.find<MyAdCleanController>();
-
-      // Request to feature ad
-      final success = await myAdController.requestFeatureAd(
-        userName: userName, // You might want to get this from user session
-        postId: postId,
-        ourSecret: ourSecret, // Using the same secret as in ad creation
-      );
-
-      if (success) {
-        log('✅ [FEATURE] Successfully requested to feature ad');
-      } else {
-        log('❌ [FEATURE] Failed to request to feature ad');
-      }
-    } catch (e) {
-      log('❌ [FEATURE] Error in _requestFeatureAd: $e');
     }
   }
 }

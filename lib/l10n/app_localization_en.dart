@@ -554,13 +554,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enter_desc => 'Enter car description...';
 
   @override
-  String get make_360_first => 'Make Your Advertisement special by 360 session';
+  String get make_360_first => 'Make Your Advertisement special by 360 session(';
 
   @override
   String get make_360_second => 'riyal only for full shooting session)';
 
   @override
-  String get pin_ad_first => 'Pin your advertisement at the top';
+  String get pin_ad_first => 'Pin your advertisement at the top for (';
 
   @override
   String get pin_ad_second => ') QR only';
@@ -642,7 +642,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_360_first => 'Our 360 photo session will beautifully highlight your post \nclick Confirm, and we\'ll handle the rest! \n   Additional charges';
 
   @override
-  String get msg_360_second => 'can apply.';
+  String get msg_360_second => 'riyal can apply.';
 
   @override
   String get confirmation => 'Confirmation';
@@ -663,6 +663,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payment_failed_or_cancelled => 'Payment failed or cancelled.';
 
   @override
+  String get missingMasterIdError => 'Missing masterId in check-order-flow response';
+
+  @override
+  String get noPaymentMethodsError => 'No payment methods available for this transaction';
+
+  @override
+  String get noTransactionUrlError => 'Transaction URL is missing';
+
+  @override
+  String get unhandledStatusError => 'An unexpected error occurred. Please try again.';
+
+  @override
   String get feature_ad => 'Feature Your Ad';
 
   @override
@@ -672,7 +684,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get feature_ad_msg_first => 'Featuring your post ensures it stands out at the top for everyone to see.\n Additional charges';
 
   @override
-  String get feature_ad_msg_second => 'can apply.\n Click confirm to proceed!';
+  String get feature_ad_msg_second => 'QR can apply.\n Click confirm to proceed!';
   @override
   String get payment => 'Payment';
 
@@ -1050,7 +1062,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_Verification_Code_Is_wrong => 'Verification Code is Wrong!';
   // In app_localization_en.dart
   @override
-  String get youHaveRequestedThisServiceBefore => 'You Have Requested This Service Before';
+  String get youHaveRequestedThisServiceBefore => 'You Already Have This Service';
   // In app_localization_en.dart
   @override
   String get note => 'Note';
@@ -1101,4 +1113,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToLoadPaymentMethods => 'Failed to load payment methods';
   @override
   String get paymentflowfailed => 'Payment flow failed:';
+
+
+  @override
+  String get wait_admin_approval=> 'You requested before, please wait Admin Approval';
 }

@@ -555,170 +555,149 @@ class _SellCarScreenState extends State<SellCarScreen> {
     if (!yearValid) return;
 
     // Submit the ad using the service
-    // _submitAd(shouldPublish: shouldPublish);//handle add post without payment
     //handle add post with payment
-    if (_isRequest360 || _isFeauredPost) {   //handle payment from here
-    //  double amount = 0;
-      final paymentController = Get.find<PaymentController>();
-
-      double amount = 0;
-      double featuredAmount=0;
-      double req360Amount=0;
-      //handle payment for now amira
-
-      // كل الخدمات Individual اللي نزلت من الـ API
-      // final services = paymentController.individualQarsServices;
-      // // خدمة 360
-      // final request360Service = services.firstWhereOrNull(
-      //       (s) => s.qarsServiceName == 'Request to 360',
-      // );
-
-
-      // خدمة Feature Ad
-      // final featureService = services.firstWhereOrNull(
-      //       (s) => s.qarsServiceName == 'Request to feature',
-      // );
-      // if (_isRequest360) {
-      //   if (request360Service != null) {
-      //     req360Amount=request360Service.qarsServicePrice.toDouble();
-      //
-      //     amount += request360Service.qarsServicePrice.toDouble();
-      //   }}
-      // if (_isFeauredPost) {
-      //   if (featureService != null) {
-      //     featuredAmount=featureService.qarsServicePrice.toDouble();
-      //     amount += featureService.qarsServicePrice.toDouble();
-      //   }}
-
-
-
-      // _isRequest360 ? amount += 100 : null;
-      // _isFeauredPost ? amount += 150 : null;
-
-      // 1) Collect contact info (dialog closes immediately and returns data only)
-      //handle payment for now amira
-
-      // final contactInfo = await ContactInfoDialog.show(
-      //   req360Amount: req360Amount,
-      //   featuredAmount: featuredAmount,
-      //   totalAmount:amount,
-      //   context: context,
-      //   isRequest360: _isRequest360,
-      //   isFeauredPost: _isFeauredPost,
-      // );
-
-// 3. Handle the result: if payment is confirmed, submit the ad.
-//       if (contactInfo == null) {
-//         // user cancelled contact info
-//       } else
-//       {
-     //   try {
-          // 2) Initiate payment using contact info
-          // final paymentController = Get.find<PaymentController>();
-          // final String customerName = '${(contactInfo['firstName'] ?? '').toString().trim()} ${(contactInfo['lastName'] ?? '').toString().trim()}'.trim();
-          // final String email = (contactInfo['email'] ?? '').toString().trim();
-          // final String mobile = (contactInfo['mobile'] ?? '').toString().trim();
-          //
-          // final result = await paymentController.initiatePayment(
-          //   amount: amount,
-          //   customerName: customerName.isEmpty ? 'Customer' : customerName,
-          //   email: email,
-          //   mobile: mobile,
-          // );
-          // log('Payment Initiation Result: $result');
-          //
-          // if (result?['IsSuccess'] == true &&
-          //     result?['Data'] != null &&
-          //     result?['Data']['PaymentMethods'] != null) {
-          //   // 3) Map methods and open NewPaymentMethodsDialog
-          //   final List<dynamic> methodsRaw = List<dynamic>.from(result!['Data']['PaymentMethods'] as List);
-          //   final methods = methodsRaw
-          //       .map((e) => PaymentMethod.fromJson(Map<String, dynamic>.from(e)))
-          //       .toList();
-          //
-          //   final userInformationRequest = PaymentInitiateRequest(
-          //     amount: amount,
-          //     customerName: customerName.isEmpty ? 'Customer' : customerName,
-          //     email: email,
-          //     mobile: mobile,
-          //   );
-          //
-          //   final methodsPayload = await NewPaymentMethodsDialog.show(
-          //     context: context,
-          //     paymentMethods: methods,
-          //     userInformationRequest: userInformationRequest,
-          //     isArabic: Get.locale?.languageCode == 'ar',
-          //   );
-          //
-          //   if (methodsPayload != null) {
-          //     Map<String, dynamic>? normalized;
-          //     final invoice = methodsPayload['invoice'] as Map<String, dynamic>?;
-          //     if (invoice != null) {
-          //       final invoiceResult = await InvoiceLinkDialog.show(
-          //         context: context,
-          //         invoiceId: (invoice['invoiceId'] ?? '').toString(),
-          //         paymentId: (invoice['paymentId'])?.toString(),
-          //         paymentUrl: (invoice['paymentUrl'] ?? '').toString(),
-          //         isArabic: (invoice['isArabic'] == true),
-          //       );
-          //       normalized = invoiceResult?['normalizedResult'] as Map<String, dynamic>?;
-          //     } else {
-          //       normalized = methodsPayload['normalizedResult'] as Map<String, dynamic>?;
-          //     }
-          //
-          //     final status = normalized?['status']?.toString();
-          //     final paymentId = normalized?['paymentId']?.toString();
-          //     final bool success = (status != null && status.toLowerCase() == 'success') || (paymentId != null && paymentId.isNotEmpty);
-
-            //  if (success) {
-            //     dialog.SuccessDialog.show(
-            //       request: true,
-            //       context: context,
-            //       title: lc.paymentSucceeded,
-            //       message: lc.paymentWasCompleted,
-            //       onClose: () { Navigator.pop(context); },
-            //       onTappp: () { Navigator.pop(context); },
-            //     );
-                _submitAd(shouldPublish: shouldPublish);
-              // } else
-              // {
-              //   dialog.SuccessDialog.show(
-              //     request: true,
-              //     context: context,
-              //     title: lc.payment_failed,
-              //     message: lc.paymentWasNotCompleted,
-              //     onClose: () { },
-              //     onTappp: () { Navigator.pop(context); },
-              //   );
-              // }
-         //   }
-         // }
-          // else {
-          //   dialog.SuccessDialog.show(
-          //     request: true,
-          //     context: context,
-          //     title: lc.payment_failed,
-          //     message: (result?['Message'] ?? lc.failedToLoadPaymentMethods).toString(),
-          //     onClose: () { Navigator.pop(context); },
-          //     onTappp: () { Navigator.pop(context); },
-          //   );
-          // }
-        // } catch (e, st) {
-        //   log('Payment flow error: $e');
-        //   log('Stack: $st');
-        //   dialog.SuccessDialog.show(
-        //     request: true,
-        //     context: context,
-        //     title: lc.payment_failed,
-        //     message: '${lc.paymentflowfailed} $e',
-        //     onClose: () { Navigator.pop(context); },
-        //     onTappp: () { Navigator.pop(context); },
-        //   );
-        // }
-    //  }
-    } else {
+    // if (_isRequest360 || _isFeauredPost) {
+    //   final paymentController = Get.find<PaymentController>();
+    //
+    //   double amount = 0;
+    //
+    //   _isRequest360 ? amount +=  paymentController.request360ServicePrice! : null;
+    //   _isFeauredPost ? amount += paymentController.featuredServicePrice! : null;
+    //
+    //   // 1) Collect contact info (dialog closes immediately and returns data only)
+    //
+    //   final contactInfo = await ContactInfoDialog.show(
+    //     req360Amount: paymentController.request360ServicePrice!,
+    //     featuredAmount: paymentController.featuredServicePrice!,
+    //     totalAmount:amount,
+    //     context: context,
+    //     isRequest360: _isRequest360,
+    //     isFeauredPost: _isFeauredPost,
+    //   );
+    //
+    //   if (contactInfo == null) {
+    //     // user cancelled contact info
+    //   } else
+    //   {
+    //     try {
+    //       // 2) Initiate payment using contact info
+    //       final paymentController = Get.find<PaymentController>();
+    //       final String customerName = '${(contactInfo['firstName'] ?? '').toString().trim()} ${(contactInfo['lastName'] ?? '').toString().trim()}'.trim();
+    //       final String email = (contactInfo['email'] ?? '').toString().trim();
+    //       final String mobile = (contactInfo['mobile'] ?? '').toString().trim();
+    //         List<int> selectedServiceIDs=[];
+    //         if(_isRequest360){
+    //           selectedServiceIDs.add(paymentController.request360ServiceId!);
+    //         }
+    //         if(_isFeauredPost){
+    //           selectedServiceIDs.add(paymentController.featuredServiceId!);
+    //         }
+    //       final result = await paymentController.initiatePayment(
+    //         postId: ad.postId,
+    //         serviceIds:selectedServiceIDs,
+    //         externalUser: Get.find<AuthController>().userName!,
+    //         amount: amount,
+    //         customerName: customerName.isEmpty ? 'Customer' : customerName,
+    //         email: email,
+    //         mobile: mobile,
+    //       );
+    //       log('Payment Initiation Result: $result');
+    //
+    //       if (result?['IsSuccess'] == true &&
+    //           result?['Data'] != null &&
+    //           result?['Data']['PaymentMethods'] != null) {
+    //         // 3) Map methods and open NewPaymentMethodsDialog
+    //         final List<dynamic> methodsRaw = List<dynamic>.from(result!['Data']['PaymentMethods'] as List);
+    //         final methods = methodsRaw
+    //             .map((e) => PaymentMethod.fromJson(Map<String, dynamic>.from(e)))
+    //             .toList();
+    //
+    //         final userInformationRequest = PaymentInitiateRequest(
+    //           postId: postId,
+    //           qarsServiceIds: selectedServiceIDs,
+    //           amount: amount,
+    //           customerName: customerName.isEmpty ? 'Customer' : customerName,
+    //           email: email,
+    //           mobile: mobile,
+    //         );
+    //
+    //         final methodsPayload = await NewPaymentMethodsDialog.show(
+    //           context: context,
+    //           paymentMethods: methods,
+    //           userInformationRequest: userInformationRequest,
+    //           isArabic: Get.locale?.languageCode == 'ar',
+    //         );
+    //
+    //         if (methodsPayload != null) {
+    //           Map<String, dynamic>? normalized;
+    //           final invoice = methodsPayload['invoice'] as Map<String, dynamic>?;
+    //           if (invoice != null) {
+    //             final invoiceResult = await InvoiceLinkDialog.show(
+    //               context: context,
+    //               invoiceId: (invoice['invoiceId'] ?? '').toString(),
+    //               paymentId: (invoice['paymentId'])?.toString(),
+    //               paymentUrl: (invoice['paymentUrl'] ?? '').toString(),
+    //               isArabic: (invoice['isArabic'] == true),
+    //             );
+    //             normalized = invoiceResult?['normalizedResult'] as Map<String, dynamic>?;
+    //           } else {
+    //             normalized = methodsPayload['normalizedResult'] as Map<String, dynamic>?;
+    //           }
+    //
+    //           final status = normalized?['status']?.toString();
+    //           final paymentId = normalized?['paymentId']?.toString();
+    //           final bool success = (status != null && status.toLowerCase() == 'success') || (paymentId != null && paymentId.isNotEmpty);
+    //
+    //           if (success) {
+    //             dialog.SuccessDialog.show(
+    //               request: true,
+    //               context: context,
+    //               title: lc.paymentSucceeded,
+    //               message: lc.paymentWasCompleted,
+    //               onClose: () { Navigator.pop(context); },
+    //               onTappp: () { Navigator.pop(context); },
+    //             );
+    //             _submitAd(shouldPublish: shouldPublish);
+    //           } else
+    //           {
+    //             dialog.SuccessDialog.show(
+    //               request: true,
+    //               context: context,
+    //               title: lc.payment_failed,
+    //               message: lc.paymentWasNotCompleted,
+    //               onClose: () { },
+    //               onTappp: () { Navigator.pop(context); },
+    //             );
+    //           }
+    //         }
+    //       }
+    //       else {
+    //         dialog.SuccessDialog.show(
+    //           request: true,
+    //           context: context,
+    //           title: lc.payment_failed,
+    //           message: (result?['Message'] ?? lc.failedToLoadPaymentMethods).toString(),
+    //           onClose: () { Navigator.pop(context); },
+    //           onTappp: () { Navigator.pop(context); },
+    //         );
+    //       }
+    //     } catch (e, st) {
+    //       log('Payment flow error: $e');
+    //       log('Stack: $st');
+    //       dialog.SuccessDialog.show(
+    //         request: true,
+    //         context: context,
+    //         title: lc.payment_failed,
+    //         message: '${lc.paymentflowfailed} $e',
+    //         onClose: () { Navigator.pop(context); },
+    //         onTappp: () { Navigator.pop(context); },
+    //       );
+    //     }
+    //   }
+    // }
+    // else {
       _submitAd(shouldPublish: shouldPublish);//handle add post without payment
-    }
+  //  }
   }
 
   /// Show alert for missing fields
@@ -830,7 +809,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
     // Refresh My Ads screen
     final auth = Get.find<AuthController>();
     if (auth.userName != null && auth.userName!.isNotEmpty) {
-      Get.find<MyAdCleanController>().fetchMyAds(userName: auth.userName!, ourSecret: ourSecret);
+      Get.find<MyAdCleanController>().fetchMyAds(userName: auth.userFullName!, ourSecret: ourSecret);
     }
   }
 
@@ -1091,10 +1070,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                   request: false,
                                   context: context,
                                   title: lc.ready_pro,
-                                  message:
-                                  //handle payment for now amira
-                                  // lc.msg_360_first+' ${priceText360} '+lc.msg_360_second,
-                                  lc.msg_360_first+' '+lc.msg_360_second,
+                                  message: lc.msg_360_first+' ${priceText360} '+lc.msg_360_second,
                                   onClose: () {},
                                   onTappp: () async {
                                     Navigator.pop(context);
@@ -1121,10 +1097,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                   request: false,
                                   context: context,
                                   title: lc.centered_ad,
-                                  message:
-                                  //handle payment for now amira
-//                                  lc.feature_ad_msg_first+' $priceTextFeatured '+lc.feature_ad_msg_second,
-                                  lc.feature_ad_msg_first+' '+lc.feature_ad_msg_second,
+                                  message:lc.feature_ad_msg_first+' $priceTextFeatured '+lc.feature_ad_msg_second,
                                   onClose: () {},
                                   onTappp: () async {
                                     Navigator.pop(context);
@@ -1137,8 +1110,8 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                 );
                               }
                             },
-                            priceReq360Api: priceText360,
-                            priceFeaturedApi: priceTextFeatured,
+                            // priceReq360Api: priceText360,
+                            // priceFeaturedApi: priceTextFeatured,
                             onValidateAndSubmit: _validateAndSubmitForm,
                             onUnfocusDescription: _unfocusDescription,
                           );
