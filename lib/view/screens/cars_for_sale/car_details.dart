@@ -195,10 +195,13 @@ class _CarDetailsState extends State<CarDetails> {
               ],
             ),
           ),
-          carImage(
-              controller.postMedia
-            //  controller.carDetails.rectangleImageUrl
+          SizedBox(
+            height: 250.h,
+            child: CarImage(
+              allImages: controller.postMedia,
+            ),
           ),
+
           Expanded(
             child: SingleChildScrollView(
               child: Column(

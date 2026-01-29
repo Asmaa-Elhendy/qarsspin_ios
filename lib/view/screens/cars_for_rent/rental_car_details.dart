@@ -8,6 +8,7 @@ import 'package:qarsspin/model/car_model.dart';
 
 import '../../../l10n/app_localization.dart';
 import '../../../model/rental_car_model.dart';
+import '../../widgets/car_image.dart';
 import '../../widgets/rental_cars/info.dart';
 import '../../widgets/rental_cars/price_table.dart';
 import '../../widgets/rental_cars/rental_bottom_bar.dart';
@@ -88,11 +89,18 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
               ),
             ),
             // ===== 1. Header with 360 preview =====
-            HeaderSection(realImage: widget.rentalCar.spin360Url??"",),
+            // HeaderSection(realImage: widget.rentalCar.spin360Url??"",),
+            SizedBox(
+              height: 250.h,
+              child: CarImage(
+                allImages: [widget.rentalCar.spin360Url??"",widget.rentalCar.rectangleImageUrl??"",widget.rentalCar.videoUrl??""],
+              ),
+            ),
+
             SingleChildScrollView(
               child: Padding(
                 padding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                 child: SizedBox(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +110,7 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: width * .03),
+                        EdgeInsets.symmetric(horizontal: width * .03),
                         child: Divider(
                           thickness: .7.h,
                           color: AppColors.divider(context),
@@ -110,7 +118,7 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: width * .03),
+                        EdgeInsets.symmetric(horizontal: width * .03),
                         child: Text(
                           lc.rental_prices,
                           style: TextStyle(
@@ -123,7 +131,7 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: width * .03),
+                        EdgeInsets.symmetric(horizontal: width * .03),
                         child: Divider(
                           thickness: .7.h,
                           color: AppColors.divider(context),
@@ -134,7 +142,7 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
                       //24.verticalSpace,
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: width * .03),
+                        EdgeInsets.symmetric(horizontal: width * .03),
                         child: Divider(
                           thickness: .7.h,
                           color: AppColors.black,
@@ -189,9 +197,9 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
                       8.verticalSpace,
 
                       GetBuilder<RentalCarsController>(
-                        builder: (controller) {
-                          return specifications(controller.spec);
-                        }
+                          builder: (controller) {
+                            return specifications(controller.spec);
+                          }
                       )
 
                     ],
@@ -221,15 +229,15 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
           child: Center(
             child: color
                 ? Container(
-                    width: 34.w,
-                    height: 34.h,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: key == lc.exterior
-                            ? widget.rentalCar.colorExterior
-                            : widget.rentalCar.colorInterior,
-                        border: Border.all(color: AppColors.darkGray)),
-                  )
+              width: 34.w,
+              height: 34.h,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: key == lc.exterior
+                      ? widget.rentalCar.colorExterior
+                      : widget.rentalCar.colorInterior,
+                  border: Border.all(color: AppColors.darkGray)),
+            )
                 : headerText(value,context),
           ),
         ),
@@ -272,8 +280,8 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
               child: Text(
                 title,
                 style: TextStyle(
-                    color: AppColors.blackColor(context),
-                    fontSize: 16.sp, ),
+                  color: AppColors.blackColor(context),
+                  fontSize: 16.sp, ),
               ),
             ),
           ),

@@ -49,9 +49,11 @@ class CarModel{
   String ownerMobile;
   String ownerName;
   String ownerEmail;
+  final String? spin360Url;
 
   CarModel({
     this.offerId=null,
+    this.spin360Url,
     this.classId,this.makeId,
     required this.postId,
     required this.pinToTop,
