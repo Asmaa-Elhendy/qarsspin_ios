@@ -176,7 +176,7 @@ class _MyAccountState extends State<MyAccount> {
                   8.verticalSpace,
                   Obx(
                         () => Text(
-                      "${lc.active_ads} ${myAdsController.activeAdsCount}",
+                      "${lc.active_ads} ${myAdsController.activeAdsCountNew}",
                       style: TextStyle(
                         fontSize: 14.sp,
                         color: AppColors.shadowColor(context),

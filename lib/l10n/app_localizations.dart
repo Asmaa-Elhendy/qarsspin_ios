@@ -1160,7 +1160,7 @@ abstract class AppLocalizations {
   /// No description provided for @make_360_first.
   ///
   /// In en, this message translates to:
-  /// **'Make Your Advertisement special by 360 session'**
+  /// **'Make Your Advertisement special by 360 session('**
   String get make_360_first;
 
   /// No description provided for @make_360_second.
@@ -1172,7 +1172,7 @@ abstract class AppLocalizations {
   /// No description provided for @pin_ad_first.
   ///
   /// In en, this message translates to:
-  /// **'Pin your advertisement at the top for '**
+  /// **'Pin your advertisement at the top for ('**
   String get pin_ad_first;
 
   /// No description provided for @pin_ad_second.
@@ -1328,7 +1328,7 @@ abstract class AppLocalizations {
   /// No description provided for @msg_360_second.
   ///
   /// In en, this message translates to:
-  /// **'can apply.'**
+  /// **'riyal can apply.'**
   String get msg_360_second;
 
   /// No description provided for @confirmation.
@@ -1367,30 +1367,6 @@ abstract class AppLocalizations {
   /// **'Payment failed or cancelled.'**
   String get payment_failed_or_cancelled;
 
-  /// No description provided for @missingMasterIdError.
-  ///
-  /// In en, this message translates to:
-  /// **'Missing masterId in check-order-flow response'**
-  String get missingMasterIdError;
-
-  /// No description provided for @noPaymentMethodsError.
-  ///
-  /// In en, this message translates to:
-  /// **'No payment methods available for this transaction'**
-  String get noPaymentMethodsError;
-
-  /// No description provided for @noTransactionUrlError.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction URL is missing'**
-  String get noTransactionUrlError;
-
-  /// No description provided for @unhandledStatusError.
-  ///
-  /// In en, this message translates to:
-  /// **'An unexpected error occurred. Please try again.'**
-  String get unhandledStatusError;
-
   /// No description provided for @feature_ad.
   ///
   /// In en, this message translates to:
@@ -1412,7 +1388,7 @@ abstract class AppLocalizations {
   /// No description provided for @feature_ad_msg_second.
   ///
   /// In en, this message translates to:
-  /// **'can apply.\n Click confirm to proceed!'**
+  /// **'QR can apply.\n Click confirm to proceed!'**
   String get feature_ad_msg_second;
 
   /// No description provided for @payment.
@@ -2144,7 +2120,7 @@ abstract class AppLocalizations {
   /// No description provided for @youHaveRequestedThisServiceBefore.
   ///
   /// In en, this message translates to:
-  /// **'You Have Requested This Service Before'**
+  /// **'You Already Have This Service'**
   String get youHaveRequestedThisServiceBefore;
 
   /// No description provided for @note.
@@ -2284,6 +2260,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payment flow failed'**
   String get paymentflowfailed;
+
+  /// No description provided for @waitadminapproval.
+  ///
+  /// In en, this message translates to:
+  /// **'You requested before, please wait Admin Approval'**
+  String get waitadminapproval;
+
+  /// No description provided for @appOutDated.
+  ///
+  /// In en, this message translates to:
+  /// **'App Outdated'**
+  String get appOutDated;
+
+  /// No description provided for @updateAppMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update the app to continue using all features.'**
+  String get updateAppMessage;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Now'**
+  String get updateNow;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -390,7 +390,10 @@
    "failedToLoadPaymentMethods" :"Failed to load payment methods",
 
    "paymentflowfailed" : "Payment flow failed",
-  "wait_admin_approval": "You requested before, please wait Admin Approval"
+  "waitadminapproval": "You requested before, please wait Admin Approval"
+,  "appOutDated": "App Outdated",
+  "updateAppMessage": "Please update the app to continue using all features.",
+  "updateNow": "Update Now"
 }
 
 

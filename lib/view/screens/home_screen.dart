@@ -8,11 +8,13 @@ import '../../controller/brand_controller.dart';
 import '../../controller/const/colors.dart';
 import '../../controller/rental_cars_controller.dart';
 import '../../l10n/app_localization.dart';
+import '../../services/app_update_service.dart';
 import '../widgets/ad_container.dart';
 import '../widgets/main_card.dart';
 import '../widgets/navigation_bar.dart';
 import 'ads/create_ad_options_screen.dart';
 import 'ads/create_new_ad.dart';
+import 'app_update/update_app_screen.dart';
 import 'auth/my_account.dart';
 import 'cars_for_rent/all_rental_cars.dart';
 import 'cars_for_sale/all_cars.dart';
@@ -51,9 +53,26 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
   }
+  //check app version to update
+  void _checkAppUpdate() async {
+    try {
+      String current = await AppUpdateService.getCurrentVersion();
+      String? store = await AppUpdateService.getStoreVersion();
+
+      debugPrint('📱 Current version: $current, Store version: $store');
+
+      if (store != null && AppUpdateService.isUpdateAvailable(current, store)) {
+        // لو النسخة قديمة، نروح لصفحة التحديث
+        Get.offAll(() => const UpdateRequiredScreen());
+      }
+    } catch (e) {
+      debugPrint('⚠️ Failed to check app update: $e');
+    }
+  }
   @override
   void initState() {
     super.initState();
+
     Get.find<BrandController>().fetchCarMakes();
 
     // Load notifications when home screen initializes
@@ -64,6 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }).catchError((error) {
         debugPrint('🔔 HomeScreen - Error loading notifications: $error');
       });
+      // ✅ Check App Update
+      _checkAppUpdate();
     });
   }
 

@@ -1100,5 +1100,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentflowfailed => 'فشل تدفق الدفع:';
   @override
   String get wait_admin_approval=> 'لقد طلبت ذلك سابقاً، يرجى الانتظار حتى تتم الموافقة من قبل الإدارة.';
-
+  @override
+  String get app_outdated => 'التطبيق قديم';
+  @override
+  String get update_app_message => 'يرجى تحديث التطبيق لمواصلة استخدام جميع الميزات.';
+  @override
+  String get update_now => 'تحديث الآن';
 }

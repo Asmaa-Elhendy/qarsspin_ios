@@ -21,6 +21,8 @@ class MyAdCleanController extends GetxController {
 
   // Computed property for active ads count
   int get activeAdsCount => myAds.where((ad) => ad.postStatus == 'Active').length;
+  //new
+  int get activeAdsCountNew => myAds.where((ad) => ad.Active == 1).length;
 
   // Media state
   var postMedia = Rxn<PostMedia>();

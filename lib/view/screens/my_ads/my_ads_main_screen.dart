@@ -121,7 +121,7 @@ class _MyAdsMainScreenState extends State<MyAdsMainScreen> {
             ),
             SizedBox(height: 3.h),
             Text(
-              "${lc.active_ads} ${controller.activeAdsCount} ${lc.of_lbl} ${controller.myAds.length}",
+              "${lc.active_ads} ${controller.activeAdsCountNew} ${lc.of_lbl} ${controller.myAds.length}",
               style: TextStyle(
                 color: AppColors.blackColor(context),
                 fontFamily: 'Gilroy',

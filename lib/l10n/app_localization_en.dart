@@ -1117,4 +1117,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wait_admin_approval=> 'You requested before, please wait Admin Approval';
+  @override
+  String get app_outdated => 'App Outdated';
+  @override
+  String get update_app_message => 'Please update the app to continue using all features.';
+  @override
+  String get update_now => 'Update Now';
 }

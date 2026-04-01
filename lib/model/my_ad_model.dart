@@ -39,6 +39,7 @@ class MyAdModel {
   final String avgPrice;
   final String firstOffer;
   final String latestOffer;
+  final int Active;
 
   MyAdModel({
     required this.postId,
@@ -81,6 +82,7 @@ class MyAdModel {
     required this.avgPrice,
     required this.firstOffer,
     required this.latestOffer,
+    required this.Active
   });
 
   factory MyAdModel.fromJson(Map<String, dynamic> json) {
@@ -125,6 +127,7 @@ class MyAdModel {
       avgPrice: json['Avg_Price'] ?? '',
       firstOffer: json['First_Offer'] ?? '',
       latestOffer: json['Latest_Offer'] ?? '',
+        Active:json['Active']??''
     );
   }
 }
