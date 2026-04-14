@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         debugPrint('🔔 HomeScreen - Error loading notifications: $error');
       });
       // ✅ Check App Update
-      //_checkAppUpdate();
+  //    _checkAppUpdate();
     });
   }
 

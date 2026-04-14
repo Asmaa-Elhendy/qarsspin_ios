@@ -550,6 +550,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qarsspin/controller/brand_controller.dart';
@@ -597,6 +598,28 @@ class _CarDetailsState extends State<CarDetails> {
   bool is360FullScreen = false; // للتحكم بالضغط على الصورة
 
   @override
+  void initState() {
+    super.initState();
+    // Allow all orientations for this screen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    // Reset to portrait-only when leaving this screen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var lc = AppLocalizations.of(context)!;
 
@@ -628,7 +651,14 @@ class _CarDetailsState extends State<CarDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () async {
+                        // Lock portrait BEFORE popping to prevent rotation flicker
+                        await SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.portraitUp,
+                          DeviceOrientation.portraitDown,
+                        ]);
+                        Navigator.pop(context);
+                      },
                       child: Icon(
                         Icons.arrow_back_outlined,
                         color: AppColors.blackColor(context),
@@ -683,7 +713,12 @@ class _CarDetailsState extends State<CarDetails> {
                 ? null
                 : widget.sourcekind == "Qars Spin"
                 ? QarsApinBottomNavigationBar(
-              onLoan: () {
+              onLoan: () async {
+                // Lock portrait before navigating to prevent rotation flicker
+                await SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.portraitUp,
+                  DeviceOrientation.portraitDown,
+                ]);
                 authController.registered
                     ? Get.to(GetLoan(car: controller.carDetails))
                     : showDialog(
