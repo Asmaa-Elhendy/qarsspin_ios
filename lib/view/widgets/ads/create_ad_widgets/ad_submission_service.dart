@@ -12,13 +12,37 @@ import '../../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../../controller/my_ads/my_ad_data_layer.dart';
 import '../../../../controller/payments/payment_controller.dart';
 import '../../../../controller/specs/specs_controller.dart';
-import '../../../../l10n/app_localization.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../model/create_ad_model.dart';
 import '../../../../model/payment/payment_method_model.dart';
 
 import '../../my_ads/dialog.dart' as dialog;
 import '../../payments/payment_methods_dialog.dart';
 import '../dialogs/contact_info_dialog.dart';
+
+/// Bilingual status text for the current submission stage.
+/// Returns Arabic when the current GetX locale is `ar`, English otherwise.
+String _stageText(String key) {
+  final bool isAr = Get.locale?.languageCode == 'ar';
+  switch (key) {
+    case 'submitting':
+      return isAr ? 'جاري إرسال بيانات الإعلان...' : 'Submitting ad details...';
+    case 'cover':
+      return isAr ? 'جاري رفع صورة الغلاف...' : 'Uploading cover photo...';
+    case 'gallery':
+      return isAr ? 'جاري رفع الصور...' : 'Uploading photos...';
+    case 'specs':
+      return isAr ? 'جاري رفع المواصفات...' : 'Uploading specifications...';
+    case 'video':
+      return isAr ? 'جاري رفع الفيديو...' : 'Uploading video...';
+    case 'payment':
+      return isAr ? 'جاري معالجة الدفع...' : 'Processing payment...';
+    case 'finalizing':
+      return isAr ? 'جاري إنهاء العملية...' : 'Finalizing...';
+    default:
+      return '';
+  }
+}
 
 class AdSubmissionService {
   static Future<void> submitAd({
@@ -49,6 +73,7 @@ class AdSubmissionService {
     required Function(String) showErrorDialog,
     required Function() hideLoadingDialog,
     required Function() navigateToMyAds,
+    Function(String)? updateLoadingStatus,
     String? postId,
     bool coverPhotoChanged = false,
   }) async {
@@ -83,6 +108,7 @@ class AdSubmissionService {
         showErrorDialog: showErrorDialog,
         hideLoadingDialog: hideLoadingDialog,
         navigateToMyAds: navigateToMyAds,
+        updateLoadingStatus: updateLoadingStatus,
         postId: postId,
         coverPhotoChanged: coverPhotoChanged,
       );
@@ -121,9 +147,11 @@ class AdSubmissionService {
     required Function(String, String, {bool isPublished}) showSuccessDialog,
     required Function(String) showErrorDialog,
     required Function() hideLoadingDialog,
+    Function(String)? updateLoadingStatus,
   }) async {
     try {
       showLoadingDialog();
+      updateLoadingStatus?.call(_stageText('submitting'));
 
       final AdCleanController brandController = Get.find<AdCleanController>();
       final selectedMake = brandController.selectedMake.value;
@@ -173,6 +201,7 @@ class AdSubmissionService {
 
       if (response['Code'] == 'OK' || response['Code']?.toString().toLowerCase() == 'ok') {
         if (postId.isNotEmpty && coverImage.isNotEmpty && coverPhotoChanged) {
+          updateLoadingStatus?.call(_stageText('cover'));
           log('Uploading cover photo for post ID: $postId');
           await adRepository.uploadCoverPhoto(
             postId: postId,
@@ -185,6 +214,7 @@ class AdSubmissionService {
         }
 
         if (postId.isNotEmpty && videoPath != null && videoPath.isNotEmpty && videoChanged) {
+          updateLoadingStatus?.call(_stageText('video'));
           log('Uploading video for post ID: $postId');
           await adRepository.uploadVideoForPost(
             postId: postId,
@@ -196,6 +226,7 @@ class AdSubmissionService {
           log('Video not changed, skipping upload');
         }
 
+        updateLoadingStatus?.call(_stageText('finalizing'));
         hideLoadingDialog();
 
         String successMessage = "Ad updated successfully!\nPost ID: $postId";
@@ -301,11 +332,13 @@ class AdSubmissionService {
     required Function(String) showErrorDialog,
     required Function() hideLoadingDialog,
     required Function() navigateToMyAds,
+    Function(String)? updateLoadingStatus,
     String? postId,
     bool coverPhotoChanged = false,
   }) async {
     try {
       final lc = AppLocalizations.of(context)!;
+      updateLoadingStatus?.call(_stageText('submitting'));
 
       // ✅ IMPORTANT: prevent double pop of loader dialog
       bool loaderHidden = false;
@@ -377,6 +410,7 @@ class AdSubmissionService {
       // =========================
       if (responsePostId.isNotEmpty && coverImage.isNotEmpty) {
         if (postId == null || coverPhotoChanged) {
+          updateLoadingStatus?.call(_stageText('cover'));
           log('Uploading cover photo for post ID: $responsePostId');
           await adRepository.uploadCoverPhoto(
             postId: responsePostId,
@@ -393,6 +427,7 @@ class AdSubmissionService {
       // ✅ 2) Upload gallery (create only)
       // =========================
       if (postId == null && responsePostId.isNotEmpty && images.isNotEmpty) {
+        updateLoadingStatus?.call(_stageText('gallery'));
         log('Uploading gallery photos for post ID: $responsePostId');
         await _uploadGalleryPhotos(
           postId: responsePostId,
@@ -407,6 +442,7 @@ class AdSubmissionService {
       // =========================
       if (postId == null && responsePostId.isNotEmpty) {
         try {
+          updateLoadingStatus?.call(_stageText('specs'));
           log('Uploading modified specs for post ID: $responsePostId');
           final specsController = Get.find<SpecsController>(tag: 'specs_0');
           await _uploadModifiedSpecs(
@@ -424,6 +460,7 @@ class AdSubmissionService {
       // =========================
       if (responsePostId.isNotEmpty && videoPath != null && videoPath.isNotEmpty) {
         if (postId == null || videoChanged) {
+          updateLoadingStatus?.call(_stageText('video'));
           log('Uploading video for post ID: $responsePostId');
           await adRepository.uploadVideoForPost(
             postId: responsePostId,
@@ -440,6 +477,7 @@ class AdSubmissionService {
       // ✅ 5) PAYMENT AFTER ALL UPLOADS
       // =========================
       if ((isRequest360 || isFeaturedPost) && responsePostId.isNotEmpty) {
+        updateLoadingStatus?.call(_stageText('payment'));
         final paymentController = Get.find<PaymentController>();
 
         double amount = 0;
@@ -581,6 +619,7 @@ class AdSubmissionService {
       // =========================
       // ✅ 6) NOW do publish + success + navigation (ONE TIME ONLY)
       // =========================
+      updateLoadingStatus?.call(_stageText('finalizing'));
       hideLoaderOnce();
 
       String successMessage = responsePostId.isNotEmpty

@@ -33,8 +33,8 @@
   "success_request": "your Request has been sent successfully ",
   "comment_hint": "eg.exterior or interior color of the car, options,\\nengine...",
   "no_result": "No Result Found",
-  "sorry": "Unfortunately what you are looking for is\\ncurrently not available. Please activate a",
-  "sorry_notify": "notification using\\\"Find me a car\\\"yp be updates",
+  "sorry": "Unfortunately what you are looking for is\\n currently not available. Please activate a",
+  "sorry_notify": "notification using\\\"Find me a car\\\" be updates",
   "sort_result": "Sort Results",
   "sort_by_post_count": "Sort By Posts Count",
   "sort_by_rating": "Sort By Rating",
@@ -182,9 +182,9 @@
   "enter_desc": "Enter car description...",
 
   "make_360_first" : "Make Your Advertisement special by 360 session(",
-  "make_360_second": "riyal only for full shooting session)",
+  "make_360_second": "QAR only for full shooting session)",
   "pin_ad_first" : "Pin your advertisement at the top for (",
-  "pin_ad_second" : ",) QR only",
+  "pin_ad_second" : ") QAR only",
   "agreement": "I agree to the Terms and Conditions",
   "confirm_info": "I confirm the accuracy of the information provided",
   "save_draft": "Save as draft",
@@ -209,7 +209,7 @@
   "request_360": "Request 360 Service",
   "ready_pro": "Ready to showCase your vehicle like a pro?",
   "msg_360_first": "Our 360 photo session will beautifully highlight your post \nclick Confirm, and we 'll handle the rest! \n   Additional charges",
-  "msg_360_second" : "riyal can apply.",
+  "msg_360_second" : "QAR can apply.",
   "confirmation": "Confirmation",
   "receive_request_msg": "We Have Received Your Request",
   "cancellation": "Cancellation",
@@ -393,7 +393,11 @@
   "waitadminapproval": "You requested before, please wait Admin Approval"
 ,  "appOutDated": "App Outdated",
   "updateAppMessage": "Please update the app to continue using all features.",
-  "updateNow": "Update Now"
+  "updateNow": "Update Now",
+  "requestAppointmentWhatsappMessage": "Hello From Qars Spin APP, I want to request an appointment.",
+   "couldNotOpenWhatsapp": "Could not open WhatsApp",
+   "app_outdated":"App is Outdated",
+   "update_app_message":"Please update the app to continue using all features."
 }
 
 

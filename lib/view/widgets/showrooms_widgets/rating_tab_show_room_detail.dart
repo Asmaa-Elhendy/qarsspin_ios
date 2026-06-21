@@ -10,7 +10,7 @@ import 'package:qarsspin/model/showroom_model.dart';
 import 'package:qarsspin/view/widgets/showrooms_widgets/rating_widget.dart';
 
 import '../../../controller/auth/auth_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../auth_widgets/register_dialog.dart';
 
 class RatingTabShowRoomDetail extends StatefulWidget {

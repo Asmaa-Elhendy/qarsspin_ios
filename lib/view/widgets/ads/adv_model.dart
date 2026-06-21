@@ -5,7 +5,7 @@ import 'package:qarsspin/controller/const/colors.dart';
 import 'package:qarsspin/l10n/l10n.dart';
 import 'package:qarsspin/view/widgets/my_ads/my_ad_card.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/add_options_model.dart';
 
 
@@ -66,6 +66,26 @@ class _AdvertisementOptionsModalState extends State<AdvertisementOptionsModal> {
             _buildCard(
               width: width,
               height: height,
+              title: lc.free_personal_ad,
+              options: personalOptions,
+              buttonText: lc.post_ad,
+              onPressed: () {
+                // final checkedOptions = personalOptions.where((opt) => opt.isChecked).toList();
+                // debugPrint('Checked options: ${checkedOptions.map((e) => e.text).toList()}');
+                widget.onPersonalAdPressed();
+              },
+              icon: "assets/images/plus.svg",
+              onOptionToggled: (index) {
+                setState(() {
+                  personalOptions[index].toggle();
+                });
+              },
+            ),
+            SizedBox(height: height*.015),
+
+            _buildCard(
+              width: width,
+              height: height,
               title: lc.qars_spin_showroom_adv,
               options: showroomOptions,
               buttonText: lc.request_appointment,
@@ -79,25 +99,6 @@ class _AdvertisementOptionsModalState extends State<AdvertisementOptionsModal> {
               onOptionToggled: (index) {
                 setState(() {
                   //         showroomOptions[index].toggle();
-                });
-              },
-            ),
-            SizedBox(height: height*.015),
-            _buildCard(
-              width: width,
-              height: height,
-              title: lc.free_personal_ad,
-              options: personalOptions,
-              buttonText: lc.post_ad,
-              onPressed: () {
-                // final checkedOptions = personalOptions.where((opt) => opt.isChecked).toList();
-                // debugPrint('Checked options: ${checkedOptions.map((e) => e.text).toList()}');
-                widget.onPersonalAdPressed();
-              },
-              icon: "assets/images/plus.svg",
-              onOptionToggled: (index) {
-                setState(() {
-                  personalOptions[index].toggle();
                 });
               },
             ),

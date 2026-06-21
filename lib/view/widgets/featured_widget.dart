@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controller/const/colors.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 
 Widget featuredContainer(context){
   var lc = AppLocalizations.of(context)!;

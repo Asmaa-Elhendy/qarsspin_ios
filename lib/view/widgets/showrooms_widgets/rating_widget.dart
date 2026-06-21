@@ -5,7 +5,7 @@ import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 
 class RateShowroomSheet extends StatefulWidget {
   final Function(int) onConfirm;

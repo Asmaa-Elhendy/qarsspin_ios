@@ -6,7 +6,7 @@ import 'package:qarsspin/controller/specs/specs_controller.dart';
 import 'package:qarsspin/controller/specs/specs_data_layer.dart';
 import 'package:qarsspin/view/widgets/ads/dialogs/loading_dialog.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/specs.dart';
 import '../../widgets/my_ads/edit_name.dart';
 

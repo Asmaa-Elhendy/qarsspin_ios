@@ -6,7 +6,7 @@ import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/view/widgets/auth_widgets/register_dialog.dart';
 import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../screens/general/inspection_report.dart';
 
 Widget requestReportButton(context,id){

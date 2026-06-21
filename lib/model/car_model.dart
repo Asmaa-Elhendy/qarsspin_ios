@@ -38,6 +38,10 @@ class CarModel{
   final String rectangleImageUrl;
   Color? interiorColor;
   Color? exteriorColor;
+  String? exteriorColorNamePl;
+  String? exteriorColorNameSl;
+  String? interiorColorNamePl;
+  String? interiorColorNameSl;
   String? description;
   String? technical_Description_SL;
   int? offersCount;
@@ -62,6 +66,10 @@ class CarModel{
     this.interiorColor,
     this.technical_Description_SL,
     this.exteriorColor,
+    this.exteriorColorNamePl,
+    this.exteriorColorNameSl,
+    this.interiorColorNamePl,
+    this.interiorColorNameSl,
     this.description,
     this.offersCount,
     this.visitsCount,

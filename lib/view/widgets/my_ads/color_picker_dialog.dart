@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import 'dialog.dart';
 
 class ColorData {

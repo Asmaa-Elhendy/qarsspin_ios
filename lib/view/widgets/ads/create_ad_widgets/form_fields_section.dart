@@ -11,7 +11,7 @@ import '../../../../controller/const/colors.dart';
 import '../../../../controller/payments/payment_controller.dart';
 import '../../../../controller/specs/specs_controller.dart';
 import '../../../../controller/specs/specs_data_layer.dart';
-import '../../../../l10n/app_localization.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../screens/my_ads/specs_management.dart';
 import '../color_picker_field.dart';
 import '../drop_Down_field.dart';

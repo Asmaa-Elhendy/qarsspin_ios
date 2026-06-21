@@ -12,7 +12,7 @@ import 'package:qarsspin/controller/auth/auth_controller.dart';
 import 'package:qarsspin/controller/my_ads/my_ad_getx_controller.dart';
 import '../../../controller/brand_controller.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../my_offers_screen.dart';
 import '../notifications/notifications.dart';
 

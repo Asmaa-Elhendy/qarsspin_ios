@@ -5,7 +5,7 @@ import 'package:qarsspin/model/specification.dart';
 
 import '../../../controller/const/base_url.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import 'offer_part.dart';
 
 class CustomTabExample extends StatefulWidget {

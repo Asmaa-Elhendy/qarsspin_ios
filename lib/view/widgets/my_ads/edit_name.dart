@@ -7,7 +7,7 @@ import 'package:qarsspin/controller/specs/specs_controller.dart';
 import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
 import 'package:qarsspin/view/widgets/ads/dialogs/loading_dialog.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/specs.dart';
 
 class EditSpecsName extends StatefulWidget {

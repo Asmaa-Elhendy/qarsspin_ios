@@ -12,7 +12,7 @@ import 'package:qarsspin/model/my_ad_model.dart';
 import '../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../controller/payments/payment_controller.dart';
 import '../../../controller/payments/payment_helper.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/payment/payment_method_model.dart';
 import '../../screens/ads/create_new_ad.dart';
 import '../../widgets/my_ads/dialog.dart';
@@ -239,7 +239,7 @@ Widget MyAdCard(
                       request: true,
                       context: context,
                       title: lc.note,
-                      message: lc.wait_admin_approval,
+                      message: lc.waitadminapproval,
                       onClose: () {},
                       onTappp: () {},
                     );
@@ -494,7 +494,7 @@ Widget MyAdCard(
       request: true,
       context: context,
       title: lc.note,
-      message: lc.wait_admin_approval,
+      message: lc.waitadminapproval,
       onClose: () {},
       onTappp: () {},
     );

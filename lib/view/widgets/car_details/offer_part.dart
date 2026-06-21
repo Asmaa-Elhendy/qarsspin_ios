@@ -11,7 +11,7 @@ import 'package:qarsspin/model/offer.dart';
 import 'dart:developer';
 
 import '../../../controller/auth/auth_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../auth_widgets/register_dialog.dart';
 import '../offer_dialog.dart';
 

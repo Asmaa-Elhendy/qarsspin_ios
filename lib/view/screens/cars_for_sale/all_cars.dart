@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../../controller/brand_controller.dart';
 import '../../../controller/const/colors.dart';
 import '../../../controller/notifications_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ad_container.dart';
 import '../../widgets/car_list_grey_bar.dart';
 import '../../widgets/cars_list_app_bar.dart';

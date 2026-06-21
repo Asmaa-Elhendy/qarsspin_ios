@@ -8,7 +8,7 @@ import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/view/screens/auth/my_account.dart';
 
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 
 class RegisterDialog extends StatefulWidget {
   bool offer;

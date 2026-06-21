@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:qarsspin/controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../services/app_update_service.dart';
 
 class UpdateRequiredScreen extends StatelessWidget {
@@ -90,7 +90,7 @@ class UpdateRequiredScreen extends StatelessWidget {
                     backgroundColor: AppColors.primary,
                   ),
                   child: Text(
-                    l10n.update_now,
+                    l10n.updateNow,
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,

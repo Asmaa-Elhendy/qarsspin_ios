@@ -6,7 +6,7 @@ import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 import 'package:qarsspin/l10n/l10n.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 
 class SortBySheet extends StatefulWidget {
   final Function(String) onConfirm;

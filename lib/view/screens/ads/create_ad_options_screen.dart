@@ -3,10 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:qarsspin/controller/auth/unregister_func.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ads/adv_model.dart';
 import '../../widgets/main_card.dart';
 import '../auth/my_account.dart';
@@ -23,7 +24,45 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
   int notificationCount = 3;
   final authController = Get.find<AuthController>();
 
+  Future<void> _openRequestAppointmentWhatsApp(BuildContext context) async {
+    final lc = AppLocalizations.of(context)!;
 
+    final String message = Uri.encodeComponent(
+      lc.requestAppointmentWhatsappMessage,
+    );
+
+    final Uri whatsappAppUrl = Uri.parse(
+      'whatsapp://send?phone=97466288388&text=$message',
+    );
+
+    final Uri whatsappWebUrl = Uri.parse(
+      'https://api.whatsapp.com/send?phone=97466288388&text=$message',
+    );
+
+    try {
+      final bool canOpenWhatsApp = await canLaunchUrl(whatsappAppUrl);
+
+      if (canOpenWhatsApp) {
+        await launchUrl(
+          whatsappAppUrl,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        await launchUrl(
+          whatsappWebUrl,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(lc.couldNotOpenWhatsapp),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +172,11 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
                   ? AdvertisementOptionsModal(
                 onShowroomAdPressed: () {
 
-                  if(authController.registered){}
+                  if(authController.registered){
+                    //when request appointment when registered
+                    _openRequestAppointmentWhatsApp(context);
+
+                  }
                   else{unRegisterFunction(context);}
                 },
                 onPersonalAdPressed: () {

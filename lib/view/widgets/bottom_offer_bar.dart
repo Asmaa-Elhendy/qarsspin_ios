@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../controller/communications.dart';
 import '../../controller/const/colors.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 
 class BottomActionBar extends StatelessWidget {
   final VoidCallback onMakeOffer;

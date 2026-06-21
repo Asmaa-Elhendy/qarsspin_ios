@@ -7,7 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:myfatoorah_flutter/myfatoorah_flutter.dart';
-import 'package:qarsspin/l10n/app_localization_en.dart';
+import 'package:qarsspin/l10n/app_localizations_en.dart';
 import 'package:qarsspin/l10n/l10n.dart';
 import 'package:qarsspin/services/fcm_service.dart';
 import 'package:qarsspin/view/screens/home_screen.dart';
@@ -21,7 +21,7 @@ import 'controller/const/app_theme.dart';
 import 'controller/notifications_controller.dart';
 import 'controller/payments/payment_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'l10n/app_localization.dart';
+import 'l10n/app_localizations.dart';
 
 
 void main() async{

@@ -6,7 +6,7 @@ import 'package:qarsspin/model/rental_car_model.dart';
 import 'package:qarsspin/model/showroom_model.dart';
 
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../showrooms_widgets/rating_tab_show_room_detail.dart';
 import '../showrooms_widgets/showroom_details_tab_widget.dart';
 

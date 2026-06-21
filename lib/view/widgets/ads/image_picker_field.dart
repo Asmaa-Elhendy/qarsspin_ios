@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'dart:async';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ImagePickerField extends StatefulWidget {
   final List<String> imagePaths;

@@ -8,7 +8,7 @@ import '../../../controller/ads/data_layer.dart';
 import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/const/colors.dart';
 import '../../../controller/my_ads/my_ad_getx_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ads/create_ad_widgets/form_fields_section.dart';
 import '../../widgets/ads/create_ad_widgets/image_upload_section.dart';
 import '../../widgets/ads/create_ad_widgets/validation_methods.dart';
@@ -500,6 +500,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
     _type_controller.dispose();
     _year_controller.dispose();
     _warranty_controller.dispose();
+    _loadingStatus.dispose();
     super.dispose();
   }
 
@@ -710,9 +711,17 @@ class _SellCarScreenState extends State<SellCarScreen> {
     MissingCoverImageDialog.show(context);
   }
 
+  /// Live status text shown under the loading dialog title.
+  final ValueNotifier<String> _loadingStatus = ValueNotifier<String>('');
+
   /// Show loading dialog
   void _showLoadingDialog() {
-    LoadingDialog.show(context, isModifyMode: widget.postData != null);
+    _loadingStatus.value = '';
+    LoadingDialog.show(
+      context,
+      isModifyMode: widget.postData != null,
+      statusNotifier: _loadingStatus,
+    );
   }
 
   /// Hide loading dialog
@@ -720,6 +729,12 @@ class _SellCarScreenState extends State<SellCarScreen> {
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
     }
+    _loadingStatus.value = '';
+  }
+
+  /// Push a new "current stage" line into the loading dialog.
+  void _updateLoadingStatus(String message) {
+    _loadingStatus.value = message;
   }
 
   /// Show success dialog
@@ -866,6 +881,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
         showSuccessDialog: _showSuccessDialog,
         showErrorDialog: _showErrorAlert,
         hideLoadingDialog: _hideLoadingDialog,
+        updateLoadingStatus: _updateLoadingStatus,
       );
     } else {
       // Create mode
@@ -899,6 +915,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
         showErrorDialog: _showErrorAlert,
         hideLoadingDialog: _hideLoadingDialog,
         navigateToMyAds: _navigateToMyAds,
+        updateLoadingStatus: _updateLoadingStatus,
       );
     }
   }

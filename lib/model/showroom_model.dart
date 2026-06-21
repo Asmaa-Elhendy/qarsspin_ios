@@ -1,3 +1,4 @@
+import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/model/car_model.dart';
 import 'package:qarsspin/model/rental_car_model.dart';
 
@@ -64,5 +65,9 @@ class Showroom {
     required this.avgRating,
   });
 
-
+  /// True when this partner is the official "Qars Spin" account. Identified
+  /// by [kQarsSpinPartnerId] — more reliable than matching on `partnerNamePl`,
+  /// which can carry hidden whitespace, bidi marks, or case differences from
+  /// the backend.
+  bool get isQarsSpinPartner => partnerId == kQarsSpinPartnerId;
 }

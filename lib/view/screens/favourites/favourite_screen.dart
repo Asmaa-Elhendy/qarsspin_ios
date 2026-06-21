@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:qarsspin/controller/brand_controller.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';
 import '../../widgets/favourites/favourite_car_card.dart';
 import '../../widgets/navigation_bar.dart';
@@ -33,6 +33,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   @override
   Widget build(BuildContext context) {
     var lc = AppLocalizations.of(context)!;
+    final double addButtonSize = 60.w;
+    final double addIconSize = 26.sp;
+    final double addTextSize = 11.sp;
 
     return Scaffold(
       backgroundColor: AppColors.background(context),
@@ -149,6 +152,55 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             ],
           );
         },
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Get.to(CreateNewAdOptions());
+        },
+        child: Container(
+          width: addButtonSize,
+          height: addButtonSize,
+          decoration: BoxDecoration(
+            color: AppColors.divider(context),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.background(context),
+              width: 3.w,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: addIconSize,
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  lc.navigation_add,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: addTextSize,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Gilroy',
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
 
       // Bottom Nav Bar

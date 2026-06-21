@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../payments/payment_methods_dialog.dart';
 
 class SuccessDialog extends StatelessWidget {

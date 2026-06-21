@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:qarsspin/controller/brand_controller.dart';
 import 'package:qarsspin/controller/const/base_url.dart';
 import '../../controller/const/colors.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 import '../../l10n/l10n.dart';
 import '../../model/car_model.dart';
 import '../screens/cars_for_sale/car_details.dart';
@@ -86,7 +86,6 @@ Widget carCard({
 
                         borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
                         child: CachedNetworkImage(
-                          //edit placeholder for now asmaa
                           imageUrl: car.rectangleImageUrl.isNotEmpty
                               ? car.rectangleImageUrl
                               : "https://via.placeholder.com/150",
@@ -95,12 +94,10 @@ Widget carCard({
                               : large
                               ? 150.h
                               : 124.9.h,
-                          //i update default height for all cars card car asmaa
                           width: double.infinity,
                           fit: BoxFit.cover,
-
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                              const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                         ),
                       ),
                       car.tag!="No Tag"?

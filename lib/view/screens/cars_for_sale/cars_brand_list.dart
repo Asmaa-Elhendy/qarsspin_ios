@@ -9,7 +9,7 @@ import 'package:qarsspin/controller/search_controller.dart';
 
 import '../../../controller/brand_controller.dart';
 import '../../../controller/notifications_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ad_container.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';
 import '../../widgets/car_card.dart';
@@ -55,9 +55,11 @@ class _CarsBrandListState extends State<CarsBrandList> {
                 ),
                 8.verticalSpace,
                 carListGreyBar(widget.notificationsController,
-                    listCars:widget.brandName!="Qars Spin \n Showroom"&& widget.brandName!="Personal Cars",//true,
-                    listCarsInQarsSpinShowRoom: widget.brandName=="Qars Spin \n Showroom",
-                    personalsCars: widget.brandName=="Personal Cars",
+                    listCars: widget.brandName != lc.qar_spin_showroom &&
+                        widget.brandName != lc.personal_cars,
+                    listCarsInQarsSpinShowRoom:
+                        widget.brandName == lc.qar_spin_showroom,
+                    personalsCars: widget.brandName == lc.personal_cars,
 
                     onSearchResult: (result) {
                       //  Get.find<MySearchController>().fetchCarMakes();

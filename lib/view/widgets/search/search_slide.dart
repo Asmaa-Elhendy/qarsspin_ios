@@ -10,7 +10,7 @@ import 'package:qarsspin/model/global_model.dart';
 
 import '../../../controller/notifications_controller.dart';
 import '../../../controller/search_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../screens/cars_for_sale/cars_brand_list.dart';
 import '../my_ads/yellow_buttons.dart';
 

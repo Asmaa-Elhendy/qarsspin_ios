@@ -65,7 +65,8 @@ dependencies:
   get_storage:
   flutter_localization:
   flutter_slidable: ^4.0.3
-  
+  #cloud_functions: ^6.2.0
+  share_plus: ^10.1.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

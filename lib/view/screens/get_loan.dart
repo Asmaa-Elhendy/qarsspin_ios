@@ -12,7 +12,7 @@ import 'package:qarsspin/view/widgets/texts/texts.dart';
 import '../../controller/brand_controller.dart';
 import '../../controller/calculate_loan.dart' as loan_calc;
 import '../../controller/const/colors.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 import '../widgets/car_details/slider.dart';
 import '../widgets/car_details/snack_bar.dart';
 

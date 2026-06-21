@@ -13,7 +13,7 @@ import 'package:qarsspin/controller/const/colors.dart';
 import 'package:qarsspin/controller/my_ads/my_ad_getx_controller.dart';
 import 'package:qarsspin/model/post_media.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';
 import 'dart:developer';
 import 'dart:async';

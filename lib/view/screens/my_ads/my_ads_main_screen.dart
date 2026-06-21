@@ -10,7 +10,7 @@ import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/my_ads/my_ad_getx_controller.dart';
 import '../../../controller/my_ads/my_ad_data_layer.dart';
 import '../../../controller/payments/payment_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';
 import '../../widgets/my_ads/my_ad_card.dart';
 

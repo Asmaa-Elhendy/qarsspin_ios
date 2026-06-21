@@ -12,7 +12,7 @@ import 'package:qarsspin/controller/showrooms_controller.dart';
 import 'package:qarsspin/view/screens/cars_for_sale/cars_brand_list.dart';
 
 import '../../controller/notifications_controller.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 import '../../model/showroom_model.dart';
 import '../screens/cars_for_rent/all_rental_cars.dart';
 import '../screens/showrooms/car_care/car_care_details.dart';
@@ -119,7 +119,7 @@ class ShowroomCard extends StatelessWidget {
                     fit: BoxFit.fill,
                     height: 130.h,
 
-                    width: double.infinity,
+                    width:double.infinity,
 
                   ),
                 ),
@@ -181,27 +181,31 @@ class ShowroomCard extends StatelessWidget {
                     ],
                   ):
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // Buttons
-
-                      yellowButtons(title: lc.details,w: 95.w,onTap: (){
-                        // Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
+                      yellowButtons(title: lc.details,w: 80.w,onTap: (){
                         Get.find<ShowRoomsController>().getShowRoomRating(showroom.partnerId);
                         Get.find<ShowRoomsController>().getPartnerGallery(showroom.partnerId);
                         Get.find<ShowRoomsController>().checkFollowing(showroom.partnerId);
                         Get.to(CarCareDetails(rental,notificationsController,carCare: showroom,isCarCare: carCare,));},context: context),
 
-
-                      10.horizontalSpace,
                       Container(
                         height: 40.h,
-                        width: 2.5.w,
+                        width: 2.w,
                         color: Colors.grey,
                       ),
-                      10.horizontalSpace,
 
-                      yellowButtons(context:context,title: "${lc.cars} (${showroom.carsCount})",w: 100.w,onTap: (){
-                        Get.find<ShowRoomsController>().fetchCarsOfShowRooms(context:context,showroomName:showroom.partnerNamePl,forSale: rental?false:true, postId: "0", sourceKind: "Partner", partnerid: showroom.partnerId.toString(), userName: userName);
+                      yellowButtons(context:context,title: "${lc.cars} (${showroom.carsCount})",w: 88.w,onTap: (){
+                        Get.find<ShowRoomsController>().fetchCarsOfShowRooms(
+                          context: context,
+                          showroomName: showroom.partnerNamePl,
+                          forSale: rental ? false : true,
+                          postId: "0",
+                          sourceKind: "Partner",
+                          partnerid: showroom.partnerId.toString(),
+                          userName: userName,
+                          overrideSourceKind: showroom.isQarsSpinPartner ? "Qars Spin" : null,
+                        );
 
                         if(rental){
                           Get.to(AllRentalCars(notificationsController));
@@ -210,37 +214,55 @@ class ShowroomCard extends StatelessWidget {
                           Get.to(CarsBrandList(notificationsController,brandName: showroom.partnerNamePl,postKind: "CarForSale",));
                         }
                       }),
-                      10.horizontalSpace,
+
                       Container(
                         height: 40.h,
-                        width: 2.5.w,
+                        width: 2.w,
                         color: Colors.grey,
                       ),
 
-                      12.horizontalSpace,
-                      Row(
-                        children: [
-                          const Icon(Icons.remove_red_eye, size: 18, color: Colors.blue),
-                          const SizedBox(width: 2),
-                          Text("${showroom.visitsCount}"),
-                        ],
+                      SizedBox(
+                        width: 40.w,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.remove_red_eye, size: 16, color: Colors.blue),
+                              const SizedBox(width: 2),
+                              Text(
+                                "${showroom.visitsCount}",
+                                maxLines: 1,
+                                style: TextStyle(fontSize: 12.sp),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      8.horizontalSpace,
+
                       Container(
-                        // margin:EdgeInsets.symmetric(horizontal: 3.w),
                         height: 40.h,
-                        width: 2.5.w,
+                        width: 2.w,
                         color: Colors.grey,
                       ),
-                      10.horizontalSpace,
-                      Row(
-                        children: [
-                          Icon(Icons.star, size: 25.w, color: Colors.amber),
-                          2.horizontalSpace,
-                          Text("${showroom.avgRating}"),
-                          10.horizontalSpace,
 
-                        ],
+                      SizedBox(
+                        width: 40.w,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.star, size: 18.w, color: Colors.amber),
+                              const SizedBox(width: 2),
+                              Text(
+                                "${showroom.avgRating}",
+                                maxLines: 1,
+                                style: TextStyle(fontSize: 12.sp),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

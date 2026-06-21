@@ -19,7 +19,8 @@ class PaymentServiceNew {
   /// GET /api/Payment/supported-currencies?env=Sandbox
   Future<SupportedCurrenciesResponse> getSupportedCurrencies({
     String env = 'Sandbox',
-  }) async {
+  }) async
+  {
     try {
       log('🌐 [PaymentService] Fetching supported currencies...');
       final uri = Uri.parse('$baseUrlWeb/api/Payment/supported-currencies')
@@ -71,7 +72,7 @@ class PaymentServiceNew {
   {
     try {
       log('💳 [PaymentService] Initiating payment...');
-      
+
       final uri = Uri.parse('$baseUrlWeb/api/Payment/initiate')
           .replace(queryParameters: {
             if (externalUser != null) 'externalUser': externalUser,
@@ -79,7 +80,7 @@ class PaymentServiceNew {
      log("external user $externalUser");
       log('🔗 API Endpoint: $uri');
       log('📦 Request body: ${jsonEncode(request.toJson())}');
-      
+
       final response = await _client.post(
         uri,
         headers: const {
@@ -99,8 +100,8 @@ class PaymentServiceNew {
 
         try {
           final body = jsonDecode(response.body);
-          return body is Map<String, dynamic> 
-              ? body 
+          return body is Map<String, dynamic>
+              ? body
               : {'raw': body, 'statusCode': response.statusCode};
         } catch (e) {
           log('⚠️ Error parsing JSON response: $e');
@@ -132,7 +133,8 @@ class PaymentServiceNew {
   Future<Map<String, dynamic>> executePayment(
     PaymentExecuteRequest request, {
     String? externalUser,
-  }) async {
+  }) async
+  {
     try {
       log('💳 [PaymentService] Executing payment for order ${request.orderMasterId}...');
       
@@ -188,7 +190,8 @@ class PaymentServiceNew {
   /// GET /api/Payment/payment-result?paymentId=...&status=...
   Future<Map<String, dynamic>> getPaymentResult(
     PaymentResultRequest request,
-  ) async {
+  ) async
+  {
     final uri = Uri.parse('$baseUrlWeb/api/Payment/payment-result')
         .replace(queryParameters: request.toQueryParameters());
 
@@ -263,7 +266,8 @@ class PaymentServiceNew {
   /// Returns list of Qars services, optionally filtered by serviceType
   Future<List<QarsService>> getQarsServices({   // get price of services 360, features and others
     String? serviceTypeFilter, // e.g. "Individual"
-  }) async {
+  }) async
+  {
     try {
       log('🌐 [PaymentService] Fetching Qars services...');
       final uri = Uri.parse('$baseUrlWeb/api/v1/QarsRequests/Get-QarsServices');

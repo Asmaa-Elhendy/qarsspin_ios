@@ -7,7 +7,7 @@ import 'package:qarsspin/controller/const/colors.dart';
 import 'package:qarsspin/model/rental_car_model.dart';
 import 'package:qarsspin/view/widgets/texts/texts.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 
 class RentalCarInfo extends StatelessWidget {
   RentalCar car;

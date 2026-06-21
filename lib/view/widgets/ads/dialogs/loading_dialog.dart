@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../controller/const/colors.dart';
-import '../../../../l10n/app_localization.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AppLoadingWidget extends StatelessWidget {
   final String title;
@@ -44,38 +44,52 @@ class AppLoadingWidget extends StatelessWidget {
 }
 
 class LoadingDialog {
-  static void show(BuildContext context, {bool isModifyMode = false,}) {
+  static void show(
+    BuildContext context, {
+    bool isModifyMode = false,
+    ValueNotifier<String>? statusNotifier,
+  }) {
     var lc = AppLocalizations.of(context)!;
     showCupertinoDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => CupertinoAlertDialog(
         title: Text(isModifyMode ? lc.update_ad : lc.creating_ad),
-        content: Row(
-          children: [
-            CupertinoActivityIndicator(),
-            SizedBox(width: 20),
-            Expanded(
-              child: Text(
-                isModifyMode
-                    ? lc.please_wait_update
-                    : lc.please_wait_create,
+        content: Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CupertinoActivityIndicator(radius: 14),
+              const SizedBox(height: 14),
+              Text(
+                isModifyMode ? lc.please_wait_update : lc.please_wait_create,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
               ),
-            ),
-          ],
-        ),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child:  Text(
-              lc.ok_lbl,
-              style: TextStyle(color: CupertinoColors.activeBlue),
-            ),
+              if (statusNotifier != null)
+                ValueListenableBuilder<String>(
+                  valueListenable: statusNotifier,
+                  builder: (_, value, __) {
+                    if (value.isEmpty) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        value,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: CupertinoColors.systemGrey,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            ],
           ),
-        ],
+        ),
+        // No actions — the loader auto-dismisses when work completes.
       ),
     );
   }

@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../controller/auth/auth_controller.dart';
 import '../../../controller/const/app_strings.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ads/dialogs/otp_dialog.dart';
 import '../../widgets/auth_widgets/country_dropdown.dart';
 import '../../widgets/auth_widgets/custom_text_field.dart' as e;

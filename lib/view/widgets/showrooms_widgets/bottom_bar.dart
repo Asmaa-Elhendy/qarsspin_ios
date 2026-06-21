@@ -13,7 +13,7 @@ import '../../../controller/const/base_url.dart';
 import '../../../controller/notifications_controller.dart';
 import '../../../controller/rental_cars_controller.dart';
 import '../../../controller/showrooms_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../screens/cars_for_rent/all_rental_cars.dart';
 import '../../screens/cars_for_sale/cars_brand_list.dart';
 
@@ -53,6 +53,7 @@ class ShowRoomBottomBar extends StatelessWidget {
                     sourceKind: "Partner",
                     partnerid: showRoom.partnerId.toString(),
                     userName: userName,
+                    overrideSourceKind: showRoom.isQarsSpinPartner ? "Qars Spin" : null,
                   );
 
                   if (rental) {

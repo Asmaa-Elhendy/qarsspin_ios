@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:qarsspin/controller/const/base_url.dart';
 import '../../controller/const/colors.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 
 
 

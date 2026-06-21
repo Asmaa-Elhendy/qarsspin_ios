@@ -12,7 +12,7 @@ import 'package:myfatoorah_flutter/myfatoorah_flutter.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 import '../../../controller/payments/payment_controller.dart';
 import '../../../controller/payments/payment_service.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/payment/payment_initiate_request.dart';
 import '../../../model/payment/payment_method_model.dart';
 
@@ -341,64 +341,67 @@ class _InvoiceLinkDialogState extends State<InvoiceLinkDialog> {
               ),
             ),
             8.verticalSpace,
+
             Row(
               children: [
+                // Expanded(
+                //   child: InkWell(
+                //     onTap: () => _openUrl(widget.paymentUrl),
+                //     child: Text(
+                //       widget.paymentUrl,
+                //       style: TextStyle(
+                //         color: Colors.white,
+                //         fontSize: 14.sp,
+                //         decorationColor: Colors.white,
+                //         decoration: TextDecoration.underline,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // 8.horizontalSpace,
+                // InkWell(
+                //   onTap: () async {
+                //     await Clipboard.setData(ClipboardData(text: widget.paymentUrl));
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(content: Text(copiedMsg)),
+                //     );
+                //   },
+                //   child: Container(
+                //     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                //     decoration: BoxDecoration(
+                //       color: AppColors.logoGray,
+                //       borderRadius: BorderRadius.circular(4),
+                //     ),
+                //     child: Center(
+                //       child: Text(
+                //         copyLabel,
+                //         style: TextStyle(
+                //           color: AppColors.black,
+                //           fontWeight: FontWeight.w700,
+                //           fontSize: 13.sp,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // 8.horizontalSpace,
                 Expanded(
                   child: InkWell(
                     onTap: () => _openUrl(widget.paymentUrl),
-                    child: Text(
-                      widget.paymentUrl,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.sp,
-                        decorationColor: Colors.white,
-                        decoration: TextDecoration.underline,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.logoGray,
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                    ),
-                  ),
-                ),
-                8.horizontalSpace,
-                InkWell(
-                  onTap: () async {
-                    await Clipboard.setData(ClipboardData(text: widget.paymentUrl));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(copiedMsg)),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.logoGray,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Center(
-                      child: Text(
-                        copyLabel,
-                        style: TextStyle(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                8.horizontalSpace,
-                InkWell(
-                  onTap: () => _openUrl(widget.paymentUrl),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.logoGray,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Center(
-                      child: Text(
-                        isAr ? 'فتح' : 'Open',
-                        style: TextStyle(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13.sp,
+                      child: Center(
+                        child: Text(
+                          isAr ? 'افتح رابط الدفع' : 'Open Payment Link',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13.sp,
+                          ),
                         ),
                       ),
                     ),
@@ -406,12 +409,12 @@ class _InvoiceLinkDialogState extends State<InvoiceLinkDialog> {
                 ),
               ],
             ),
-            16.verticalSpace,
+            8.verticalSpace,//16
             if (checkError != null) ...[
               12.verticalSpace,
               Text(checkError!, style: TextStyle(color: Colors.red, fontSize: 12.sp)),
             ],
-            12.verticalSpace,
+            8.verticalSpace,//12
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

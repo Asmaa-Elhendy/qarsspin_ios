@@ -5,11 +5,15 @@ import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
 
 import '../../../controller/communications.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../../../model/rental_car_model.dart';
 
 class RentalBottomNaviagtion extends StatelessWidget {
   String phone;
-   RentalBottomNaviagtion({required this.phone,super.key});
+  RentalCar rentalCar;
+  RentalBottomNaviagtion({required this.phone, required this.rentalCar,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class RentalBottomNaviagtion extends StatelessWidget {
               ),
             )
           ],) ,onTap: (){
-            makePhoneCall(phone);
+            makePhoneCall(phone.trim());
           },),
           myButtons(title:Row(children: [
             8.horizontalSpace,
@@ -56,7 +60,8 @@ class RentalBottomNaviagtion extends StatelessWidget {
               ),
             )
           ],), onTap: (){
-            openWhatsApp(phone, message: "Hello 👋");
+            openWhatsApp(phone.trim(), message: "Hello 👋,Hi, I’m interested in your ${Get.locale?.languageCode=='ar'?rentalCar.carNameSL.trim():rentalCar.carNamePL.trim()} ${rentalCar.manufactureYear}.The Chassis Number is: ${rentalCar.chassisNumber}");
+            //openWhatsApp(phone, message: "Hello 👋");
           },green: true),
 
 

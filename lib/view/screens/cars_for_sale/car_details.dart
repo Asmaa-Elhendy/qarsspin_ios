@@ -12,7 +12,7 @@
 // import '../../../controller/auth/unregister_func.dart';
 // import '../../../controller/communications.dart';
 // import '../../../controller/const/colors.dart';
-// import '../../../l10n/app_localization.dart';
+// import '../../../l10n/app_localizations.dart';
 // import '../../../model/car_model.dart';
 // import '../../widgets/ads/dialogs/loading_dialog.dart';
 // import '../../widgets/bottom_offer_bar.dart';
@@ -559,7 +559,7 @@ import 'package:qarsspin/view/widgets/auth_widgets/register_dialog.dart';
 import 'package:qarsspin/view/widgets/car_details/qars_apin_bottom_navigation_bar.dart';
 import 'package:qarsspin/controller/communications.dart';
 import 'package:qarsspin/controller/const/colors.dart';
-import 'package:qarsspin/l10n/app_localization.dart';
+import 'package:qarsspin/l10n/app_localizations.dart';
 import 'package:qarsspin/model/car_model.dart';
 import 'package:qarsspin/model/specification.dart';
 import 'package:qarsspin/view/screens/get_loan.dart';
@@ -679,6 +679,63 @@ class _CarDetailsState extends State<CarDetails> {
                     ),
                     Row(
                       children: [
+                       InkWell(   onTap: () {
+                         final bool isArabic =
+                             Get.locale?.languageCode == 'ar';
+                         final carDetails = controller.carDetails;
+
+                         final String carName = isArabic
+                             ? carDetails.carNameSl.trim()
+                             : carDetails.carNamePl.trim();
+                         final String? description = isArabic
+                             ? carDetails.technical_Description_SL
+                             : carDetails.description;
+                         final String? exteriorColor = isArabic
+                             ? carDetails.exteriorColorNameSl
+                             : carDetails.exteriorColorNamePl;
+                         final String? interiorColor = isArabic
+                             ? carDetails.interiorColorNameSl
+                             : carDetails.interiorColorNamePl;
+
+                         final Map<String, String> extraInfo =
+                             <String, String>{};
+                         final String? warranty =
+                             carDetails.warrantyAvailable;
+                         if (warranty != null && warranty.trim().isNotEmpty) {
+                           extraInfo['Warranty'] = warranty.trim();
+                         }
+
+                         final List<MapEntry<String, String>> specs =
+                             controller.spec
+                                 .map((s) => MapEntry<String, String>(
+                                     s.key, s.value))
+                                 .toList();
+
+                         shareCarFromQarsSpin(
+                           carName: carName,
+                           year: carDetails.manufactureYear.toString(),
+                           price:
+                               "${carDetails.askingPrice} ${lc.currency_Symbol}",
+                           adCode: carDetails.postCode,
+                           mileage: '${carDetails.mileage} km',
+                           exteriorColor: exteriorColor,
+                           interiorColor: interiorColor,
+                           description: description,
+                           sourceKind: carDetails.sourceKind,
+                           imageUrl: carDetails.rectangleImageUrl,
+                           extraInfo: extraInfo,
+                           specifications: specs,
+                         );
+                       },
+                      child: SizedBox(
+                          width: 25.w,
+                          child: Image.asset(
+                            "assets/images/share.png",
+                            fit: BoxFit.cover,
+                            color: AppColors.blackColor(context),
+                          )),
+                    ),
+                    10.horizontalSpace,
                         12.horizontalSpace,
                         InkWell(
                           onTap: () {
@@ -756,10 +813,14 @@ class _CarDetailsState extends State<CarDetails> {
                     : unRegisterFunction(context);
               },
               onWhatsApp: () {
-                openWhatsApp(controller.carDetails.ownerMobile, message: "Hello 👋");
+                openWhatsApp(
+                 //   "97466288388"
+                 controller.carDetails.ownerMobile.trim()
+                    , message: "Hello 👋 I’m interested in your ${Get.locale?.languageCode=='ar'?controller.carDetails.carNameSl.trim():controller.carDetails.carNamePl.trim()} ${controller.carDetails.manufactureYear}.The AD Code is: ${controller.carDetails.postCode}");
+                //openWhatsApp(controller.carDetails.ownerMobile, message: "Hello 👋");
               },
               onCall: () {
-                makePhoneCall(controller.carDetails.ownerMobile);
+                makePhoneCall(controller.carDetails.ownerMobile.trim());
               },
             ),
             body: controller.oldData

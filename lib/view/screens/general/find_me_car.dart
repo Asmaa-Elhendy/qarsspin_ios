@@ -9,7 +9,7 @@ import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
 
 import '../../../controller/auth/auth_controller.dart';
 import '../../../controller/search_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/global_model.dart';
 import '../../widgets/auth_widgets/register_dialog.dart';
 

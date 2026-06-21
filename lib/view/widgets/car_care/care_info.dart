@@ -9,7 +9,7 @@ import 'package:qarsspin/view/widgets/my_ads/yellow_buttons.dart';
 import 'package:qarsspin/controller/showrooms_controller.dart';
 
 import '../../../controller/auth/auth_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../auth_widgets/register_dialog.dart';
 
 class CareInfo extends StatelessWidget {

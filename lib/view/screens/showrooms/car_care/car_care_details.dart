@@ -6,6 +6,7 @@ import 'package:qarsspin/controller/rental_cars_controller.dart';
 import 'package:qarsspin/controller/showrooms_controller.dart';
 import 'package:qarsspin/model/showroom_model.dart';
 
+import '../../../../controller/communications.dart';
 import '../../../../controller/notifications_controller.dart';
 import '../../../widgets/car_care/care_info.dart';
 import '../../../widgets/car_care/tab_Bar.dart';
@@ -86,14 +87,52 @@ class _CarCareDetailsState extends State<CarCareDetails> {
 
                 ),
                 InkWell(
-                  onTap: (){},
-                  child:
-                  SizedBox(
-                      width: 25.w,
-                      child: Image.asset("assets/images/share.png",
-                          fit: BoxFit.cover,
-                          color:   AppColors.blackColor(context)
-                      )),
+                  onTap: () {
+                    final bool isArabic =
+                        Get.locale?.languageCode == 'ar';
+                    final Showroom showroom = widget.carCare;
+
+                    final String name = isArabic
+                        ? showroom.partnerNameSl.trim()
+                        : showroom.partnerNamePl.trim();
+                    final String branchName = isArabic
+                        ? showroom.branchNameSl.trim()
+                        : showroom.branchNamePl.trim();
+                    final String description = isArabic
+                        ? showroom.partnerDescSl.trim()
+                        : showroom.partnerDescPl.trim();
+                    final String banner = isArabic
+                        ? showroom.bannerUrlSl
+                        : showroom.bannerUrlPl;
+                    final String imageUrl = showroom.logoUrl.trim().isNotEmpty
+                        ? showroom.logoUrl
+                        : banner;
+
+                    shareCarCareFromQarsSpin(
+                      name: name,
+                      rating: showroom.avgRating,
+                      type: widget.isCarCare ? 'Car Care service' : 'Showroom',
+                      branchName: branchName,
+                      description: description,
+                      phone: showroom.contactPhone,
+                      whatsapp: showroom.contactWhatsApp,
+                      mapsUrl: showroom.mapsUrl,
+                      joiningDate: showroom.joiningDate,
+                      visitsCount: showroom.visitsCount,
+                      activePosts: showroom.activePosts,
+                      followersCount: showroom.followersCount,
+                      carsCount: showroom.carsCount,
+                      imageUrl: imageUrl,
+                    );
+                  },
+                  child: SizedBox(
+                    width: 25.w,
+                    child: Image.asset(
+                      "assets/images/share.png",
+                      fit: BoxFit.cover,
+                      color: AppColors.blackColor(context),
+                    ),
+                  ),
                 )
               ],
             ),

@@ -7,7 +7,7 @@ import 'package:qarsspin/view/screens/general/terms_and_conditions.dart';
 
 import '../../../controller/Theme_controller.dart';
 import '../../../controller/const/colors.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../l10n/l10n.dart';
 import 'about_qars_spin.dart';
 

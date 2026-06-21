@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../controller/auth/auth_controller.dart';
 import '../../../../controller/const/colors.dart';
-import '../../../../l10n/app_localization.dart';
+import '../../../../controller/otp_service.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'error_dialog.dart';
 
 /// ===============================
@@ -247,6 +248,51 @@ class _OTPDialogState extends State<OTPDialog> {
           widget.onLoadingChange(false);
         }
       },
+      //otp from firebase-twillio استبدلي جزء التحقق القديم بهذا الجزء الجديد
+      // onTap: () async {
+      //   final enteredOtp = widget.otpController.text.trim();
+      //   if (enteredOtp.isEmpty) {
+      //     showErrorAlert('Please enter the OTP', context);
+      //     return;
+      //   }
+      //
+      //   widget.onLoadingChange(true);
+      //
+      //   try {
+      //     // التعديل هنا: هننادي الدالة ونخزن النتيجة في var الأول
+      //     final result = await OtpService().verifyOtp(widget.mobile, enteredOtp);
+      //
+      //     // بما إن دالتك في الـ Service بترجع bool أصلاً
+      //     if (result == true) {
+      //       l.log('✅ OTP Verified successfully');
+      //       Navigator.pop(context);
+      //
+      //       if (widget.otpCount == 1) {
+      //         final auth = Get.find<AuthController>();
+      //         if (widget.userData != null) {
+      //           await auth.saveUserFromApiData(widget.userData!);
+      //         } else {
+      //           final prefs = await SharedPreferences.getInstance();
+      //           await prefs.setString('username', widget.mobile);
+      //           auth.updateRegisteredStatus(true, widget.mobile, widget.name, widget.mobile, widget.email);
+      //         }
+      //         widget.onValidOTP();
+      //       } else if (widget.otpCount == 0) {
+      //         widget.onRegister();
+      //       } else {
+      //         widget.onValidOTP();
+      //       }
+      //     } else {
+      //       showErrorAlert('Invalid OTP. Please try again.', context);
+      //       widget.onInvalidOTP();
+      //     }
+      //   } catch (e) {
+      //     l.log('Detailed Error: $e'); // شوفي الـ log ده هيطلع إيه بالظبط
+      //     showErrorAlert('An error occurred. Please try again.', context);
+      //   } finally {
+      //     if (mounted) widget.onLoadingChange(false);
+      //   }
+      // },
       child: Container(
         width: 95.w,
         padding: EdgeInsets.symmetric(vertical: 10.h),

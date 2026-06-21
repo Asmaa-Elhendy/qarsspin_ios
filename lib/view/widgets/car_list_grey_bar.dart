@@ -13,7 +13,7 @@ import 'package:qarsspin/view/widgets/search/search_slide.dart';
 import 'package:qarsspin/view/widgets/showrooms_widgets/sort_by_widgets.dart';
 import '../../controller/const/colors.dart';
 import '../../controller/notifications_controller.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 
 
 Widget carListGreyBar(

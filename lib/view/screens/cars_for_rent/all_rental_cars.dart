@@ -5,7 +5,7 @@ import 'package:qarsspin/controller/const/colors.dart';
 
 import '../../../controller/notifications_controller.dart';
 import '../../../controller/rental_cars_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/ad_container.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';
 import '../../widgets/car_list_grey_bar.dart';

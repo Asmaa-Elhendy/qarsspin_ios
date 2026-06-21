@@ -543,13 +543,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get make_360_first => 'اجعل إعلانك مميزًا بجلسة تصوير 360 درجة (';
 
   @override
-  String get make_360_second => 'ريال فقط لجلسة التصوير الكاملة)';
+  String get make_360_second => 'ريال قطري فقط لجلسة التصوير الكاملة)';
 
   @override
   String get pin_ad_first => 'قم بتثبيت إعلانك في الأعلى مقابل (';
 
   @override
-  String get pin_ad_second => ') ريال فقط';
+  String get pin_ad_second => ') ريال قطري فقط';
 
   @override
   String get agreement => 'أوافق على الشروط والأحكام';
@@ -624,7 +624,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get msg_360_first => 'جلسة التصوير 360 درجة الخاصة بنا ستبرز منشورك بشكل جميل \\nانقر فوق تأكيد، وسنقوم بالباقي! \\n   رسوم إضافية';
 
   @override
-  String get msg_360_second => 'ريال يمكن أن تنطبق.';
+  String get msg_360_second => 'ريال قطري يمكن أن تنطبق.';
 
   @override
   String get confirmation => 'تأكيد';
@@ -654,10 +654,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get feature_ad_msg_first => 'سيضمن تمييز منشورك ظهوره في المقدمة للجميع لرؤيته.\\n رسوم إضافية';
 
   @override
-  String get feature_ad_msg_second => 'ريال يمكن أن تنطبق.\\n انقر فوق تأكيد للمتابعة!';
+  String get feature_ad_msg_second => 'ريال قطري يمكن أن تنطبق.\\n انقر فوق تأكيد للمتابعة!';
 
   @override
-  String get payment => 'Payment';
+  String get payment => 'الدفع';
 
   @override
   String get modify => 'تعديل';
@@ -1029,10 +1029,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get serviceFee => 'رسوم الخدمة';
 
   @override
-  String get qarOnlyForRequest360Session => 'ريال فقط لطلب جلسة 360 درجة.';
+  String get qarOnlyForRequest360Session => 'ريال قطري فقط لطلب جلسة 360 درجة.';
 
   @override
-  String get qarOnlyForFeaturePost => 'ريال فقط للمنشور المميز.';
+  String get qarOnlyForFeaturePost => 'ريال قطري فقط للمنشور المميز.';
 
   @override
   String get contactInformation => 'معلومات الاتصال';
@@ -1102,4 +1102,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updateNow => 'تحديث الآن';
+
+  @override
+  String get requestAppointmentWhatsappMessage => 'مرحبًا من تطبيق Qars Spin، أريد حجز موعد.';
+
+  @override
+  String get couldNotOpenWhatsapp => 'تعذر فتح واتساب';
+
+  @override
+  String get app_outdated => 'التطبيق اصدراره قديم';
+
+  @override
+  String get update_app_message => 'يرجى تحديث التطبيق لمواصلة استخدام جميع الميزات.';
 }

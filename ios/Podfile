@@ -1,7 +1,6 @@
 platform :ios, '15.0'
 $FirebaseSDKVersion = '11.10.0'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -18,6 +17,7 @@ def flutter_root
     matches = line.match(/FLUTTER_ROOT=(.*)/)
     return matches[1].strip if matches
   end
+
   raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}"
 end
 
@@ -28,6 +28,8 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
+
+  pod 'MyFatoorah', '2.0.161'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

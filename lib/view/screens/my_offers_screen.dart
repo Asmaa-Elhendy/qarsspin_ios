@@ -9,7 +9,7 @@ import 'package:qarsspin/view/screens/cars_for_sale/car_details.dart';
 import 'package:qarsspin/view/widgets/ads/dialogs/loading_dialog.dart';
 
 import '../../controller/auth/auth_controller.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
 import 'ads/create_ad_options_screen.dart';
 import 'favourites/favourite_screen.dart';
 import 'general/contact_us.dart';
@@ -60,6 +60,9 @@ class _OffersScreenState extends State<OffersScreen> {
   @override
   Widget build(BuildContext context) {
     var lc = AppLocalizations.of(context)!;
+    final double addButtonSize = 60.w;
+    final double addIconSize = 26.sp;
+    final double addTextSize = 11.sp;
     return Scaffold(
       backgroundColor: AppColors.background(context),
       appBar: AppBar(
@@ -234,6 +237,55 @@ class _OffersScreenState extends State<OffersScreen> {
         ],
       )
       ,
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Get.to(CreateNewAdOptions());
+        },
+        child: Container(
+          width: addButtonSize,
+          height: addButtonSize,
+          decoration: BoxDecoration(
+            color: AppColors.divider(context),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.background(context),
+              width: 3.w,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: addIconSize,
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  lc.navigation_add,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: addTextSize,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Gilroy',
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
 
       // Bottom Nav Bar
       bottomNavigationBar: CustomBottomNavBar(

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../l10n/app_localization.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../image_picker_field.dart';
 import '../video_player_widget.dart';
 

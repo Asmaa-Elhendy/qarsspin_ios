@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 
-import '../../../../l10n/app_localization.dart';
+import '../../../../l10n/app_localizations.dart';
 
 
 class ContactInfoDialog {

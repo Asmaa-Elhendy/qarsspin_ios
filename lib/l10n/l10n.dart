@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/car_model.dart';
-import 'app_localization.dart';
+import 'app_localizations.dart';
 
 /// 🔹 اللغات المدعومة
 class L10n {

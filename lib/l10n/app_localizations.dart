@@ -278,13 +278,13 @@ abstract class AppLocalizations {
   /// No description provided for @sorry.
   ///
   /// In en, this message translates to:
-  /// **'Unfortunately what you are looking for is\\ncurrently not available. Please activate a'**
+  /// **'Unfortunately what you are looking for is\\n currently not available. Please activate a'**
   String get sorry;
 
   /// No description provided for @sorry_notify.
   ///
   /// In en, this message translates to:
-  /// **'notification using\\\"Find me a car\\\"yp be updates'**
+  /// **'notification using\\\"Find me a car\\\" be updates'**
   String get sorry_notify;
 
   /// No description provided for @sort_result.
@@ -1166,7 +1166,7 @@ abstract class AppLocalizations {
   /// No description provided for @make_360_second.
   ///
   /// In en, this message translates to:
-  /// **'riyal only for full shooting session)'**
+  /// **'QAR only for full shooting session)'**
   String get make_360_second;
 
   /// No description provided for @pin_ad_first.
@@ -1178,7 +1178,7 @@ abstract class AppLocalizations {
   /// No description provided for @pin_ad_second.
   ///
   /// In en, this message translates to:
-  /// **',) QR only'**
+  /// **') QAR only'**
   String get pin_ad_second;
 
   /// No description provided for @agreement.
@@ -1328,7 +1328,7 @@ abstract class AppLocalizations {
   /// No description provided for @msg_360_second.
   ///
   /// In en, this message translates to:
-  /// **'riyal can apply.'**
+  /// **'QAR can apply.'**
   String get msg_360_second;
 
   /// No description provided for @confirmation.
@@ -2284,6 +2284,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update Now'**
   String get updateNow;
+
+  /// No description provided for @requestAppointmentWhatsappMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello From Qars Spin APP, I want to request an appointment.'**
+  String get requestAppointmentWhatsappMessage;
+
+  /// No description provided for @couldNotOpenWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open WhatsApp'**
+  String get couldNotOpenWhatsapp;
+
+  /// No description provided for @app_outdated.
+  ///
+  /// In en, this message translates to:
+  /// **'App is Outdated'**
+  String get app_outdated;
+
+  /// No description provided for @update_app_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update the app to continue using all features.'**
+  String get update_app_message;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

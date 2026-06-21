@@ -99,10 +99,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_result => 'No Result Found';
 
   @override
-  String get sorry => 'Unfortunately what you are looking for is\\ncurrently not available. Please activate a';
+  String get sorry => 'Unfortunately what you are looking for is\\n currently not available. Please activate a';
 
   @override
-  String get sorry_notify => 'notification using\\\"Find me a car\\\"yp be updates';
+  String get sorry_notify => 'notification using\\\"Find me a car\\\" be updates';
 
   @override
   String get sort_result => 'Sort Results';
@@ -543,13 +543,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get make_360_first => 'Make Your Advertisement special by 360 session(';
 
   @override
-  String get make_360_second => 'riyal only for full shooting session)';
+  String get make_360_second => 'QAR only for full shooting session)';
 
   @override
   String get pin_ad_first => 'Pin your advertisement at the top for (';
 
   @override
-  String get pin_ad_second => ',) QR only';
+  String get pin_ad_second => ') QAR only';
 
   @override
   String get agreement => 'I agree to the Terms and Conditions';
@@ -624,7 +624,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msg_360_first => 'Our 360 photo session will beautifully highlight your post \nclick Confirm, and we \'ll handle the rest! \n   Additional charges';
 
   @override
-  String get msg_360_second => 'riyal can apply.';
+  String get msg_360_second => 'QAR can apply.';
 
   @override
   String get confirmation => 'Confirmation';
@@ -1102,4 +1102,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateNow => 'Update Now';
+
+  @override
+  String get requestAppointmentWhatsappMessage => 'Hello From Qars Spin APP, I want to request an appointment.';
+
+  @override
+  String get couldNotOpenWhatsapp => 'Could not open WhatsApp';
+
+  @override
+  String get app_outdated => 'App is Outdated';
+
+  @override
+  String get update_app_message => 'Please update the app to continue using all features.';
 }

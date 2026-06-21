@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 
 import '../../../controller/notifications_controller.dart';
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/notification_model.dart';
 import '../../widgets/notification_card.dart';
 import '../../widgets/ads/dialogs/loading_dialog.dart';

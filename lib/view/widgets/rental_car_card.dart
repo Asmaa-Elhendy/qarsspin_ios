@@ -6,8 +6,10 @@ import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/controller/rental_cars_controller.dart';
 import 'package:qarsspin/view/screens/cars_for_rent/rental_car_details.dart';
 import '../../controller/const/colors.dart';
-import '../../l10n/app_localization.dart';
+import '../../l10n/app_localizations.dart';
+import '../../model/car_model.dart' show CarStatus;
 import '../../model/rental_car_model.dart';
+import 'car_card.dart' show carStatus;
 
 
 class RentalCarCard extends StatelessWidget {
@@ -102,7 +104,19 @@ class RentalCarCard extends StatelessWidget {
                 ),
               ),
 
-             30.verticalSpace,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: carStatus(
+                  car.sourceKind == "Individual"
+                      ? CarStatus.personal
+                      : car.sourceKind == "Qars Spin"
+                      ? CarStatus.qarsSpin
+                      : CarStatus.showroom,
+                  context,
+                ),
+              ),
+
+             8.verticalSpace,
               Container(
                 padding:  EdgeInsets.symmetric(vertical: 8.h),
                 decoration: const BoxDecoration(

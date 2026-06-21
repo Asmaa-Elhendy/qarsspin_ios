@@ -139,14 +139,15 @@ class PaymentController extends GetxController {
     required String email,
     required String mobile,
     String? externalUser,
-  }) async {
+  }) async
+  {
     try {
       isInitiatingPayment.value = true;
       paymentErrorMessage.value = '';
       lastPaymentInitiateResponse.value = null;
 
       log('💳 Initializing payment for post $postId with services: $serviceIds');
-      
+
       final request = PaymentInitiateRequest(
         postId: postId,
         qarsServiceIds: serviceIds,
@@ -157,7 +158,7 @@ class PaymentController extends GetxController {
       );
 
       log('📦 Payment request created: ${request.toJson()}');
-      
+
       final response = await _service.initiatePayment(
         request,
         externalUser: externalUser,
@@ -166,12 +167,12 @@ class PaymentController extends GetxController {
       log('✅ Payment initiated successfully');
       lastPaymentInitiateResponse.value = response;
       return response;
-      
+
     } catch (e, stackTrace) {
       final errorMsg = '❌ Failed to initiate payment: $e';
       log(errorMsg);
       log('📜 Stack trace: $stackTrace');
-      
+
       paymentErrorMessage.value = e.toString();
       return null;
     } finally {
@@ -192,22 +193,23 @@ class PaymentController extends GetxController {
     required int paymentMethodId,
     required String returnUrl,
     String? externalUser,
-  }) async {
+  }) async
+  {
     try {
       isExecutingPayment.value = true;
       executePaymentErrorMessage.value = '';
       lastPaymentExecuteResponse.value = null;
 
       log('💳 Executing payment for order $orderMasterId with method $paymentMethodId');
-      
+
       final request = PaymentExecuteRequest(
         orderMasterId: orderMasterId,
         paymentMethodId: paymentMethodId,
         returnUrl: returnUrl,
       );
-      
+
       log('📦 Payment execution request: ${request.toJson()}');
-      
+
       final response = await _service.executePayment(
         request,
         externalUser: externalUser,
@@ -217,12 +219,12 @@ class PaymentController extends GetxController {
       log('response of execute is $response');
       lastPaymentExecuteResponse.value = response;
       return response;
-      
+
     } catch (e, stackTrace) {
       final errorMsg = '❌ Failed to execute payment: $e';
       log(errorMsg);
       log('📜 Stack trace: $stackTrace');
-      
+
       executePaymentErrorMessage.value = errorMsg;
       return null;
     } finally {
@@ -234,7 +236,8 @@ class PaymentController extends GetxController {
   Future<Map<String, dynamic>?> getPaymentResult({
     required String paymentId,
     required String status,
-  }) async {
+  }) async
+  {
     try {
       isFetchingPaymentResult.value = true;
       paymentResultErrorMessage.value = '';
@@ -261,7 +264,8 @@ class PaymentController extends GetxController {
   Future<Map<String, dynamic>?> getTestStatus({
     required String paymentId,
     required bool isTest,
-  }) async {
+  }) async
+  {
     try {
       isFetchingTestStatus.value = true;
       testStatusErrorMessage.value = '';
@@ -290,16 +294,16 @@ class PaymentController extends GetxController {
     try {
       isLoadingQarsServices.value = true;
       qarsServicesErrorMessage.value = '';
-      
+
       final services = await _service.getQarsServices();
-      
+
       // Filter for Individual services only
       final individualServices = services
           .where((service) => service.qarsServiceType == 'Individual')
           .toList();
-      
+
       individualQarsServices.assignAll(individualServices);
-      
+
       // Extract and store specific services
       for (var service in individualServices) {
         if (service.qarsServiceName.toLowerCase().contains('feature')) {
@@ -310,7 +314,7 @@ class PaymentController extends GetxController {
           print('🔄 360 service stored - ID: ${service.qarsServiceId}, Name: ${service.qarsServiceName}, Price: ${service.qarsServicePrice}');
         }
       }
-      
+
     } catch (e) {
       final errorMsg = 'Failed to load Qars services: $e';
       qarsServicesErrorMessage.value = errorMsg;
@@ -326,7 +330,8 @@ class PaymentController extends GetxController {
   Future<Map<String, dynamic>?> checkOrderFlow({
     required int postId,
     required int qarsServiceId,
-  }) async {
+  }) async
+  {
     try {
       isCheckingOrderFlow.value = true;
       checkOrderFlowErrorMessage.value = '';

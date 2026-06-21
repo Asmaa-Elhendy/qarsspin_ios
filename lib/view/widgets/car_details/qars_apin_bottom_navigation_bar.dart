@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:qarsspin/controller/const/base_url.dart';
 import 'package:qarsspin/controller/const/colors.dart';
 
-import '../../../l10n/app_localization.dart';
+import '../../../l10n/app_localizations.dart';
 
 class QarsApinBottomNavigationBar extends StatefulWidget {
   final VoidCallback onRequestToBuy;

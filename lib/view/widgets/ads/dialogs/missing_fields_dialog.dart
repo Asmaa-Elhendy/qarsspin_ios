@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qarsspin/l10n/l10n.dart';
 
-import '../../../../l10n/app_localization.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class MissingFieldsDialog {
   static void show(BuildContext context, List<String> missingFields) {

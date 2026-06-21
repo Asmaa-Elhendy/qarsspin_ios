@@ -114,9 +114,16 @@ class ShowRoomsController extends GetxController {
   }
 
   //ApI calls
-  fetchCarsOfShowRooms({required bool forSale,required String postId,required String sourceKind, required String partnerid,  required String userName,required String showroomName,required BuildContext context}) async {
+  fetchCarsOfShowRooms({required bool forSale,required String postId,required String sourceKind, required String partnerid,  required String userName,required String showroomName,required BuildContext context, String? overrideSourceKind}) async {
 
     log("callalalla${sourceKind}");
+    log(
+      "🟢 [fetchCarsOfShowRooms] partnerid=$partnerid"
+      " showroomName='$showroomName'"
+      " showroomName.length=${showroomName.length}"
+      " showroomName.codeUnits=${showroomName.codeUnits}"
+      " overrideSourceKind=$overrideSourceKind",
+    );
 
     rentalCarsOfShowRoom = [];
     carsForSale = [];
@@ -165,7 +172,7 @@ class ShowRoomsController extends GetxController {
                   carNameWithYearSl: body["Data"][i]["Car_Name_With_Year_SL"],
                   manufactureYear: body["Data"][i]["Manufacture_Year"],
                   tag: body["Data"][i]["Tag"],
-                  sourceKind: body["Data"][i]["Source_Kind"],
+                  sourceKind: overrideSourceKind ?? resolveCarSourceKind(body["Data"][i]),
                   mileage: body["Data"][i]["Mileage"],
                   askingPrice:  body["Data"][i]["Asking_Price"],
                   rectangleImageFileName:  body["Data"][i]["Rectangle_Image_FileName"],
@@ -179,7 +186,7 @@ class ShowRoomsController extends GetxController {
               postStatus: body["Data"][i]["Post_Status"],
               pinToTop: body["Data"][i]["Pin_To_Top"],
               tag: body["Data"][i]["Tag"],
-              sourceKind: body["Data"][i]["Source_Kind"],
+              sourceKind: overrideSourceKind ?? body["Data"][i]["Source_Kind"],
               partnerId: body["Data"][i]["Partner_ID"],
               userName: body["Data"][i]["UserName"],
               createdBy: body["Data"][i]["Created_By"],
@@ -234,6 +241,7 @@ class ShowRoomsController extends GetxController {
               ownerMobile: body["Data"][i]["Owner_Mobile"]));
           //Get.find<BrandController>().switchLoading();
           if(forSale) {
+            log("🟢 [fetchCarsOfShowRooms] parsed ${carsForSale.length} cars. First car sourceKind = ${carsForSale.isNotEmpty ? carsForSale.first.sourceKind : '(none)'}");
 
             Get.find<BrandController>().setCars(carsForSale, showroomName);
           }else{
