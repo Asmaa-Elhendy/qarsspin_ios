@@ -61,7 +61,7 @@ dependencies:
 
   shared_preferences: ^2.2.2
   intl: ^0.20.2
-  sqflite_common_ffi: ^2.3.6
+  sqflite_common_ffi: 2.3.4+4
   get_storage:
   flutter_localization:
   flutter_slidable: ^4.0.3
