@@ -2,7 +2,7 @@ name: qarsspin
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 2.4.1+227
+version: 2.4.1+228
 
 environment:
   sdk: ^3.8.1
@@ -46,6 +46,7 @@ dependencies:
   flutter_slidable: ^4.0.3
   # cloud_functions: ^6.2.0
   share_plus: ^10.1.4
+  flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
   flutter_test:

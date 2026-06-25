@@ -54,5 +54,9 @@
     <array>
         <string>whatsapp</string>
     </array>
+	<key>NSPhotoLibraryUsageDescription</key>
+        <string>Qars Spin needs access to your photos to attach images when sharing a car or showroom.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Qars Spin needs permission to save shared images to your photo library.</string>
 </dict>
 </plist>

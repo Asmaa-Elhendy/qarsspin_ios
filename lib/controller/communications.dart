@@ -1,27 +1,41 @@
-
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
+import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+bool _isSharing = false;
+
+/// iOS needs a valid popover origin, especially on iPad and sometimes
+/// on real iPhone release builds.
+Rect _sharePositionOrigin(BuildContext context) {
+  final RenderObject? renderObject = context.findRenderObject();
+
+  if (renderObject is RenderBox && renderObject.hasSize) {
+    return renderObject.localToGlobal(Offset.zero) & renderObject.size;
+  }
+
+  return const Rect.fromLTWH(0, 0, 100, 100);
+}
 
 String _normalizePhoneNumber(String phoneNumber) {
   String phone = phoneNumber.trim();
 
-  // remove spaces, dashes, brackets
+  // Remove spaces, dashes, and brackets.
   phone = phone.replaceAll(RegExp(r'[\s\-\(\)]'), '');
 
-  // remove +
+  // Remove +.
   if (phone.startsWith('+')) {
     phone = phone.substring(1);
   }
 
-  // convert 00974... to 974...
+  // Convert 00974... to 974...
   if (phone.startsWith('00')) {
     phone = phone.substring(2);
   }
 
-  // لو الرقم قطري محلي 8 أرقام، ضيفي كود قطر
+  // If the number is a local Qatar number with 8 digits, add Qatar code.
   if (phone.length == 8) {
     phone = '974$phone';
   }
@@ -69,7 +83,7 @@ Future<void> openWhatsApp(String phoneNumber, {String message = ""}) async {
     if (!launchedWeb) {
       throw 'Could not launch WhatsApp';
     }
-  } catch (e) {
+  } catch (_) {
     final bool launchedWeb = await launchUrl(
       whatsappWebUrl,
       mode: LaunchMode.externalApplication,
@@ -91,32 +105,16 @@ Future<void> openMap(String url) async {
   }
 }
 
+/// Uses cache instead of downloading the image manually every time.
+/// This makes sharing faster on iOS because the image is usually already cached
+/// from the car details screen.
 Future<XFile?> _downloadImageToTemp(String url) async {
   try {
-    final Uri uri = Uri.parse(url);
-    final http.Response response = await http
-        .get(uri)
-        .timeout(const Duration(seconds: 8));
+    final File file = await DefaultCacheManager().getSingleFile(url);
 
-    if (response.statusCode != 200 || response.bodyBytes.isEmpty) {
+    if (!await file.exists()) {
       return null;
     }
-
-    String extension = '.jpg';
-    final String path = uri.path.toLowerCase();
-    if (path.endsWith('.png')) {
-      extension = '.png';
-    } else if (path.endsWith('.webp')) {
-      extension = '.webp';
-    } else if (path.endsWith('.jpeg')) {
-      extension = '.jpeg';
-    }
-
-    final Directory tempDir = Directory.systemTemp;
-    final String fileName =
-        'qarsspin_share_${DateTime.now().millisecondsSinceEpoch}$extension';
-    final File file = File('${tempDir.path}${Platform.pathSeparator}$fileName');
-    await file.writeAsBytes(response.bodyBytes, flush: true);
 
     return XFile(file.path);
   } catch (_) {
@@ -124,11 +122,66 @@ Future<XFile?> _downloadImageToTemp(String url) async {
   }
 }
 
+Future<void> _shareQarsSpinContent({
+  required BuildContext context,
+  required String message,
+  required String subject,
+  String? imageUrl,
+  VoidCallback? onShareSheetWillOpen,
+}) async {
+  if (_isSharing) return;
+
+  _isSharing = true;
+
+  try {
+    final Rect shareOrigin = _sharePositionOrigin(context);
+
+    XFile? imageFile;
+    if (imageUrl != null && imageUrl.trim().isNotEmpty) {
+      imageFile = await _downloadImageToTemp(imageUrl.trim());
+    }
+
+    // Reset the button loading before the iOS share sheet opens.
+    // Share.share / shareXFiles returns only after the share sheet is closed,
+    // so we should not keep the button loading until then.
+    onShareSheetWillOpen?.call();
+
+    await Future.delayed(const Duration(milliseconds: 80));
+
+    if (imageFile != null) {
+      try {
+        await Share.shareXFiles(
+          <XFile>[imageFile],
+          text: message,
+          subject: subject,
+          sharePositionOrigin: shareOrigin,
+        );
+      } catch (_) {
+        await Share.share(
+          message,
+          subject: subject,
+          sharePositionOrigin: shareOrigin,
+        );
+      }
+    } else {
+      await Share.share(
+        message,
+        subject: subject,
+        sharePositionOrigin: shareOrigin,
+      );
+    }
+  } finally {
+    _isSharing = false;
+  }
+}
+
 Future<void> shareCarFromQarsSpin({
+  required BuildContext context,
   required String carName,
   required String year,
   required String price,
   required String adCode,
+  VoidCallback? onShareSheetWillOpen,
   String priceLabel = 'Price',
   String? category,
   String? mileage,
@@ -176,12 +229,16 @@ Future<void> shareCarFromQarsSpin({
 
   if (specifications != null && specifications.isNotEmpty) {
     final List<String> specLines = <String>[];
+
     for (final MapEntry<String, String> entry in specifications) {
       final String label = entry.key.trim();
       final String value = entry.value.trim();
+
       if (label.isEmpty || value.isEmpty) continue;
+
       specLines.add('• $label: $value');
     }
+
     if (specLines.isNotEmpty) {
       lines.add('');
       lines.add('Specifications:');
@@ -199,25 +256,21 @@ Future<void> shareCarFromQarsSpin({
   final String message = lines.join('\n');
   const String subject = 'Car you may like from Qars Spin app';
 
-  XFile? imageFile;
-  if (imageUrl != null && imageUrl.trim().isNotEmpty) {
-    imageFile = await _downloadImageToTemp(imageUrl.trim());
-  }
-
-  if (imageFile != null) {
-    await Share.shareXFiles(
-      <XFile>[imageFile],
-      text: message,
-      subject: subject,
-    );
-  } else {
-    await Share.share(message, subject: subject);
-  }
+  await _shareQarsSpinContent(
+    context: context,
+    message: message,
+    subject: subject,
+    imageUrl: imageUrl,
+    onShareSheetWillOpen: onShareSheetWillOpen,
+  );
 }
+
 Future<void> shareCarCareFromQarsSpin({
+  required BuildContext context,
   required String name,
   required String rating,
   required String type,
+  VoidCallback? onShareSheetWillOpen,
   String? branchName,
   String? description,
   String? phone,
@@ -249,21 +302,27 @@ Future<void> shareCarCareFromQarsSpin({
   }
 
   addIfPresent('Branch', branchName);
+
   if (rating.trim().isNotEmpty) {
     lines.add('Rating: ${rating.trim()} / 5');
   }
+
   if (activePosts != null && activePosts > 0) {
     lines.add('Active posts: $activePosts');
   }
+
   if (carsCount != null && carsCount > 0) {
     lines.add('Cars: $carsCount');
   }
+
   if (followersCount != null && followersCount > 0) {
     lines.add('Followers: $followersCount');
   }
+
   if (visitsCount != null && visitsCount > 0) {
     lines.add('Visits: $visitsCount');
   }
+
   addIfPresent('Joined', joiningDate);
   addIfPresent('Phone', phone);
   addIfPresent('WhatsApp', whatsapp);
@@ -278,18 +337,11 @@ Future<void> shareCarCareFromQarsSpin({
   final String message = lines.join('\n');
   final String subject = '$type you may like from Qars Spin app';
 
-  XFile? imageFile;
-  if (imageUrl != null && imageUrl.trim().isNotEmpty) {
-    imageFile = await _downloadImageToTemp(imageUrl.trim());
-  }
-
-  if (imageFile != null) {
-    await Share.shareXFiles(
-      <XFile>[imageFile],
-      text: message,
-      subject: subject,
-    );
-  } else {
-    await Share.share(message, subject: subject);
-  }
+  await _shareQarsSpinContent(
+    context: context,
+    message: message,
+    subject: subject,
+    imageUrl: imageUrl,
+    onShareSheetWillOpen: onShareSheetWillOpen,
+  );
 }
