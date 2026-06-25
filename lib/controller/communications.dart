@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,16 +5,44 @@ import 'package:url_launcher/url_launcher.dart';
 
 bool _isSharing = false;
 
-/// iOS needs a valid popover origin, especially on iPad and sometimes
-/// on real iPhone release builds.
+/// iOS needs a valid popover origin, especially on iPad and sometimes on
+/// real iPhone release builds. If the rect is missing or falls outside the
+/// visible screen, `UIActivityViewController` can silently refuse to present
+/// and the share sheet simply never appears — even though the Dart call
+/// returns normally. Fall back to a small rect anchored to the bottom-
+/// centre of the screen (where the iPhone share sheet slides up from anyway)
+/// so the call is always valid.
 Rect _sharePositionOrigin(BuildContext context) {
-  final RenderObject? renderObject = context.findRenderObject();
+  final MediaQueryData? mediaQuery = MediaQuery.maybeOf(context);
+  final Size screenSize = mediaQuery?.size ?? const Size(400, 800);
 
-  if (renderObject is RenderBox && renderObject.hasSize) {
-    return renderObject.localToGlobal(Offset.zero) & renderObject.size;
+  final Rect bottomCenterFallback = Rect.fromLTWH(
+    (screenSize.width - 100) / 2,
+    screenSize.height - 120,
+    100,
+    100,
+  );
+
+  final RenderObject? renderObject = context.findRenderObject();
+  if (renderObject is! RenderBox || !renderObject.hasSize) {
+    return bottomCenterFallback;
   }
 
-  return const Rect.fromLTWH(0, 0, 100, 100);
+  final Offset origin = renderObject.localToGlobal(Offset.zero);
+  final Rect buttonRect = origin & renderObject.size;
+
+  // Reject rects that are zero-sized, off-screen, or partly behind the
+  // status bar / dynamic island. iOS treats those as invalid popover
+  // anchors and refuses to present the share sheet.
+  final bool isValid =
+      buttonRect.width > 0 &&
+      buttonRect.height > 0 &&
+      buttonRect.left >= 0 &&
+      buttonRect.top >= 0 &&
+      buttonRect.right <= screenSize.width &&
+      buttonRect.bottom <= screenSize.height;
+
+  return isValid ? buttonRect : bottomCenterFallback;
 }
 
 String _normalizePhoneNumber(String phoneNumber) {
@@ -105,18 +131,18 @@ Future<void> openMap(String url) async {
   }
 }
 
-/// Uses cache instead of downloading the image manually every time.
-/// This makes sharing faster on iOS because the image is usually already cached
-/// from the car details screen.
-Future<XFile?> _downloadImageToTemp(String url) async {
+/// Cache-only image lookup. Returns immediately if the image is already on
+/// disk; returns null otherwise. Network fetches are NOT performed inline at
+/// share time on iOS — keeping the share call synchronous-feeling preserves
+/// the user-initiated gesture window that UIActivityViewController needs in
+/// order to present.
+Future<XFile?> _readCachedImage(String url) async {
   try {
-    final File file = await DefaultCacheManager().getSingleFile(url);
-
-    if (!await file.exists()) {
-      return null;
-    }
-
-    return XFile(file.path);
+    final FileInfo? cached =
+        await DefaultCacheManager().getFileFromCache(url);
+    if (cached == null) return null;
+    if (!await cached.file.exists()) return null;
+    return XFile(cached.file.path);
   } catch (_) {
     return null;
   }
@@ -136,17 +162,18 @@ Future<void> _shareQarsSpinContent({
   try {
     final Rect shareOrigin = _sharePositionOrigin(context);
 
+    // Only read from cache — never block the share call on a network fetch.
+    // On iOS, awaiting a slow HTTP request between the tap and the
+    // `Share.share` call breaks the user-initiated gesture context, and the
+    // share sheet then silently refuses to present. Screens that want an
+    // image attached should pre-cache it with DefaultCacheManager().downloadFile
+    // on screen entry (most details screens already do).
     XFile? imageFile;
     if (imageUrl != null && imageUrl.trim().isNotEmpty) {
-      imageFile = await _downloadImageToTemp(imageUrl.trim());
+      imageFile = await _readCachedImage(imageUrl.trim());
     }
 
-    // Reset the button loading before the iOS share sheet opens.
-    // Share.share / shareXFiles returns only after the share sheet is closed,
-    // so we should not keep the button loading until then.
     onShareSheetWillOpen?.call();
-
-    await Future.delayed(const Duration(milliseconds: 80));
 
     if (imageFile != null) {
       try {

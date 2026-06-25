@@ -96,10 +96,10 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
       final RentalCar car = widget.rentalCar;
 
       final String carName =
-          isArabic ? car.carNameSL.trim() : car.carNamePL.trim();
+      isArabic ? car.carNameSL.trim() : car.carNamePL.trim();
 
       final String category =
-          isArabic ? car.categoryNameSL.trim() : car.categoryNamePL.trim();
+      isArabic ? car.categoryNameSL.trim() : car.categoryNamePL.trim();
 
       final String exteriorColor = isArabic
           ? car.exteriorColorNameSL.trim()
@@ -117,12 +117,12 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
 
       if (car.availableForWeeklyRent == 1) {
         extraInfo['Rent per week'] =
-            '${car.rentPerWeek} ${lc.currency_Symbol}';
+        '${car.rentPerWeek} ${lc.currency_Symbol}';
       }
 
       if (car.availableForMonthlyRent == 1) {
         extraInfo['Rent per month'] =
-            '${car.rentPerMonth} ${lc.currency_Symbol}';
+        '${car.rentPerMonth} ${lc.currency_Symbol}';
       }
 
       if (car.availableForLease == 1) {
@@ -132,10 +132,10 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
       final List<MapEntry<String, String>> specs = rentalController.spec
           .map(
             (s) => MapEntry<String, String>(
-              s.key,
-              s.value,
-            ),
-          )
+          s.key,
+          s.value,
+        ),
+      )
           .toList();
 
       await shareCarFromQarsSpin(
@@ -172,8 +172,8 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
   }
 
   Future<void> _toggleRentalFavorite(
-    RentalCarsController controller,
-  ) async {
+      RentalCarsController controller,
+      ) async {
     if (!authController.registered) {
       showDialog(
         context: context,
@@ -206,29 +206,29 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
             onTap: _isShareLoading
                 ? null
                 : () async {
-                    await _shareRentalCar(
-                      shareButtonContext: shareButtonContext,
-                      lc: lc,
-                      rentalController: rentalController,
-                    );
-                  },
+              await _shareRentalCar(
+                shareButtonContext: shareButtonContext,
+                lc: lc,
+                rentalController: rentalController,
+              );
+            },
             child: Center(
               child: _isShareLoading
                   ? SizedBox(
-                      width: 18.w,
-                      height: 18.w,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.blackColor(context),
-                      ),
-                    )
+                width: 18.w,
+                height: 18.w,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.blackColor(context),
+                ),
+              )
                   : Image.asset(
-                      "assets/images/share.png",
-                      width: 25.w,
-                      height: 25.w,
-                      fit: BoxFit.contain,
-                      color: AppColors.blackColor(context),
-                    ),
+                "assets/images/share.png",
+                width: 25.w,
+                height: 25.w,
+                fit: BoxFit.contain,
+                color: AppColors.blackColor(context),
+              ),
             ),
           ),
         );
@@ -251,82 +251,82 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
               appBar: isLandscape
                   ? null
                   : PreferredSize(
-                      preferredSize: Size.fromHeight(100.h),
-                      child: Container(
-                        height: 100.h,
-                        padding: EdgeInsets.only(
-                          top: 25.h,
-                          left: 14.w,
-                          right: 14.w,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.background(context),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  AppColors.blackColor(context).withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 5.h,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () async {
-                                await SystemChrome.setPreferredOrientations([
-                                  DeviceOrientation.portraitUp,
-                                  DeviceOrientation.portraitDown,
-                                ]);
+                preferredSize: Size.fromHeight(100.h),
+                child: Container(
+                  height: 100.h,
+                  padding: EdgeInsets.only(
+                    top: 25.h,
+                    left: 14.w,
+                    right: 14.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.background(context),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                        AppColors.blackColor(context).withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 5.h,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          await SystemChrome.setPreferredOrientations([
+                            DeviceOrientation.portraitUp,
+                            DeviceOrientation.portraitDown,
+                          ]);
 
-                                Navigator.pop(context);
-                              },
-                              child: SizedBox(
-                                width: 48.w,
-                                height: 48.h,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back_outlined,
-                                    color: AppColors.blackColor(context),
-                                    size: 30.w,
-                                  ),
-                                ),
-                              ),
+                          Navigator.pop(context);
+                        },
+                        child: SizedBox(
+                          width: 48.w,
+                          height: 48.h,
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_outlined,
+                              color: AppColors.blackColor(context),
+                              size: 30.w,
                             ),
-
-                            .5.horizontalSpace,
-
-                            Center(
-                              child: SizedBox(
-                                width: 147.w,
-                                child: Image.asset(
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? 'assets/images/balckIconDarkMode.png'
-                                      : 'assets/images/black_logo.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-
-                            _buildShareButton(
-                              context: context,
-                              lc: lc,
-                              rentalController: rentalController,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+
+                      .5.horizontalSpace,
+
+                      Center(
+                        child: SizedBox(
+                          width: 147.w,
+                          child: Image.asset(
+                            Theme.of(context).brightness ==
+                                Brightness.dark
+                                ? 'assets/images/balckIconDarkMode.png'
+                                : 'assets/images/black_logo.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+
+                      _buildShareButton(
+                        context: context,
+                        lc: lc,
+                        rentalController: rentalController,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               bottomNavigationBar: isLandscape
                   ? null
                   : RentalBottomNaviagtion(
-                      phone: widget.rentalCar.ownerMobile,
-                      rentalCar: widget.rentalCar,
-                    ),
+                phone: widget.rentalCar.ownerMobile,
+                rentalCar: widget.rentalCar,
+              ),
               body: Column(
                 children: [
                   GestureDetector(
@@ -467,11 +467,11 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
   }
 
   Widget column(
-    String key,
-    dynamic value,
-    AppLocalizations lc, {
-    bool color = false,
-  }) {
+      String key,
+      dynamic value,
+      AppLocalizations lc, {
+        bool color = false,
+      }) {
     return Column(
       children: [
         SizedBox(
@@ -486,22 +486,22 @@ class _RentalCarDetailsState extends State<RentalCarDetails> {
           child: Center(
             child: color
                 ? Container(
-                    width: 34.w,
-                    height: 34.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: key == lc.exterior
-                          ? widget.rentalCar.colorExterior
-                          : widget.rentalCar.colorInterior,
-                      border: Border.all(
-                        color: AppColors.darkGray,
-                      ),
-                    ),
-                  )
+              width: 34.w,
+              height: 34.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: key == lc.exterior
+                    ? widget.rentalCar.colorExterior
+                    : widget.rentalCar.colorInterior,
+                border: Border.all(
+                  color: AppColors.darkGray,
+                ),
+              ),
+            )
                 : headerText(
-                    value.toString(),
-                    context,
-                  ),
+              value.toString(),
+              context,
+            ),
           ),
         ),
       ],

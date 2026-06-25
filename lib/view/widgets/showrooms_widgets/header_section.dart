@@ -11,7 +11,8 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 class HeaderSection extends StatefulWidget {
   String realImage;
-   HeaderSection({this.realImage="",super.key});
+  String fallbackImageUrl;
+   HeaderSection({this.realImage="",this.fallbackImageUrl="",super.key});
 
   @override
   State<HeaderSection> createState() => _HeaderSectionState();
@@ -19,6 +20,21 @@ class HeaderSection extends StatefulWidget {
 
 class _HeaderSectionState extends State<HeaderSection> {
   late final WebViewController _controller;
+
+  bool get _hasValid360 {
+    final String url = widget.realImage.trim();
+    if (url.isEmpty) return false;
+    final Uri? uri = Uri.tryParse(url);
+    return uri != null && uri.hasScheme;
+  }
+
+  bool get _hasFallbackImage {
+    final String url = widget.fallbackImageUrl.trim();
+    if (url.isEmpty) return false;
+    final Uri? uri = Uri.tryParse(url);
+    return uri != null && uri.hasScheme;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -30,10 +46,15 @@ class _HeaderSectionState extends State<HeaderSection> {
       WebViewPlatform.instance = WebKitWebViewPlatform();
     }
     _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted) // allow JS (required for 360 player)
-      ..loadRequest(Uri.parse(
-          widget.realImage));
+      ..setJavaScriptMode(JavaScriptMode.unrestricted); // allow JS (required for 360 player)
 
+    // Only load the URL when we actually have a valid one; otherwise `build`
+    // falls through to the fallback image / panorama branch and the WebView
+    // is never shown. Calling loadRequest with an empty/scheme-less URI
+    // throws.
+    if (_hasValid360) {
+      _controller.loadRequest(Uri.parse(widget.realImage.trim()));
+    }
   }
   @override
 
@@ -41,19 +62,46 @@ class _HeaderSectionState extends State<HeaderSection> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return widget.realImage!=""?
-    
-    Container(
+    if (_hasValid360) {
+      return Container(
         width: double.infinity,
         height: 250.h,
+        child: WebViewWidget(controller: _controller),
+      );
+    }
 
-        
-        child: WebViewWidget(controller: _controller,
+    if (_hasFallbackImage) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          height: 200.h,
+          width: double.infinity,
+          child: Image.network(
+            widget.fallbackImageUrl.trim(),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              // Network image failed (bad URL, no connectivity, decode error).
+              // Fall back to the static panorama placeholder instead of an
+              // ugly broken-image icon.
+              return _staticPanoramaPlaceholder(width, height);
+            },
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return Container(
+                color: AppColors.background(context),
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            },
+          ),
+        ),
+      );
+    }
 
+    return _staticPanoramaPlaceholder(width, height);
+  }
 
-        )
-    )
-        :Stack(
+  Widget _staticPanoramaPlaceholder(double width, double height) {
+    return Stack(
       children: [
         // 👇 هنا الصورة تتحول لعرض 360 بدل ما تبقى خلفية ثابتة
         ClipRRect(

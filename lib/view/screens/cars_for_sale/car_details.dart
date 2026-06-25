@@ -110,229 +110,229 @@ class _CarDetailsState extends State<CarDetails> {
               appBar: isLandscape
                   ? null
                   : PreferredSize(
-                      preferredSize: Size.fromHeight(100.h),
-                      child: Container(
-                        height: 100.h,
-                        padding: EdgeInsets.only(
-                          top: 25.h,
-                          left: 14.w,
-                          right: 14.w,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.background(context),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.blackColor(context)
-                                  .withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 5.h,
-                              offset: const Offset(0, 2),
+                preferredSize: Size.fromHeight(100.h),
+                child: Container(
+                  height: 100.h,
+                  padding: EdgeInsets.only(
+                    top: 25.h,
+                    left: 14.w,
+                    right: 14.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.background(context),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.blackColor(context)
+                            .withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 5.h,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          await SystemChrome.setPreferredOrientations([
+                            DeviceOrientation.portraitUp,
+                            DeviceOrientation.portraitDown,
+                          ]);
+
+                          Navigator.pop(context);
+                        },
+                        child: SizedBox(
+                          width: 48.w,
+                          height: 48.h,
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_outlined,
+                              color: AppColors.blackColor(context),
+                              size: 30.w,
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () async {
-                                await SystemChrome.setPreferredOrientations([
-                                  DeviceOrientation.portraitUp,
-                                  DeviceOrientation.portraitDown,
-                                ]);
-
-                                Navigator.pop(context);
-                              },
-                              child: SizedBox(
-                                width: 48.w,
-                                height: 48.h,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back_outlined,
-                                    color: AppColors.blackColor(context),
-                                    size: 30.w,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            .5.horizontalSpace,
-
-                            Center(
-                              child: SizedBox(
-                                width: 147.w,
-                                child: Image.asset(
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? 'assets/images/balckIconDarkMode.png'
-                                      : 'assets/images/black_logo.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _buildShareButton(
-                                  context: context,
-                                  controller: controller,
-                                  lc: lc,
-                                ),
-
-                                8.horizontalSpace,
-
-                                GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTap: () {
-                                    authController.registered
-                                        ? controller.alterPostFavorite(
-                                            add: controller
-                                                    .carDetails.isFavorite!
-                                                ? false
-                                                : true,
-                                            postId: widget.id,
-                                          )
-                                        : showDialog(
-                                            context: context,
-                                            builder: (_) => RegisterDialog(),
-                                          );
-                                  },
-                                  child: SizedBox(
-                                    width: 48.w,
-                                    height: 48.h,
-                                    child: Center(
-                                      child: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Icon(
-                                              Icons.favorite,
-                                              color: controller.carDetails
-                                                      .isFavorite!
-                                                  ? AppColors.primary
-                                                  : AppColors.notFavorite(
-                                                      context,
-                                                    ),
-                                            )
-                                          : controller.carDetails.isFavorite!
-                                              ? Icon(
-                                                  Icons.favorite,
-                                                  color: AppColors.primary,
-                                                )
-                                              : const Icon(
-                                                  Icons.favorite_border,
-                                                ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+
+                      .5.horizontalSpace,
+
+                      Center(
+                        child: SizedBox(
+                          width: 147.w,
+                          child: Image.asset(
+                            Theme.of(context).brightness ==
+                                Brightness.dark
+                                ? 'assets/images/balckIconDarkMode.png'
+                                : 'assets/images/black_logo.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildShareButton(
+                            context: context,
+                            controller: controller,
+                            lc: lc,
+                          ),
+
+                          8.horizontalSpace,
+
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              authController.registered
+                                  ? controller.alterPostFavorite(
+                                add: controller
+                                    .carDetails.isFavorite!
+                                    ? false
+                                    : true,
+                                postId: widget.id,
+                              )
+                                  : showDialog(
+                                context: context,
+                                builder: (_) => RegisterDialog(),
+                              );
+                            },
+                            child: SizedBox(
+                              width: 48.w,
+                              height: 48.h,
+                              child: Center(
+                                child: Theme.of(context).brightness ==
+                                    Brightness.dark
+                                    ? Icon(
+                                  Icons.favorite,
+                                  color: controller.carDetails
+                                      .isFavorite!
+                                      ? AppColors.primary
+                                      : AppColors.notFavorite(
+                                    context,
+                                  ),
+                                )
+                                    : controller.carDetails.isFavorite!
+                                    ? Icon(
+                                  Icons.favorite,
+                                  color: AppColors.primary,
+                                )
+                                    : const Icon(
+                                  Icons.favorite_border,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               bottomNavigationBar: isLandscape
                   ? null
                   : widget.sourcekind == "Qars Spin"
-                      ? QarsApinBottomNavigationBar(
-                          onLoan: () async {
-                            await SystemChrome.setPreferredOrientations([
-                              DeviceOrientation.portraitUp,
-                              DeviceOrientation.portraitDown,
-                            ]);
+                  ? QarsApinBottomNavigationBar(
+                onLoan: () async {
+                  await SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                    DeviceOrientation.portraitDown,
+                  ]);
 
-                            authController.registered
-                                ? Get.to(
-                                    GetLoan(
-                                      car: controller.carDetails,
-                                    ),
-                                  )
-                                : showDialog(
-                                    context: context,
-                                    builder: (_) => RegisterDialog(),
-                                  );
-                          },
-                          onMakeOffer: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (_) => authController.registered
-                                  ? MakeOfferDialog()
-                                  : RegisterDialog(),
-                            );
-                          },
-                          onRequestToBuy: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (_) => authController.registered
-                                  ? MakeOfferDialog(
-                                      offer: false,
-                                      requestToBuy: true,
-                                      price:
-                                          controller.carDetails.askingPrice,
-                                    )
-                                  : RegisterDialog(),
-                            );
-                          },
-                        )
-                      : BottomActionBar(
-                          onMakeOffer: () async {
-                            await authController.registered
-                                ? showDialog(
-                                    context: context,
-                                    builder: (_) => MakeOfferDialog(),
-                                  )
-                                : unRegisterFunction(context);
-                          },
-                          onWhatsApp: () {
-                            openWhatsApp(
-                              controller.carDetails.ownerMobile.trim(),
-                              message:
-                                  "Hello 👋 I’m interested in your ${Get.locale?.languageCode == 'ar' ? controller.carDetails.carNameSl.trim() : controller.carDetails.carNamePl.trim()} ${controller.carDetails.manufactureYear}.The AD Code is: ${controller.carDetails.postCode}",
-                            );
-                          },
-                          onCall: () {
-                            makePhoneCall(
-                              controller.carDetails.ownerMobile.trim(),
-                            );
-                          },
-                        ),
+                  authController.registered
+                      ? Get.to(
+                    GetLoan(
+                      car: controller.carDetails,
+                    ),
+                  )
+                      : showDialog(
+                    context: context,
+                    builder: (_) => RegisterDialog(),
+                  );
+                },
+                onMakeOffer: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (_) => authController.registered
+                        ? MakeOfferDialog()
+                        : RegisterDialog(),
+                  );
+                },
+                onRequestToBuy: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (_) => authController.registered
+                        ? MakeOfferDialog(
+                      offer: false,
+                      requestToBuy: true,
+                      price:
+                      controller.carDetails.askingPrice,
+                    )
+                        : RegisterDialog(),
+                  );
+                },
+              )
+                  : BottomActionBar(
+                onMakeOffer: () async {
+                  await authController.registered
+                      ? showDialog(
+                    context: context,
+                    builder: (_) => MakeOfferDialog(),
+                  )
+                      : unRegisterFunction(context);
+                },
+                onWhatsApp: () {
+                  openWhatsApp(
+                    controller.carDetails.ownerMobile.trim(),
+                    message:
+                    "Hello 👋 I’m interested in your ${Get.locale?.languageCode == 'ar' ? controller.carDetails.carNameSl.trim() : controller.carDetails.carNamePl.trim()} ${controller.carDetails.manufactureYear}.The AD Code is: ${controller.carDetails.postCode}",
+                  );
+                },
+                onCall: () {
+                  makePhoneCall(
+                    controller.carDetails.ownerMobile.trim(),
+                  );
+                },
+              ),
               body: controller.oldData
                   ? Center(
-                      child: Container(
-                        color: AppColors.black.withOpacity(0.5),
-                        child: Center(
-                          child: AppLoadingWidget(
-                            title: lc.loading,
-                          ),
-                        ),
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              is360FullScreen = !is360FullScreen;
-                            });
-                          },
-                          child: SizedBox(
-                            height: isLandscape || is360FullScreen
-                                ? MediaQuery.of(context).size.height
-                                : 250.h,
-                            width: double.infinity,
-                            child: CarImage(
-                              allImages: controller.postMedia,
-                            ),
-                          ),
-                        ),
-
-                        if (!(isLandscape || is360FullScreen))
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: mainContent(controller, lc),
-                            ),
-                          ),
-                      ],
+                child: Container(
+                  color: AppColors.black.withOpacity(0.5),
+                  child: Center(
+                    child: AppLoadingWidget(
+                      title: lc.loading,
                     ),
+                  ),
+                ),
+              )
+                  : Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        is360FullScreen = !is360FullScreen;
+                      });
+                    },
+                    child: SizedBox(
+                      height: isLandscape || is360FullScreen
+                          ? MediaQuery.of(context).size.height
+                          : 250.h,
+                      width: double.infinity,
+                      child: CarImage(
+                        allImages: controller.postMedia,
+                      ),
+                    ),
+                  ),
+
+                  if (!(isLandscape || is360FullScreen))
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: mainContent(controller, lc),
+                      ),
+                    ),
+                ],
+              ),
             );
           },
         );
@@ -356,93 +356,93 @@ class _CarDetailsState extends State<CarDetails> {
           onPressed: _isShareLoading
               ? null
               : () async {
-                  setState(() {
-                    _isShareLoading = true;
-                  });
+            setState(() {
+              _isShareLoading = true;
+            });
 
-                  try {
-                    final bool isArabic = Get.locale?.languageCode == 'ar';
-                    final carDetails = controller.carDetails;
+            try {
+              final bool isArabic = Get.locale?.languageCode == 'ar';
+              final carDetails = controller.carDetails;
 
-                    final String carName = isArabic
-                        ? carDetails.carNameSl.trim()
-                        : carDetails.carNamePl.trim();
+              final String carName = isArabic
+                  ? carDetails.carNameSl.trim()
+                  : carDetails.carNamePl.trim();
 
-                    final String? description = isArabic
-                        ? carDetails.technical_Description_SL
-                        : carDetails.description;
+              final String? description = isArabic
+                  ? carDetails.technical_Description_SL
+                  : carDetails.description;
 
-                    final String? exteriorColor = isArabic
-                        ? carDetails.exteriorColorNameSl
-                        : carDetails.exteriorColorNamePl;
+              final String? exteriorColor = isArabic
+                  ? carDetails.exteriorColorNameSl
+                  : carDetails.exteriorColorNamePl;
 
-                    final String? interiorColor = isArabic
-                        ? carDetails.interiorColorNameSl
-                        : carDetails.interiorColorNamePl;
+              final String? interiorColor = isArabic
+                  ? carDetails.interiorColorNameSl
+                  : carDetails.interiorColorNamePl;
 
-                    final Map<String, String> extraInfo = <String, String>{};
+              final Map<String, String> extraInfo = <String, String>{};
 
-                    final String? warranty = carDetails.warrantyAvailable;
-                    if (warranty != null && warranty.trim().isNotEmpty) {
-                      extraInfo['Warranty'] = warranty.trim();
-                    }
+              final String? warranty = carDetails.warrantyAvailable;
+              if (warranty != null && warranty.trim().isNotEmpty) {
+                extraInfo['Warranty'] = warranty.trim();
+              }
 
-                    final List<MapEntry<String, String>> specs =
-                        controller.spec
-                            .map(
-                              (s) => MapEntry<String, String>(
-                                s.key,
-                                s.value,
-                              ),
-                            )
-                            .toList();
+              final List<MapEntry<String, String>> specs =
+              controller.spec
+                  .map(
+                    (s) => MapEntry<String, String>(
+                  s.key,
+                  s.value,
+                ),
+              )
+                  .toList();
 
-                    await shareCarFromQarsSpin(
-                      context: shareButtonContext,
-                      carName: carName,
-                      year: carDetails.manufactureYear.toString(),
-                      price: "${carDetails.askingPrice} ${lc.currency_Symbol}",
-                      adCode: carDetails.postCode,
-                      mileage: '${carDetails.mileage} km',
-                      exteriorColor: exteriorColor,
-                      interiorColor: interiorColor,
-                      description: description,
-                      sourceKind: carDetails.sourceKind,
-                      imageUrl: carDetails.rectangleImageUrl,
-                      extraInfo: extraInfo,
-                      specifications: specs,
-                      onShareSheetWillOpen: () {
-                        if (mounted) {
-                          setState(() {
-                            _isShareLoading = false;
-                          });
-                        }
-                      },
-                    );
-                  } finally {
-                    if (mounted) {
-                      setState(() {
-                        _isShareLoading = false;
-                      });
-                    }
+              await shareCarFromQarsSpin(
+                context: shareButtonContext,
+                carName: carName,
+                year: carDetails.manufactureYear.toString(),
+                price: "${carDetails.askingPrice} ${lc.currency_Symbol}",
+                adCode: carDetails.postCode,
+                mileage: '${carDetails.mileage} km',
+                exteriorColor: exteriorColor,
+                interiorColor: interiorColor,
+                description: description,
+                sourceKind: carDetails.sourceKind,
+                imageUrl: carDetails.rectangleImageUrl,
+                extraInfo: extraInfo,
+                specifications: specs,
+                onShareSheetWillOpen: () {
+                  if (mounted) {
+                    setState(() {
+                      _isShareLoading = false;
+                    });
                   }
                 },
+              );
+            } finally {
+              if (mounted) {
+                setState(() {
+                  _isShareLoading = false;
+                });
+              }
+            }
+          },
           icon: _isShareLoading
               ? SizedBox(
-                  width: 18.w,
-                  height: 18.w,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.blackColor(context),
-                  ),
-                )
+            width: 18.w,
+            height: 18.w,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: AppColors.blackColor(context),
+            ),
+          )
               : Image.asset(
-                  "assets/images/share.png",
-                  width: 25.w,
-                  height: 25.w,
-                  fit: BoxFit.contain,
-                  color: AppColors.blackColor(context),
-                ),
+            "assets/images/share.png",
+            width: 25.w,
+            height: 25.w,
+            fit: BoxFit.contain,
+            color: AppColors.blackColor(context),
+          ),
         );
       },
     );

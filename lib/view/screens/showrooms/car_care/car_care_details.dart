@@ -22,12 +22,12 @@ class CarCareDetails extends StatefulWidget {
   final NotificationsController notificationsController;
 
   const CarCareDetails(
-    this.rental,
-    this.notificationsController, {
-    required this.carCare,
-    required this.isCarCare,
-    super.key,
-  });
+      this.rental,
+      this.notificationsController, {
+        required this.carCare,
+        required this.isCarCare,
+        super.key,
+      });
 
   @override
   State<CarCareDetails> createState() => _CarCareDetailsState();
@@ -143,26 +143,26 @@ class _CarCareDetailsState extends State<CarCareDetails> {
           onPressed: _isShareLoading
               ? null
               : () async {
-                  await _shareCarCare(
-                    shareButtonContext: shareButtonContext,
-                  );
-                },
+            await _shareCarCare(
+              shareButtonContext: shareButtonContext,
+            );
+          },
           icon: _isShareLoading
               ? SizedBox(
-                  width: 18.w,
-                  height: 18.w,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.blackColor(context),
-                  ),
-                )
+            width: 18.w,
+            height: 18.w,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: AppColors.blackColor(context),
+            ),
+          )
               : Image.asset(
-                  "assets/images/share.png",
-                  width: 25.w,
-                  height: 25.w,
-                  fit: BoxFit.contain,
-                  color: AppColors.blackColor(context),
-                ),
+            "assets/images/share.png",
+            width: 25.w,
+            height: 25.w,
+            fit: BoxFit.contain,
+            color: AppColors.blackColor(context),
+          ),
         );
       },
     );
@@ -241,6 +241,14 @@ class _CarCareDetailsState extends State<CarCareDetails> {
 
           HeaderSection(
             realImage: widget.carCare.spin360Url,
+            fallbackImageUrl: () {
+              final bool isArabic = Get.locale?.languageCode == 'ar';
+              final String banner = isArabic
+                  ? widget.carCare.bannerUrlSl
+                  : widget.carCare.bannerUrlPl;
+              if (banner.trim().isNotEmpty) return banner;
+              return widget.carCare.logoUrl;
+            }(),
           ),
 
           CareInfo(
@@ -269,4 +277,3 @@ class _CarCareDetailsState extends State<CarCareDetails> {
     );
   }
 }
-
