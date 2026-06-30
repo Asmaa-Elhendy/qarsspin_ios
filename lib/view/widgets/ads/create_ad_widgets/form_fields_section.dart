@@ -439,7 +439,7 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
                   children: [
                     CustomDropDownTyping(
                       label:
-                      Get.locale?.languageCode=='ar'?controller.specsStatic[0].specHeaderSl:controller.specsStatic[0].specHeaderPl+'(*)' ,
+                      Get.locale?.languageCode=='ar'?controller.specsStatic[0].specHeaderSl+'(*)':controller.specsStatic[0].specHeaderPl+'(*)' ,
                       // 👈 اسم الخيار
                       controller:widget.fuelTypeController,
                       // 👈 كل spec له كنترولر خاص

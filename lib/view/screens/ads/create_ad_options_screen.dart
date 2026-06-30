@@ -12,7 +12,7 @@ import '../../widgets/ads/adv_model.dart';
 import '../../widgets/main_card.dart';
 import '../auth/my_account.dart';
 import '../general/main_menu.dart';
-import 'create_new_ad.dart';
+import 'create_new_ad.dart';//j
 
 class CreateNewAdOptions extends StatefulWidget {
   @override
@@ -121,7 +121,10 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
                     },
                     title: lc.create_car_ads,fromHome: 'true',
                     imageAsset:
-                    Get.locale?.languageCode=='ar'? 'assets/images/Dark mode icons/QS D-Mode-21.svg':Theme.of(context).brightness == Brightness.dark?'assets/images/Dark mode icons/QS D-Mode-01.svg' :'assets/images/new_svg/home1.svg',
+                    Get.locale?.languageCode=='ar'? 'assets/images/Dark mode icons/QS D-Mode-21.svg':
+                    Theme.of(context).brightness == Brightness.dark?
+                    'assets/images/Dark mode icons/QS D-Mode-01.svg' :'assets/images/new_svg/home1.svg',
+
                     large: false,//f
                   ),
                   HomeServiceCard(
@@ -131,8 +134,7 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
                       });
                     },
                     title: lc.create_bike_ad,fromHome: 'true',
-                    plate: true,
-                    imageAsset2: Get.locale?.languageCode=='ar'?'assets/images/Dark mode icons/QS D-Mode-69.svg':Theme.of(context).brightness == Brightness.dark?'assets/images/soon.svg':'assets/images/soon.svg',
+                    plate: true,//l
 
                     imageAsset:
                     Theme.of(context).brightness == Brightness.dark?'assets/images/Dark mode icons/QS D-Mode-05.svg' :'assets/images/new_svg/bikes.svg',
@@ -145,7 +147,6 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
                       });
                     },
                     plate: true,
-                    imageAsset2: Get.locale?.languageCode=='ar'?'assets/images/Dark mode icons/QS D-Mode-69.svg':Theme.of(context).brightness == Brightness.dark?'assets/images/soon.svg':'assets/images/soon.svg',
 
                     title: lc.create_caravan_ad,
                     imageAsset: Theme.of(context).brightness == Brightness.dark?'assets/images/Dark mode icons/QS D-Mode-06.svg' :'assets/images/new_svg/caravans.svg',
@@ -158,7 +159,6 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
                       });
                     },
                     plate: true,
-                    imageAsset2: Get.locale?.languageCode=='ar'?'assets/images/Dark mode icons/QS D-Mode-69.svg':Theme.of(context).brightness == Brightness.dark?'assets/images/soon.svg':'assets/images/soon.svg',
 
                     title: lc.create_plate_ad,
                     imageAsset: Theme.of(context).brightness == Brightness.dark?'assets/images/Dark mode icons/QS D-Mode-07.svg' :'assets/images/new_svg/plates.svg',

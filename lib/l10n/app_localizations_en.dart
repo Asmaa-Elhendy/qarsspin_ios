@@ -51,7 +51,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ads => 'Ads';
 
   @override
-  String get create_car_ads => 'Create Car Ads';
+  String get create_car_ads => 'Create Car Ad';
 
   @override
   String get cars => 'Cars';
@@ -414,13 +414,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_new_Ad => 'Create New Ad';
 
   @override
-  String get create_bike_ad => 'Create Bike Ads';
+  String get create_bike_ad => 'Create Bike Ad';
 
   @override
-  String get create_caravan_ad => 'Create Caravan Ads';
+  String get create_caravan_ad => 'Create Caravan Ad';
 
   @override
-  String get create_plate_ad => 'Create Plate Ads';
+  String get create_plate_ad => 'Create Plate Ad';
 
   @override
   String get free_ads => 'Free Ads';
@@ -540,22 +540,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enter_desc => 'Enter car description...';
 
   @override
-  String get make_360_first => 'Make Your Advertisement special by 360 session(';
+  String get make_360_first => 'Make your advertisement stand out with a 360° shooting session for only';
 
   @override
-  String get make_360_second => 'QAR only for full shooting session)';
+  String get make_360_second => 'QAR.';
 
   @override
-  String get pin_ad_first => 'Pin your advertisement at the top for (';
+  String get pin_ad_first => 'Pin your advertisement to the top for only ';
 
   @override
-  String get pin_ad_second => ') QAR only';
+  String get pin_ad_second => ' QAR.';
 
   @override
-  String get agreement => 'I agree to the Terms and Conditions';
+  String get agreement => 'I agree to the Terms and Conditions.';
 
   @override
-  String get confirm_info => 'I confirm the accuracy of the information provided';
+  String get confirm_info => 'I confirm that all the information provided is accurate.';
 
   @override
   String get save_draft => 'Save as draft';

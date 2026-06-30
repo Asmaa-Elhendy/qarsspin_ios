@@ -139,11 +139,10 @@ class _AdvertisementOptionsModalState extends State<AdvertisementOptionsModal> {
               child: Center(
                 child: Text(
                   title,
-                  style:  TextStyle(
-                      fontSize: width*.035 ,
-                      fontFamily: fontFamily,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.white//AppColors.blackColor(context),  //update color asmaa
+                  style: TextStyle(
+                    fontSize: width * .035,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.white,
                   ),
                 ),
               ),

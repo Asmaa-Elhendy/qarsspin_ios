@@ -182,7 +182,7 @@ abstract class AppLocalizations {
   /// No description provided for @create_car_ads.
   ///
   /// In en, this message translates to:
-  /// **'Create Car Ads'**
+  /// **'Create Car Ad'**
   String get create_car_ads;
 
   /// No description provided for @cars.
@@ -908,19 +908,19 @@ abstract class AppLocalizations {
   /// No description provided for @create_bike_ad.
   ///
   /// In en, this message translates to:
-  /// **'Create Bike Ads'**
+  /// **'Create Bike Ad'**
   String get create_bike_ad;
 
   /// No description provided for @create_caravan_ad.
   ///
   /// In en, this message translates to:
-  /// **'Create Caravan Ads'**
+  /// **'Create Caravan Ad'**
   String get create_caravan_ad;
 
   /// No description provided for @create_plate_ad.
   ///
   /// In en, this message translates to:
-  /// **'Create Plate Ads'**
+  /// **'Create Plate Ad'**
   String get create_plate_ad;
 
   /// No description provided for @free_ads.
@@ -1160,25 +1160,25 @@ abstract class AppLocalizations {
   /// No description provided for @make_360_first.
   ///
   /// In en, this message translates to:
-  /// **'Make Your Advertisement special by 360 session('**
+  /// **'Make Your Advertisement special by 360 session'**
   String get make_360_first;
 
   /// No description provided for @make_360_second.
   ///
   /// In en, this message translates to:
-  /// **'QAR only for full shooting session)'**
+  /// **'QAR only for full shooting session'**
   String get make_360_second;
 
   /// No description provided for @pin_ad_first.
   ///
   /// In en, this message translates to:
-  /// **'Pin your advertisement at the top for ('**
+  /// **'Pin your advertisement at the top for '**
   String get pin_ad_first;
 
   /// No description provided for @pin_ad_second.
   ///
   /// In en, this message translates to:
-  /// **') QAR only'**
+  /// **' QAR only'**
   String get pin_ad_second;
 
   /// No description provided for @agreement.

@@ -448,75 +448,78 @@ class MyAdCleanController extends GetxController {
   }
 
   /// Request to feature (pin) a post
-  Future<bool> requestFeatureAd({
-    required String userName,
-    required String postId,
-    required String ourSecret,
-  }) async {
-    isSubmittingRequest.value = true;
-    requestError.value = null;
-    requestSuccess.value = false;
-
-    try {
-      final result = await repository.requestToFeaturePost(
-        userName: userName,
-        postId: postId,
-        ourSecret: ourSecret,
-      );
-
-      if ((result['Code']?.toString().toUpperCase() ?? '') == 'OK') {
-        requestSuccess.value = true;
-        return true;
-      } else {
-        requestError.value = result['Desc']?.toString() ?? 'Request failed';
-        return false;
-      }
-    } catch (e) {
-      requestError.value = 'Network error: ${e.toString()}';
-      return false;
-    } finally {
-      isSubmittingRequest.value = false;
-    }
-  }
+  // Future<bool> requestFeatureAd({
+  //   required String userName,
+  //   required String postId,
+  //   required String ourSecret,
+  // }) async
+  // {
+  //   isSubmittingRequest.value = true;
+  //   requestError.value = null;
+  //   requestSuccess.value = false;
+  //
+  //   try {
+  //     final result = await repository.requestToFeaturePost(
+  //       userName: userName,
+  //       postId: postId,
+  //       ourSecret: ourSecret,
+  //     );
+  //
+  //     if ((result['Code']?.toString().toUpperCase() ?? '') == 'OK') {
+  //       requestSuccess.value = true;
+  //       return true;
+  //     } else {
+  //       requestError.value = result['Desc']?.toString() ?? 'Request failed';
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     requestError.value = 'Network error: ${e.toString()}';
+  //     return false;
+  //   } finally {
+  //     isSubmittingRequest.value = false;
+  //   }
+  // }
 
   /// Request a 360 photo session for a post
-  Future<bool> request360Session({
-    required String userName,
-    required String postId,
-    required String ourSecret,
-  }) async {
-    isSubmittingRequest.value = true;
-    requestError.value = null;
-    requestSuccess.value = false;
-
-    try {
-      final result = await repository.request360PhotoSession(
-        userName: userName,
-        postId: postId,
-        ourSecret: ourSecret,
-      );
-
-      if ((result['Code']?.toString().toUpperCase() ?? '') == 'OK') {
-        requestSuccess.value = true;
-        return true;
-      } else {
-        requestError.value = result['Desc']?.toString() ?? 'Request failed';
-        return false;
-      }
-    } catch (e) {
-      requestError.value = 'Network error: ${e.toString()}';
-      return false;
-    } finally {
-      isSubmittingRequest.value = false;
-    }
-  }
+  // Future<bool> request360Session({
+  //   required String userName,
+  //   required String postId,
+  //   required String ourSecret,
+  // }) async
+  // {
+  //   isSubmittingRequest.value = true;
+  //   requestError.value = null;
+  //   requestSuccess.value = false;
+  //
+  //   try {
+  //     final result = await repository.request360PhotoSession(
+  //       userName: userName,
+  //       postId: postId,
+  //       ourSecret: ourSecret,
+  //     );
+  //
+  //     if ((result['Code']?.toString().toUpperCase() ?? '') == 'OK') {
+  //       requestSuccess.value = true;
+  //       return true;
+  //     } else {
+  //       requestError.value = result['Desc']?.toString() ?? 'Request failed';
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     requestError.value = 'Network error: ${e.toString()}';
+  //     return false;
+  //   } finally {
+  //     isSubmittingRequest.value = false;
+  //   }
+  // }
 
   /// Request to publish (approval) a post
   Future<bool> requestPublishAd({
     required String userName,
     required String postId,
     required String ourSecret,
-  }) async {
+  }) async
+  {
     isSubmittingRequest.value = true;
     requestError.value = null;
     requestSuccess.value = false;

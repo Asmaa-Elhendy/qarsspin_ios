@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:qarsspin/controller/const/base_url.dart';
 import '../../controller/const/colors.dart';
 import '../../l10n/app_localizations.dart';
+import 'coming_soon_badge.dart';
 
 
 
@@ -19,14 +20,12 @@ class HomeServiceCard extends StatelessWidget {
   String fromHome;
   bool fromHomeSmall;
   bool plate;
-  String? imageAsset2;
   final VoidCallback? onTap;
 
   HomeServiceCard({
     Key? key,
     this.brand = false,
     this.plate=false,
-    this.imageAsset2="",
     this.make_count =0,
     required this.title,
     this.fromHome='',
@@ -39,6 +38,7 @@ class HomeServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var lc = AppLocalizations.of(context)!;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     // final screenWidth = MediaQuery.of(context).size.width;
     // final cardSize = (screenWidth - 48 - 16) / 2; // reduce card size: more horizontal padding and spacing
@@ -126,8 +126,20 @@ class HomeServiceCard extends StatelessWidget {
                         SvgPicture.asset(
                           fit: BoxFit.fill,
                           imageAsset,
-                          width:Theme.of(context).brightness == Brightness.dark?75.w:title.contains(lc.ads)?65.w:fromHomeSmall?48.58.w: 95.37.w,
-                          height:Theme.of(context).brightness == Brightness.dark?87.33.h:title==lc.create_car_ads?85.h :title.contains(lc.ads)?72.h:fromHomeSmall?30:75.33.h,
+                          width: Theme.of(context).brightness == Brightness.dark
+                              ? 75.w
+                              : (title == lc.create_car_ads && Get.locale?.languageCode == 'ar')
+                                  ? 85.w
+                                  : (title == lc.create_car_ads || title == lc.create_bike_ad || title == lc.create_caravan_ad || title == lc.create_plate_ad)
+                                      ? 65.w
+                                      : fromHomeSmall ? 48.58.w : 95.37.w,
+                          height: Theme.of(context).brightness == Brightness.dark
+                              ? 87.33.h
+                              : (title == lc.create_car_ads && Get.locale?.languageCode == 'ar')
+                                  ? 90.h
+                                  : (title == lc.create_car_ads || title == lc.create_bike_ad || title == lc.create_caravan_ad || title == lc.create_plate_ad)
+                                      ? 72.h
+                                      : fromHomeSmall ? 30 : 75.33.h,
 
                         ):  Image.asset(
                           imageAsset,
@@ -147,16 +159,14 @@ class HomeServiceCard extends StatelessWidget {
             ),
           ),
           Positioned(
-              left:fromHomeSmall?57.w:90.w,
-              right:6,
-              top: 70.h,
-              child: SvgPicture.asset(
-                fit: BoxFit.fill,
-                imageAsset2!,
-                width:large?45.w:fromHomeSmall?75.w:88.w,
-                height:large?70.h: fromHomeSmall?65.h:100.h,
-
-              ))
+            left: isRtl ? null : 4.0,
+            right: isRtl ? 4.0 : null,
+            top: 4.0 + 35.h,
+            bottom: 4.0,
+            child: ComingSoonBadge(
+              width: fromHomeSmall ? 20.w : 24.w,
+            ),
+          ),
         ],
       ):
       Container(
@@ -234,8 +244,22 @@ class HomeServiceCard extends StatelessWidget {
                     SvgPicture.asset(
                       fit: BoxFit.fill,
                       imageAsset,
-                      width:Theme.of(context).brightness == Brightness.dark?75.w:title.contains(lc.ads)?65.w:fromHomeSmall?48.58.w: 95.37.w,
-                      height:Theme.of(context).brightness == Brightness.dark?87.33.h:title==lc.create_car_ads?85.h :title.contains(lc.ads)?72.h:fromHomeSmall?30:75.33.h,
+                      width: Theme.of(context).brightness == Brightness.dark
+                          ? 75.w
+                          : (title == lc.create_car_ads && Get.locale?.languageCode == 'ar')
+                              ? 120.w
+                              : title.contains(lc.ads)
+                                  ? 65.w
+                                  : fromHomeSmall ? 48.58.w : 95.37.w,
+                      height: Theme.of(context).brightness == Brightness.dark
+                          ? 87.33.h
+                          : (title == lc.create_car_ads && Get.locale?.languageCode == 'ar')
+                              ? 110.h
+                              : title == lc.create_car_ads
+                                  ? 85.h
+                                  : title.contains(lc.ads)
+                                      ? 72.h
+                                      : fromHomeSmall ? 30 : 75.33.h,
 
                     ):  Image.asset(
                       imageAsset,

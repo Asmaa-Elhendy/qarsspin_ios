@@ -411,19 +411,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get followers => 'عدد المتابعين';
 
   @override
-  String get create_new_Ad => 'اضف إعلانا جديدا';
+  String get create_new_Ad => 'أضف إعلانا جديدا';
 
   @override
-  String get create_bike_ad => 'إنشاء إعلان دراجة';
+  String get create_bike_ad => 'إضافة إعلان دراجة';
 
   @override
-  String get create_caravan_ad => 'إنشاء إعلان لكارفان';
+  String get create_caravan_ad => 'إضافة إعلان لكارفان';
 
   @override
-  String get create_plate_ad => 'إنشاء إعلان لوحة';
+  String get create_plate_ad => 'إضافة إعلان لوحة';
 
   @override
-  String get free_ads => 'إعلانات مجانية';
+  String get free_ads => 'إعلان مجاني';
 
   @override
   String get free_360 => 'جلسة تصوير 360 مجانية';
@@ -435,7 +435,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get private_seller_info => 'تظل معلومات البائع خاصة (لا يمكن للمشترين رؤية تفاصيل الاتصال الخاصة بك).';
 
   @override
-  String get standard_advertise => 'إعلان قياسي.';
+  String get standard_advertise => 'إعلان مجاني.';
 
   @override
   String get show_contact_details => 'يمكن للأشخاص رؤية تفاصيل الاتصال الخاصة بك.';
@@ -540,22 +540,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enter_desc => 'ادخل وصف للسيارة...';
 
   @override
-  String get make_360_first => 'اجعل إعلانك مميزًا بجلسة تصوير 360 درجة (';
+  String get make_360_first => 'اجعل إعلانك مميزًا من خلال جلسة تصوير 360° مقابل ';
 
   @override
-  String get make_360_second => 'ريال قطري فقط لجلسة التصوير الكاملة)';
+  String get make_360_second => ' ر.ق فقط.';
 
   @override
-  String get pin_ad_first => 'قم بتثبيت إعلانك في الأعلى مقابل (';
+  String get pin_ad_first => 'ثبت إعلانك في الأعلى مقابل ';
 
   @override
-  String get pin_ad_second => ') ريال قطري فقط';
+  String get pin_ad_second => ' ر.ق فقط.';
 
   @override
-  String get agreement => 'أوافق على الشروط والأحكام';
+  String get agreement => 'أوافق على الشروط والأحكام.';
 
   @override
-  String get confirm_info => 'أؤكد صحة المعلومات المقدمة';
+  String get confirm_info => 'أؤكد أن جميع المعلومات المقدمة صحيحة.';
 
   @override
   String get save_draft => 'حفظ كمسودة';
