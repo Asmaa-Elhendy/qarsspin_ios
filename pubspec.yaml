@@ -2,7 +2,7 @@ name: qarsspin
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 2.4.2+229
+version: 2.4.2+230
 
 environment:
   sdk: ^3.8.1
