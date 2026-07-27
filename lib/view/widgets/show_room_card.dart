@@ -196,6 +196,12 @@ class ShowroomCard extends StatelessWidget {
                       ),
 
                       yellowButtons(context:context,title: "${lc.cars} (${showroom.carsCount})",w: 88.w,onTap: (){
+                        if (rental) {
+                          Get.find<RentalCarsController>().switchLoading();
+                        } else {
+                          Get.find<BrandController>().switchLoading();
+                        }
+
                         Get.find<ShowRoomsController>().fetchCarsOfShowRooms(
                           context: context,
                           showroomName: showroom.partnerNamePl,
@@ -210,7 +216,6 @@ class ShowroomCard extends StatelessWidget {
                         if(rental){
                           Get.to(AllRentalCars(notificationsController));
                         }else{
-                          Get.find<BrandController>().switchLoading();
                           Get.to(CarsBrandList(notificationsController,brandName: showroom.partnerNamePl,postKind: "CarForSale",));
                         }
                       }),

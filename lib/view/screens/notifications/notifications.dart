@@ -17,6 +17,10 @@ class NotificationsPage extends GetView<NotificationsController> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       debugPrint('🔔 Initial notifications load triggered');
       controller.getNotifications();
+      // Clear the local unread badge as soon as the user lands on this page.
+      // Locally-persisted notifications are considered "seen" once the page
+      // is open — the backend unread count is not affected by this call.
+      controller.markAllAsRead();
     });
   }
 
@@ -37,6 +41,24 @@ class NotificationsPage extends GetView<NotificationsController> {
             fontSize: 20.sp,
           ),
         ),
+        // Trailing "clear all local notifications" action. Only removes
+        // locally-persisted notifications (payment / ad-created); API
+        // notifications are the server's responsibility and are not touched.
+        actions: [
+          Obx(() {
+            final bool hasLocals = controller.notifications
+                .any((n) => n.data?['source'] == 'local');
+            if (!hasLocals) return const SizedBox.shrink();
+            return IconButton(
+              tooltip: lc.btn_delete_all,
+              icon: Icon(
+                Icons.delete_sweep_outlined,
+                color: AppColors.blackColor(context),
+              ),
+              onPressed: () => _showDeleteAllDialog(context),
+            );
+          }),
+        ],
         backgroundColor: AppColors.background(context),
         toolbarHeight: 60.h,
         flexibleSpace: Container(
@@ -92,13 +114,39 @@ class NotificationsPage extends GetView<NotificationsController> {
                 return controller.getNotifications();
               },
               child: ListView.builder(
-                padding: EdgeInsets.all(12.r),
+                // Extra bottom padding so the last notification is
+                // fully visible above the system nav bar / home
+                // indicator — otherwise the tail of the last card
+                // gets clipped and reads as "cut off".
+                padding: EdgeInsets.fromLTRB(12.r, 12.r, 12.r, 80.h),
                 itemCount: controller.notifications.length,
                 itemBuilder: (context, index) {
                   final notification = controller.notifications[index];
+                  final bool isLocal =
+                      notification.data?['source'] == 'local';
                   debugPrint('📌 Rendering notification ${index + 1}/${controller.notifications.length}: ${notification.title}');
+
+                  // Only locally-persisted notifications are dismissible.
+                  // API notifications are the server's source of truth —
+                  // a client-side dismiss would immediately reappear on
+                  // the next fetch, which is exactly the bug we're
+                  // fixing here.
+                  if (!isLocal) {
+                    return NotificationCard(notification: notification);
+                  }
+
+                  // Local notifications carry `id == null`, so the
+                  // previous `'notification_$index'` fallback key was
+                  // index-based and unstable across list rebuilds. Use
+                  // the notification's own fire-time (millisecond
+                  // precision) — unique per entry, stable across
+                  // rebuilds, and matches what NotificationsStore uses
+                  // as the delete identifier.
+                  final String dismissKey =
+                      'local_${notification.date.millisecondsSinceEpoch}';
+
                   return Dismissible(
-                    key: Key(notification.id?.toString() ?? 'notification_$index'),
+                    key: Key(dismissKey),
                     direction: DismissDirection.endToStart,
                     background: Container(
                       alignment: Alignment.centerRight,
@@ -110,8 +158,10 @@ class NotificationsPage extends GetView<NotificationsController> {
                       return await _showDeleteDialog(context, notification);
                     },
                     onDismissed: (direction) {
-                      debugPrint('🗑️ Dismissed notification: ${notification.id}');
-                      // controller.deleteNotification(notification);
+                      debugPrint(
+                        '🗑️ Dismissed local notification @ ${notification.date}',
+                      );
+                      controller.deleteLocalNotification(notification);
                     },
                     child: NotificationCard(notification: notification),
                   );
@@ -175,7 +225,10 @@ class NotificationsPage extends GetView<NotificationsController> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text(lc.btn_Cancel),
+            child: Text(lc.btn_Cancel,
+              style: TextStyle(color: Colors.black),
+            ),
+
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
@@ -187,5 +240,11 @@ class NotificationsPage extends GetView<NotificationsController> {
         ],
       ),
     ) ?? false;
+
+    if (confirmed) {
+      // Only wipes the locally-persisted notifications — backend
+      // notifications belong to the server and are never cleared here.
+      await controller.clearAllLocalNotifications();
+    }
   }
 }

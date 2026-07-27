@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import '../model/notification_model.dart';
 import '../services/notification_database.dart';
+import '../services/notifications_store.dart';
 import '../services/fcm_service.dart';
 import 'ads/data_layer.dart';
 import 'auth/auth_controller.dart'; // لو فعلاً مستخدمه
@@ -12,13 +13,23 @@ import 'auth/auth_controller.dart'; // لو فعلاً مستخدمه
 class NotificationsController extends GetxController {
   final RxList<NotificationModel> _notifications = <NotificationModel>[].obs;
   final RxBool _isLoading = false.obs;
-  final RxInt _notificationCount = 0.obs;
+  // Unread count coming from the backend (API `Count` field), tracked
+  // separately from locally-generated unread notifications so the two
+  // sources can be summed for the badge without conflict.
+  final RxInt _apiUnreadCount = 0.obs;
+  final RxInt _localUnreadCount = 0.obs;
   final NotificationDatabase _database = NotificationDatabase();
   final FCMService _fcmService = Get.find<FCMService>();
 
-  List<NotificationModel> get notifications => _notifications.reversed.toList();
+  // Newest-first: `addLocalNotification` and `_hydrateLocalNotifications`
+  // both `insert(0, ...)` so the freshest local entries sit at the head
+  // of `_notifications`, followed by API notifications (already sorted
+  // newest-first by the backend). Returning as-is keeps that ordering
+  // for the UI — no `.reversed`, which was flipping it to oldest-first.
+  List<NotificationModel> get notifications => _notifications.toList();
   bool get isLoading => _isLoading.value;
-  int get notificationCount => _notificationCount.value;
+  /// Total unread badge count = backend-unread + locally-generated unread.
+  int get notificationCount => _apiUnreadCount.value + _localUnreadCount.value;
 
   @override
   void onInit() {
@@ -47,7 +58,8 @@ class NotificationsController extends GetxController {
       if (userName.trim().isEmpty) {
         log('⚠️ userName is empty. API will return Missing Parameter.');
         _notifications.clear();
-        _notificationCount.value = 0;
+        _apiUnreadCount.value = 0;
+        _hydrateLocalNotifications();
      //   Get.snackbar('Error', 'User name is missing');
         return;
       }
@@ -65,7 +77,8 @@ class NotificationsController extends GetxController {
         log('⚠️ API returned error: $desc');
 
         _notifications.clear();
-        _notificationCount.value = 0;
+        _apiUnreadCount.value = 0;
+        _hydrateLocalNotifications();
 
         Get.snackbar('Error', desc);
         return;
@@ -104,16 +117,20 @@ class NotificationsController extends GetxController {
         ..clear()
         ..addAll(apiNotifications);
 
+      // Merge locally-generated notifications (payment, ad-created, etc.)
+      // so they appear on the same page as the backend notifications.
+      _hydrateLocalNotifications();
+
       // ✅ Update the count from API response
       if (responseData['Count'] != null) {
-        _notificationCount.value = responseData['Count'] is int
+        _apiUnreadCount.value = responseData['Count'] is int
             ? responseData['Count']
             : int.tryParse(responseData['Count'].toString()) ??
-            apiNotifications.length;
-        log('📊 Notification count from API: ${_notificationCount.value}');
+                apiNotifications.length;
+        log('📊 Notification count from API: ${_apiUnreadCount.value}');
       } else {
         // Fallback to list length if count is not available
-        _notificationCount.value = apiNotifications.length;
+        _apiUnreadCount.value = apiNotifications.length;
       }
 
       if (_notifications.isEmpty) {
@@ -136,15 +153,17 @@ class NotificationsController extends GetxController {
       try {
         final notification = NotificationModel.fromFCM(message);
 
-        // أضف الإشعار الجديد مباشرة للقائمة
+        // أضف الإشعار الجديد مباشرة للقائمة وحدّث العداد
         _notifications.insert(0, notification);
         _notifications.refresh();
+        _apiUnreadCount.value++;
 
-        // عرض Snackbar
+        // عرض Snackbar — السيرفر بيبعت data-only messages
+        // فالعنوان والنص في dTitle/dBody (متظبطين جوه الموديل) مش في message.notification
         if (Get.isSnackbarOpen != true) {
           Get.snackbar(
-            message.notification?.title ?? 'New Notification',
-            message.notification?.body ?? '',
+            notification.title,
+            notification.reason ?? '',
             snackPosition: SnackPosition.TOP,
             duration: const Duration(seconds: 3),
           );
@@ -190,6 +209,103 @@ class NotificationsController extends GetxController {
     } catch (e) {
       if (kDebugMode) {
         print('Error updating FCM token: $e');
+      }
+    }
+  }
+
+  /// Reload the local-notifications slice of the in-memory list from
+  /// [NotificationsStore]. Removes any existing local entries first so the
+  /// method is fully idempotent — calling it multiple times cannot create
+  /// duplicates.
+  ///
+  /// Locally-generated entries are identified by `data['source'] == 'local'`,
+  /// which is set by [LocalNotificationService] when it persists them.
+  /// API-sourced entries are left untouched.
+  void _hydrateLocalNotifications() {
+    try {
+      // Wipe any existing local entries before re-inserting fresh copies
+      // from the store. This is the single guarantee against duplicate
+      // rendering when this method is invoked repeatedly during a session
+      // (page opens, live add via addLocalNotification, etc.).
+      _notifications.removeWhere((n) => n.data?['source'] == 'local');
+
+      final List<NotificationModel> local =
+          NotificationsStore.instance.getAll();
+      if (local.isNotEmpty) {
+        // Prepend so they render alongside API results in the existing
+        // `reversed` getter (newest first).
+        _notifications.insertAll(0, local);
+      }
+      _notifications.refresh();
+      _localUnreadCount.value = local.where((n) => !n.isRead).length;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error hydrating local notifications: $e');
+      }
+    }
+  }
+
+  /// Called by [LocalNotificationService] right after a new local
+  /// notification is persisted. Routes through [_hydrateLocalNotifications]
+  /// so the in-memory list is rebuilt from the store — cannot produce a
+  /// duplicate even if the caller (or a widget) invokes this multiple times.
+  void addLocalNotification(NotificationModel notification) {
+    try {
+      _hydrateLocalNotifications();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding local notification to controller: $e');
+      }
+    }
+  }
+
+  /// Mark every locally-persisted notification as read and reset the local
+  /// unread counter. Called by the notifications page when the user opens it.
+  ///
+  /// Does not touch the backend (`API`) unread count — the backend is the
+  /// source of truth for its own unread state and should be updated by a
+  /// separate server call if/when that feature exists.
+  Future<void> markAllAsRead() async {
+    try {
+      await NotificationsStore.instance.markAllAsRead();
+      _localUnreadCount.value = 0;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error marking notifications as read: $e');
+      }
+    }
+  }
+
+  /// Delete a single locally-persisted notification (identified by its
+  /// `date`) from disk, then refresh the in-memory list so the deletion
+  /// is reflected in the UI immediately.
+  ///
+  /// A no-op for API-sourced notifications — those must be removed on the
+  /// backend and cannot be dismissed client-side without them reappearing
+  /// on the next fetch.
+  Future<void> deleteLocalNotification(NotificationModel notification) async {
+    try {
+      final bool isLocal = notification.data?['source'] == 'local';
+      if (!isLocal) return;
+      await NotificationsStore.instance.removeByDate(notification.date);
+      _hydrateLocalNotifications();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error deleting local notification: $e');
+      }
+    }
+  }
+
+  /// Wipe every locally-persisted notification (payment / ad-created /
+  /// etc.) and refresh the in-memory list. Backend notifications are
+  /// untouched.
+  Future<void> clearAllLocalNotifications() async {
+    try {
+      await NotificationsStore.instance.clear();
+      _hydrateLocalNotifications();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error clearing local notifications: $e');
       }
     }
   }

@@ -21,6 +21,28 @@ class AllRentalCars extends StatefulWidget {
 }
 
 class _AllRentalCarsState extends State<AllRentalCars> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_loadMoreCarsIfNeeded);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_loadMoreCarsIfNeeded);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _loadMoreCarsIfNeeded() {
+    if (!_scrollController.hasClients) return;
+    if (_scrollController.position.extentAfter < 500) {
+      Get.find<RentalCarsController>().loadMoreRentalCars(context: context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var lc = AppLocalizations.of(context)!;
@@ -30,7 +52,6 @@ class _AllRentalCarsState extends State<AllRentalCars> {
       backgroundColor: AppColors.background(context),
       appBar: carListAppBar(widget.notificationsController,notificationCount: 3,context: context),
       body:  GetBuilder<RentalCarsController>(
-          init:  RentalCarsController(),
           builder: (controller) {
             return Stack(
               children: [
@@ -43,27 +64,43 @@ class _AllRentalCarsState extends State<AllRentalCars> {
                     carListGreyBar(widget.notificationsController,onSearchResult:(_){},title: lc.all_rental_cars,context: context,squareIcon: true,rental: true),
                     8.verticalSpace,
                     GetBuilder<RentalCarsController>(
-                        init:  RentalCarsController(),
                         builder: (controller) {
                           return Expanded(
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.symmetric(horizontal: 10.w),
-
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 20.h,
-                                // crossAxisSpacing: .4.w,
-                                childAspectRatio: .59,
-                              ),
-                              itemCount: controller.rentalCars.length,
-                              itemBuilder: (context, index) {
-
-
-                                return  RentalCarCard(
-                                  car: controller.rentalCars[index],
-                                );
-                              },
+                            child: CustomScrollView(
+                              controller: _scrollController,
+                              slivers: [
+                                SliverPadding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                  sliver: SliverGrid(
+                                    gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 20.h,
+                                      // crossAxisSpacing: .4.w,
+                                      childAspectRatio: .59,
+                                    ),
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        return RentalCarCard(
+                                          car: controller.rentalCars[index],
+                                        );
+                                      },
+                                      childCount: controller.rentalCars.length,
+                                    ),
+                                  ),
+                                ),
+                                if (controller.loadingMoreCars)
+                                  SliverToBoxAdapter(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           );
                         }

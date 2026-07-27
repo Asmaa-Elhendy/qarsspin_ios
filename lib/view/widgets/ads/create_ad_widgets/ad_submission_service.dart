@@ -15,6 +15,7 @@ import '../../../../controller/specs/specs_controller.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../model/create_ad_model.dart';
 import '../../../../model/payment/payment_method_model.dart';
+import '../../../../services/local_notification_service.dart';
 
 import '../../my_ads/dialog.dart' as dialog;
 import '../../payments/payment_methods_dialog.dart';
@@ -349,6 +350,11 @@ class AdSubmissionService {
         }
       }
 
+      // Populated when a paid service (360, Feature) is successfully paid for
+      // during this submission. Consumed by the final ad-created notification
+      // so both events can be reported in a single, professional message.
+      final List<String> _paidServiceLabels = <String>[];
+
       final bool warrantyAvailable = warranty.toLowerCase() == 'yes';
 
       final String exteriorColorHex =
@@ -566,6 +572,14 @@ class AdSubmissionService {
                     (status != null && status.toLowerCase() == 'success') &&
                         (paymentId != null && paymentId.isNotEmpty);
 
+                // Track successfully paid services so the final ad-created
+                // notification (fired at the end of this function) can include
+                // them in a single, consolidated message.
+                if (success) {
+                  if (isRequest360) _paidServiceLabels.add(lc.request_360);
+                  if (isFeaturedPost) _paidServiceLabels.add(lc.feature_ad);
+                }
+
                 // ✅ HERE: show success/fail dialog BEFORE navigation and WAIT
                 await _showPaymentStatusThenContinue(
                   context: context,
@@ -622,6 +636,23 @@ class AdSubmissionService {
       updateLoadingStatus?.call(_stageText('finalizing'));
       hideLoaderOnce();
 
+      // 🔔 Local notification: fire once per newly-created ad, summarising
+      // the resulting status and any paid services from the same submission.
+      // Only fires for NEW ads (create mode) — update-mode edits are not
+      // announced. Delivery is deduplicated by responsePostId.
+      if (postId == null && responsePostId.isNotEmpty) {
+        _fireAdCreatedNotification(
+          postId: responsePostId,
+          shouldPublish: shouldPublish,
+          paidServiceLabels: _paidServiceLabels,
+          // The just-picked cover image is a LOCAL file path at this
+          // point (the server URL isn't returned by the create-post
+          // endpoint). NotificationCard renders local paths via
+          // Image.file so the thumbnail still shows.
+          carImagePath: coverImage,
+        );
+      }
+
       String successMessage = responsePostId.isNotEmpty
           ? "Ad ${postId == null ? 'created' : 'updated'} successfully!\nPost ID: $responsePostId"
           : "Ad ${postId == null ? 'created' : 'updated'} successfully!";
@@ -668,6 +699,53 @@ class AdSubmissionService {
       log('Error submitting ad: $e');
       showErrorDialog('An error occurred while submitting your ad. Please try again.');
     }
+  }
+
+  /// Fires the "Ad created" local notification with a professional, bilingual
+  /// message that combines the resulting ad status with an optional payment
+  /// summary. Fire-and-forget: any plugin error is swallowed internally by
+  /// [LocalNotificationService] so it never breaks the submission flow.
+  static void _fireAdCreatedNotification({
+    required String postId,
+    required bool shouldPublish,
+    required List<String> paidServiceLabels,
+    String? carImagePath,
+  }) {
+    final bool isArabic = Get.locale?.languageCode == 'ar';
+
+    final String title = isArabic
+        ? 'تم إنشاء الإعلان بنجاح'
+        : 'Ad created successfully';
+
+    final String statusLabel = shouldPublish
+        ? (isArabic ? 'قيد المراجعة' : 'Pending Approval')
+        : (isArabic ? 'مسودة' : 'Draft');
+
+    final String statusLine = isArabic
+        ? 'الحالة: $statusLabel'
+        : 'Status: $statusLabel';
+
+    final String paymentLine = paidServiceLabels.isEmpty
+        ? ''
+        : (isArabic
+            ? ' — تم تأكيد الدفع لـ ${paidServiceLabels.join(' + ')}.'
+            : ' — Payment confirmed for ${paidServiceLabels.join(' + ')}.');
+
+    final String body = '$statusLine$paymentLine';
+
+    unawaited(
+      LocalNotificationService.instance.notifyAdCreatedOnce(
+        postId: postId,
+        title: title,
+        body: body,
+        // notifyAdCreatedOnce sets `carId: postId` internally — no need
+        // to pass it here.
+        carImageUrl:
+            (carImagePath != null && carImagePath.trim().isNotEmpty)
+                ? carImagePath.trim()
+                : null,
+      ),
+    );
   }
 
   static Future<void> _uploadGalleryPhotos({

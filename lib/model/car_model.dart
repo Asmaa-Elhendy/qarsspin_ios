@@ -23,6 +23,7 @@ class CarModel{
   final int? offerId;
   final int postId;
   final int pinToTop;
+  final String? endServiceDate;
   final String postCode;
   final String postKind;
   final String carNamePl;
@@ -61,6 +62,7 @@ class CarModel{
     this.classId,this.makeId,
     required this.postId,
     required this.pinToTop,
+    this.endServiceDate,
     required this.postCode,
     required this.carNamePl,
     this.interiorColor,
@@ -89,6 +91,29 @@ class CarModel{
     required this.ownerMobile,required this.ownerName,required this.ownerEmail
   });
 
+  bool get hasActivePinToTopService {
+    final rawEndServiceDate = endServiceDate?.trim();
+    if (rawEndServiceDate == null || rawEndServiceDate.isEmpty) {
+      return false;
+    }
+
+    final parsedEndServiceDate = DateTime.tryParse(
+      rawEndServiceDate.replaceFirst(' ', 'T'),
+    );
+    if (parsedEndServiceDate == null) {
+      return false;
+    }
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final endServiceDay = DateTime(
+      parsedEndServiceDate.year,
+      parsedEndServiceDate.month,
+      parsedEndServiceDate.day,
+    );
+
+    return !today.isAfter(endServiceDay);
+  }
 
 }
 /// Converts a string to CarType enum

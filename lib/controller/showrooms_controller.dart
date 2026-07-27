@@ -144,8 +144,15 @@ class ShowRoomsController extends GetxController {
       if (body["Data"] == null) {
         rentalCarsOfShowRoom = [];
         carsForSale = [];
-        Get.find<BrandController>().setCars(carsForSale, showroomName);
-        Get.find<RentalCarsController>().setRentalCars(rentalCarsOfShowRoom);
+        Get.find<BrandController>().setCars(
+          carsForSale,
+          showroomName,
+          paginated: true,
+        );
+        Get.find<RentalCarsController>().setRentalCars(
+          rentalCarsOfShowRoom,
+          paginated: true,
+        );
         loadingMode = false;
         update();
         log("empty updattes");
@@ -159,6 +166,7 @@ class ShowRoomsController extends GetxController {
           forSale?carsForSale.add(
               CarModel(postId: body["Data"][i]["Post_ID"],
                   pinToTop: body["Data"][i]["Pin_To_Top"],
+                  endServiceDate: body["Data"][i]["EndServiceDate"]?.toString(),
                   postKind: "",
                   technical_Description_SL: "",
                   ownerMobile: "",
@@ -243,18 +251,29 @@ class ShowRoomsController extends GetxController {
           if(forSale) {
             log("🟢 [fetchCarsOfShowRooms] parsed ${carsForSale.length} cars. First car sourceKind = ${carsForSale.isNotEmpty ? carsForSale.first.sourceKind : '(none)'}");
 
-            Get.find<BrandController>().setCars(carsForSale, showroomName);
+            // Showroom lists are published once after parsing all returned cars.
           }else{
 
-            Get.find<RentalCarsController>().setRentalCars(rentalCarsOfShowRoom);
+            // Showroom lists are published once after parsing all returned cars.
 
           }
 
-          loadingMode = false;
-
-          update();
-
         }
+        if (forSale) {
+          Get.find<BrandController>().setCars(
+            carsForSale,
+            showroomName,
+            paginated: true,
+          );
+        } else {
+          Get.find<RentalCarsController>().setRentalCars(
+            rentalCarsOfShowRoom,
+            paginated: true,
+          );
+        }
+
+        loadingMode = false;
+        update();
       }
     }
 

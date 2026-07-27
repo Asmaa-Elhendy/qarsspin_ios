@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:myfatoorah_flutter/myfatoorah_flutter.dart';
 import 'package:qarsspin/l10n/app_localizations_en.dart';
 import 'package:qarsspin/l10n/l10n.dart';
 import 'package:qarsspin/services/fcm_service.dart';
+import 'package:qarsspin/services/local_notification_service.dart';
 import 'package:qarsspin/view/screens/home_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -36,6 +38,20 @@ void main() async{
   // Initialize Firebase
   await Firebase.initializeApp();
 
+  // ── Diagnostic: confirm which Firebase project is loaded at runtime ──
+  // Safe to remove once verified.
+  final app = Firebase.app();
+  debugPrint('========== FIREBASE ==========');
+  debugPrint('Project ID: ${app.options.projectId}');
+  debugPrint('App ID: ${app.options.appId}');
+  debugPrint('Sender ID: ${app.options.messagingSenderId}');
+  debugPrint('API Key: ${app.options.apiKey}');
+  debugPrint('==============================');
+  // ─────────────────────────────────────────────────────────────────────
+
+  // لازم يتسجل قبل runApp عشان إشعارات الخلفية (data-only) تظهر
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   // Initialize MyFatoorah SDK
   //PaymentService.initialize();
   settings();
@@ -44,6 +60,13 @@ void main() async{
   final fcmService = FCMService();
   await fcmService.initialize();
   Get.put(fcmService);  // Register the instance with GetX
+
+  // Initialize the local-notifications plugin from the main isolate at
+  // startup — before any local notification can fire — so the plugin's
+  // global tap-callback slot is set from t=0 and the terminated-state
+  // launch check (`getNotificationAppLaunchDetails`) runs on cold boot.
+  await LocalNotificationService.instance.initialize();
+
   Get.put(AuthController(), permanent: true);
 
   // Initialize Notifications Controller

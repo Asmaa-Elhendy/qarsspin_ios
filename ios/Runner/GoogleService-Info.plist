@@ -2,29 +2,29 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>API_KEY</key>
-    <string>AIzaSyApC_r1FUELHBWxRG_StdZrsFOeYc97IMM</string>
-    <key>GCM_SENDER_ID</key>
-    <string>805570665785</string>
-    <key>PLIST_VERSION</key>
-    <string>1</string>
-    <key>BUNDLE_ID</key>
-    <string>com.qarsspin.app</string>
-    <key>PROJECT_ID</key>
-    <string>qars-spin</string>
-    <key>STORAGE_BUCKET</key>
-    <string>qars-spin.appspot.com</string>
-    <key>IS_ADS_ENABLED</key>
-    <false></false>
-    <key>IS_ANALYTICS_ENABLED</key>
-    <false></false>
-    <key>IS_APPINVITE_ENABLED</key>
-    <true></true>
-    <key>IS_GCM_ENABLED</key>
-    <true></true>
-    <key>IS_SIGNIN_ENABLED</key>
-    <true></true>
-    <key>GOOGLE_APP_ID</key>
-    <string>1:805570665785:ios:b2efca25fbcbe59b46dce8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCnR9wcDICMzzj_klMQsSAW7kg-kn2Sxbg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>786950290655</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.qarsspin.app</string>
+	<key>PROJECT_ID</key>
+	<string>qars-spin-signup-otp</string>
+	<key>STORAGE_BUCKET</key>
+	<string>qars-spin-signup-otp.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:786950290655:ios:59960657130889d3d5fd6a</string>
 </dict>
 </plist>

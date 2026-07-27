@@ -31,12 +31,30 @@ class CarsBrandList extends StatefulWidget {
 class _CarsBrandListState extends State<CarsBrandList> {
   bool isGrid = true; // controls which view to show
   String searchResult = "";
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _scrollController.addListener(_loadMoreCarsIfNeeded);
     print("btrandName = ${widget.brandName}");
   }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_loadMoreCarsIfNeeded);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _loadMoreCarsIfNeeded() {
+    if (!_scrollController.hasClients) return;
+    if (_scrollController.position.extentAfter < 500) {
+      Get.find<BrandController>().loadMoreCars();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var lc = AppLocalizations.of(context)!;
@@ -80,8 +98,8 @@ class _CarsBrandListState extends State<CarsBrandList> {
                 controller.carsList.isNotEmpty
                     ? Expanded(
                     child: isGrid
-                        ? listAsAGread(controller.carsList)
-                        : listAsAList(controller.carsList))
+                        ? listAsAGread(controller)
+                        : listAsAList(controller))
                     : noResultFoud(lc)
               ],
             ),
@@ -104,37 +122,67 @@ class _CarsBrandListState extends State<CarsBrandList> {
     );
   }
 
-  Widget listAsAGread(cars) {
+  Widget listAsAGread(BrandController controller) {
+    final cars = controller.carsList;
     return Padding(
         padding:
         EdgeInsets.symmetric(horizontal: 13.w, vertical: 8), //update asmaa
-        child: GridView.builder(
-            itemCount: cars.length,
-
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // 2 columns
-              mainAxisSpacing: 28.h,
-              crossAxisSpacing: 10.w, //update asmaa
-              childAspectRatio: Platform.isAndroid ? 0.775 : 0.72, // adjust as needed ios / android
-            ),
-            itemBuilder: (context, index) {
-
-              return carCard(
-                  context: context,
-                  w: 192.w,
-                  h: 245.h,
-                  car: cars[index],
-                  large: false,
-                  postKind: widget.postKind);
-            }));
+        child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 columns
+                  mainAxisSpacing: 28.h,
+                  crossAxisSpacing: 10.w, //update asmaa
+                  childAspectRatio: Platform.isAndroid ? 0.775 : 0.72, // adjust as needed ios / android
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return carCard(
+                        context: context,
+                        w: 192.w,
+                        h: 245.h,
+                        car: cars[index],
+                        large: false,
+                        postKind: widget.postKind);
+                  },
+                  childCount: cars.length,
+                ),
+              ),
+              if (controller.loadingMoreCars)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
+            ]));
   }
 
-  Widget listAsAList(cars) {
+  Widget listAsAList(BrandController controller) {
+    final cars = controller.carsList;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
-        itemCount: cars.length,
+        controller: _scrollController,
+        itemCount: cars.length + (controller.loadingMoreCars ? 1 : 0),
         itemBuilder: (context, index) {
+          if (index >= cars.length) {
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primary,
+                ),
+              ),
+            );
+          }
+
           return Column(
             children: [
               carCard(

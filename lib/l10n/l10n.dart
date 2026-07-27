@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/car_model.dart';
+import '../services/fcm_service.dart';
 import 'app_localizations.dart';
 
 /// 🔹 اللغات المدعومة
@@ -38,6 +39,13 @@ class LanguageController extends GetxController {
     // حفظ اللغة في SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language', langCode);
+
+    // تحديث الإشعارات حسب اللغة (زي الأندرويد):
+    // الاشتراك في Only_Arabic / Only_English + تحديث اللغة المفضلة على السيرفر
+    if (Get.isRegistered<FCMService>()) {
+      FCMService.to.subscribeToLanguageTopic(langCode);
+      FCMService.to.sendTokenToServer(language: langCode);
+    }
   }
 
   /// تحميل اللغة المحفوظة عند فتح التطبيق

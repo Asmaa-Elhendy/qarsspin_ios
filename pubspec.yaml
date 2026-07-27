@@ -38,6 +38,7 @@ dependencies:
   webview_flutter_wkwebview: ^3.23.0
   firebase_core: ^4.1.1
   firebase_messaging: ^16.0.3
+  flutter_local_notifications: ^19.4.2
   shared_preferences: ^2.2.2
   intl: ^0.20.2
   sqflite_common_ffi: ^2.3.6

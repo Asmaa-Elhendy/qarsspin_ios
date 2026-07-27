@@ -69,14 +69,19 @@ import '../../controller/notifications_controller.dart';
               ),
             ),
 
-            // The badge MUST be a direct child of Stack
+            // The badge MUST be a direct child of Stack.
+            //
+            // Read `notificationCount` (unread, backend + local) rather than
+            // `notifications.length` (total list size). This lets the badge
+            // drop after `markAllAsRead()` on the notifications page, which
+            // changes the unread counters but does NOT change the list length.
+            //
+            // The badge is always visible — even when the count is 0 —
+            // per product decision. To hide it when empty, guard on
+            // `count == 0` and return `SizedBox.shrink()` here.
             Obx(() {
-              final count = notificationsController.notifications.length;
+              final count = notificationsController.notificationCount;
               debugPrint('🔔 Notification count: $count');
-
-              // if (count == 0) {
-              //   return const SizedBox.shrink(); // hide when zero
-              // }
 
               return PositionedDirectional(
                 // works for both LTR/RTL without manual left/right logic

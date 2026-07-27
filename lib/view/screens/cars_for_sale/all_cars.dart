@@ -42,6 +42,13 @@ class _AllCarsState extends State<AllCars> {
           GetBuilder<BrandController>(
             init: BrandController(),
             builder: (controller) {
+              // Hide makes with 0 cars — the user shouldn't see a brand
+              // tile that leads to an empty listing. The synthetic
+              // "All Cars" entry (index 0 of the raw list) carries the
+              // aggregated total, so it stays visible.
+              final visibleBrands = controller.carBrands
+                  .where((b) => b.make_count > 0)
+                  .toList();
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: GridView.builder(
@@ -53,27 +60,28 @@ class _AllCarsState extends State<AllCars> {
                     crossAxisSpacing: 8.w,
                     mainAxisSpacing: 8.w,
                   ),
-                  itemCount: controller.carBrands.length,
+                  itemCount: visibleBrands.length,
                   itemBuilder: (context, index) {
+                    final brand = visibleBrands[index];
                     return HomeServiceCard(
                       onTap: () {
                         final currentLocaleName = AppLocalizations.of(context)!.localeName;
                         print("current loca;$currentLocaleName");
                         controller.switchLoading();
                         controller.getCars(  // in case care for sale list
-                          make_id: controller.carBrands[index].id,
-                          makeName: controller.carBrands[index].name,
+                          make_id: brand.id,
+                          makeName: brand.name,
                         );
                         Get.to(CarsBrandList(
                           widget.notificationsController,
                             postKind: "CarForSale", //makes only in car for sale
-                            brandName:  Get.locale?.languageCode=='ar'?controller.carBrands[index].slName:controller.carBrands[index].name));
+                            brandName:  Get.locale?.languageCode=='ar'?brand.slName:brand.name));
                       },
                       brand: true,
-                      title: Get.locale?.languageCode=='ar'? controller.carBrands[index].slName:controller.carBrands[index].name,
-                      imageAsset: controller.carBrands[index].imageUrl,
+                      title: Get.locale?.languageCode=='ar'? brand.slName:brand.name,
+                      imageAsset: brand.imageUrl,
                       large: false,
-                      make_count: controller.carBrands[index].make_count,
+                      make_count: brand.make_count,
                     );
                   },
                 ),

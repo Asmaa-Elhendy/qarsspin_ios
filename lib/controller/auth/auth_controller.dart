@@ -244,6 +244,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:qarsspin/controller/auth/auth_data_layer.dart';
+import 'package:qarsspin/services/fcm_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
@@ -328,6 +329,12 @@ class AuthController extends GetxController {
     _ownerMobile.value = mobile;
 
     log('🔐 Saved user to prefs: username=$username, fullName=$fullName, mobile=$mobile, email=$email');
+
+    // بعد ما اليوزر اتسجل نربط الـ FCM token باسمه على السيرفر
+    // (نفس اللي بيحصل في الأندرويد بعد إنشاء الحساب)
+    if (Get.isRegistered<FCMService>()) {
+      FCMService.to.sendTokenToServer();
+    }
   }
 
   /// تحفظ بيانات اليوزر اللي راجعة من الـ API (login أو register)

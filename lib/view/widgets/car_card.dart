@@ -111,7 +111,7 @@ Widget carCard({
                     ],
                   ),
                 ),
-                if (car.pinToTop == 1)
+                if (car.pinToTop == 1 && car.hasActivePinToTopService)
                   Positioned(bottom: 3, left: 3.w, child: featuredContainer(context)),
               ],
             ),

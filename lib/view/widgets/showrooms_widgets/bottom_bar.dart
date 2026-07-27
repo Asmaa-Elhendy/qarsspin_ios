@@ -45,6 +45,12 @@ class ShowRoomBottomBar extends StatelessWidget {
         children: [
           !carCare
               ? carButton(() {
+                  if (rental) {
+                    Get.find<RentalCarsController>().switchLoading();
+                  } else {
+                    Get.find<BrandController>().switchLoading();
+                  }
+
                   Get.find<ShowRoomsController>().fetchCarsOfShowRooms(
                     context: context,
                     showroomName: showRoom.partnerNamePl,
@@ -59,8 +65,6 @@ class ShowRoomBottomBar extends StatelessWidget {
                   if (rental) {
                     Get.to(AllRentalCars(notificationsController));
                   } else {
-                    Get.find<BrandController>().switchLoading();
-
                     Get.to(
                       CarsBrandList(
                         notificationsController,

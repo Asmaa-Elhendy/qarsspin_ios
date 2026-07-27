@@ -77,5 +77,29 @@
 
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Qars Spin needs permission to save shared images to your photo library.</string>
+
+	<!--
+	Firebase Messaging by default performs method swizzling on the
+	app delegate to intercept remote-notification callbacks AND to
+	install itself as the UNUserNotificationCenter delegate. That
+	swizzling was silently dropping our locally-fired notifications
+	on iOS (they never appeared as a banner AND never showed up in
+	the Notification Center) because iOS asked Firebase's proxied
+	delegate how to present them and got no useful answer.
+
+	We are not currently using any FCM remote push notifications —
+	every notification the app posts is local via
+	`flutter_local_notifications`. So disabling the proxy is safe:
+	`flutter_local_notifications` becomes the sole
+	UNUserNotificationCenter delegate and its foreground
+	presentation options (banner / list / sound) are honored.
+
+	If FCM push notifications are wired up later, this flag must
+	either be flipped back to YES OR the AppDelegate must manually
+	forward the notification callbacks to Firebase — see
+	https://firebase.google.com/docs/cloud-messaging/ios/client#method_swizzling_in_firebase_messaging
+	-->
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 </dict>
 </plist>

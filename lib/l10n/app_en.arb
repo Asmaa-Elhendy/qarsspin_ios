@@ -224,7 +224,7 @@
   "modify": "Modify",
   "specs": "Specs",
   "info": "Information",
-  "waiting_ad_approval": "This ad is pending approval, Please wait \\n while we review your ad",
+  "waiting_ad_approval": "This ad is pending approval.\nPlease wait while we review your ad."
   "creation_date": "Creation Date:",
   "ex_date": "Expiry Date:",
   "please_edit_img": "Please edit image",

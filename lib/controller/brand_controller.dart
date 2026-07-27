@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,9 @@ import 'auth/auth_controller.dart';
 
 class BrandController extends GetxController{
   bool loadingMode = true;
+  bool loadingMoreCars = false;
+  bool hasMoreCars = true;
+  static const int carsPageSize = 20;
   List<CarModel> carsList = [];
   List<CarModel> similarCars = [];
   List<CarModel> ownersAds = [];
@@ -65,6 +69,18 @@ class BrandController extends GetxController{
   String currentSourceKind = "All";
   int currentMakeId = 0;
   String currentMakeName ="";
+  String currentCarsSort = "lb_Sort_By_Post_Date_Desc";
+  bool currentCarsIsSearch = false;
+  bool currentCarsIsShowroom = false;
+  List<CarModel> _showroomCarsCache = [];
+  int _showroomCarsVisibleCount = 0;
+  String currentSearchClassId = "0";
+  String currentSearchModelId = "0";
+  String currentSearchCatId = "0";
+  String currentSearchYearMin = "0";
+  String currentSearchYearMax = "0";
+  String currentSearchPriceMin = "0";
+  String currentSearchPriceMax = "0";
 
   Color hexToColor(String hex) {
     hex = hex.replaceAll("#", ""); // remove the "#"
@@ -228,6 +244,7 @@ class BrandController extends GetxController{
               offerId: offer['Offer_ID']??0,
               postId: offer['Post_ID'] ?? 0,
               pinToTop: offer['Pin_To_Top'] ?? 0,
+              endServiceDate: offer['EndServiceDate']?.toString(),
               postCode: offer['Post_Code'] ?? '',
               postKind: offer['Post_Kind'] ?? '',
               carNamePl: (offer['Car_Name_PL'] ?? '').trim(),
@@ -307,20 +324,32 @@ class BrandController extends GetxController{
     required String makeName,
     String sourceKind = "All",
     sort = "lb_Sort_By_Post_Date_Desc",
+    bool loadMore = false,
   }) async {
     log("call$sort ");
 
-    carsList = [];
-    loadingMode = true;
+    if (loadMore) {
+      if (loadingMode || loadingMoreCars || !hasMoreCars) return [];
+      loadingMoreCars = true;
+    } else {
+      carsList = [];
+      loadingMode = true;
+      hasMoreCars = true;
+    }
     currentSourceKind = sourceKind;
     currentMakeId = make_id;
     currentMakeName = makeName;
+    currentCarsSort = sort;
+    currentCarsIsSearch = false;
+    currentCarsIsShowroom = false;
+    _showroomCarsCache = [];
+    _showroomCarsVisibleCount = 0;
     update();
 
     final filterDetails = {
       "Source_Kind": sourceKind,
-      "Offset": 0,
-      "Limit": 1000,
+      "Offset": loadMore ? carsList.length : 0,
+      "Limit": carsPageSize,
       "Make_ID": make_id,
       "Class_ID": 0,
       "Model_ID": 0,
@@ -331,7 +360,6 @@ class BrandController extends GetxController{
       "Price_Max": 0,
       "Sort_By": sort,
     };
-
     log("details $filterDetails");
     // {"Source_Kind": "Qars spin", "Offset": 0, "Limit": 1000, "Make_ID": 0, "Class_ID": 0, "Model_ID": 0, "Category_ID": 0, "Year_Min": 0, "Year_Max": 0, "Price_Min": 0, "Price_Max": 0, "Sort_By": "lb_Sort_By_Post_Date_Desc"}
     final uri = Uri.parse(
@@ -352,8 +380,10 @@ class BrandController extends GetxController{
         final List data = body["Data"] ?? [];
 
         if (data.isEmpty) {
-          carsList = [];
+          if (!loadMore) carsList = [];
           loadingMode = false;
+          loadingMoreCars = false;
+          hasMoreCars = false;
           currentModelPointer = makeName;
           update();
           return [];
@@ -364,6 +394,7 @@ class BrandController extends GetxController{
             CarModel(
               postId: data[i]["Post_ID"] ?? 0,
               pinToTop: data[i]["Pin_To_Top"] ?? 0,
+              endServiceDate: data[i]["EndServiceDate"]?.toString(),
               postKind: "CarForSale",
 
               ownerEmail: data[i]["Owner_Email"] ?? "",
@@ -388,24 +419,72 @@ class BrandController extends GetxController{
         }
 
         loadingMode = false;
+        loadingMoreCars = false;
+        hasMoreCars = data.length == carsPageSize;
         currentModelPointer = makeName;
 
         update();
         return data;
       } else {
         loadingMode = false;
+        loadingMoreCars = false;
         update();
         throw Exception("Failed to load cars: ${response.statusCode}");
       }
     } catch (e) {
       log("getCars error: $e");
 
-      carsList = [];
+      if (!loadMore) carsList = [];
       loadingMode = false;
+      loadingMoreCars = false;
       update();
 
       return [];
     }
+  }
+
+  loadMoreCars() {
+    if (currentCarsIsShowroom) {
+      if (loadingMode || loadingMoreCars || !hasMoreCars) return [];
+      loadingMoreCars = true;
+      update();
+
+      _showroomCarsVisibleCount = math.min(
+        _showroomCarsVisibleCount + carsPageSize,
+        _showroomCarsCache.length,
+      );
+      carsList = _showroomCarsCache.take(_showroomCarsVisibleCount).toList();
+      hasMoreCars = _showroomCarsVisibleCount < _showroomCarsCache.length;
+      loadingMoreCars = false;
+      update();
+      return carsList;
+    }
+
+    if (currentCarsIsSearch) {
+      return searchCar(
+        make_id: currentMakeId,
+        makeName: currentMakeName,
+        sourceKind: currentSourceKind,
+        sort: currentCarsSort,
+        classId: currentSearchClassId,
+        makeId: currentMakeId.toString(),
+        modelId: currentSearchModelId,
+        catId: currentSearchCatId,
+        yearMin: currentSearchYearMin,
+        yearMax: currentSearchYearMax,
+        priceMin: currentSearchPriceMin,
+        priceMax: currentSearchPriceMax,
+        loadMore: true,
+      );
+    }
+
+    return getCars(
+      make_id: currentMakeId,
+      makeName: currentMakeName,
+      sourceKind: currentSourceKind,
+      sort: currentCarsSort,
+      loadMore: true,
+    );
   }
   getCarDetails(String postKind,String id,{required BuildContext context}) async{
 
@@ -425,6 +504,7 @@ class BrandController extends GetxController{
           CarModel(
               postId: body["Data"][0]["Post_ID"],
               pinToTop: body["Data"][0]["Pin_To_Top"],
+              endServiceDate: body["Data"][0]["EndServiceDate"]?.toString(),
               postCode: body["Data"][0]["Post_Code"],
               postKind: body["Data"][0]["Post_Kind"],
               carNamePl: body["Data"][0]["Car_Name_PL"],
@@ -596,16 +676,35 @@ class BrandController extends GetxController{
     }
   }
 
-  searchCar({required int make_id,  String makeName="All Cars",String sourceKind="All",sort = "lb_Sort_By_Post_Date_Desc", required String classId, required String makeId,required String modelId,required String catId,required String yearMin, yearMax,required String priceMin,required String priceMax}) async {
-    carsList=[];
+  searchCar({required int make_id,  String makeName="All Cars",String sourceKind="All",sort = "lb_Sort_By_Post_Date_Desc", required String classId, required String makeId,required String modelId,required String catId,required String yearMin, yearMax,required String priceMin,required String priceMax, bool loadMore = false}) async {
+    if (loadMore) {
+      if (loadingMode || loadingMoreCars || !hasMoreCars) return [];
+      loadingMoreCars = true;
+    } else {
+      carsList=[];
+      loadingMode = true;
+      hasMoreCars = true;
+    }
     currentSourceKind = sourceKind;
     currentMakeId = make_id;
     currentMakeName = makeName;
+    currentCarsSort = sort;
+    currentCarsIsSearch = true;
+    currentCarsIsShowroom = false;
+    _showroomCarsCache = [];
+    _showroomCarsVisibleCount = 0;
+    currentSearchClassId = classId;
+    currentSearchModelId = modelId;
+    currentSearchCatId = catId;
+    currentSearchYearMin = yearMin;
+    currentSearchYearMax = yearMax?.toString() ?? "0";
+    currentSearchPriceMin = priceMin;
+    currentSearchPriceMax = priceMax;
 
     final filterDetails = {
       "Source_Kind":sourceKind,
-      "Offset": "0",
-      "Limit": "1000",
+      "Offset": loadMore ? carsList.length : 0,
+      "Limit": carsPageSize,
       "Make_ID": make_id,
       "Class_ID": classId,
       "Model_ID": modelId,
@@ -616,7 +715,6 @@ class BrandController extends GetxController{
       "Price_Max": priceMax,
       "Sort_By": sort,
     };
-
     final uri = Uri.parse(
       "$base_url/BrowsingRelatedApi.asmx/GetListOfCarsForSale?Filter_Details=${Uri.encodeComponent(jsonEncode(filterDetails))}",
     );
@@ -628,36 +726,41 @@ class BrandController extends GetxController{
 
       final body = jsonDecode(response.body);
       if(body["Data"]==null){
-        carsList = [];
+        if (!loadMore) carsList = [];
+        hasMoreCars = false;
 
       }else{
-        for(int i = 0; i<body["Data"].length;i++){
+        final List dataList = body["Data"] ?? [];
+        for(int i = 0; i<dataList.length;i++){
           carsList.add(
-              CarModel(postId: body["Data"][i]["Post_ID"],
-                  pinToTop: body["Data"][i]["Pin_To_Top"],
-                  postCode:body["Data"][i]["Post_Code"],
-                  carNamePl:body["Data"][i]["Car_Name_PL"],
+              CarModel(postId: dataList[i]["Post_ID"],
+                  pinToTop: dataList[i]["Pin_To_Top"],
+                  endServiceDate: dataList[i]["EndServiceDate"]?.toString(),
+                  postCode:dataList[i]["Post_Code"],
+                  carNamePl:dataList[i]["Car_Name_PL"],
                   postKind: "CarForSale",
                   ownerMobile: "",
                   ownerEmail:"",
                   ownerName: "",
 
 
-                  carNameSl: body["Data"][i]["Car_Name_SL"],
-                  carNameWithYearPl: body["Data"][i]["Car_Name_With_Year_PL"],
-                  carNameWithYearSl: body["Data"][i]["Car_Name_With_Year_SL"],
-                  manufactureYear: body["Data"][i]["Manufacture_Year"],
-                  tag: body["Data"][i]["Tag"],
-                  sourceKind: resolveCarSourceKind(body["Data"][i]),
-                  mileage: body["Data"][i]["Mileage"],
+                  carNameSl: dataList[i]["Car_Name_SL"],
+                  carNameWithYearPl: dataList[i]["Car_Name_With_Year_PL"],
+                  carNameWithYearSl: dataList[i]["Car_Name_With_Year_SL"],
+                  manufactureYear: dataList[i]["Manufacture_Year"],
+                  tag: dataList[i]["Tag"],
+                  sourceKind: resolveCarSourceKind(dataList[i]),
+                  mileage: dataList[i]["Mileage"],
 
-                  askingPrice:  body["Data"][i]["Asking_Price"],
-                  rectangleImageFileName:  body["Data"][i]["Rectangle_Image_FileName"],
-                  rectangleImageUrl:  body["Data"][i]["Rectangle_Image_URL"]));
+                  askingPrice:  dataList[i]["Asking_Price"],
+                  rectangleImageFileName:  dataList[i]["Rectangle_Image_FileName"],
+                  rectangleImageUrl:  dataList[i]["Rectangle_Image_URL"]));
 
         }
+        hasMoreCars = dataList.length == carsPageSize;
       }
       loadingMode = false;
+      loadingMoreCars = false;
       currentModelPointer = makeName;
 
       update();
@@ -665,6 +768,9 @@ class BrandController extends GetxController{
       return data is List ? data : [];
 
     } else {
+      loadingMode = false;
+      loadingMoreCars = false;
+      update();
       throw Exception("Failed to load cars: ${response.statusCode}");
     }
 
@@ -672,11 +778,24 @@ class BrandController extends GetxController{
 
   }
 
-  setCars(List<CarModel> cars,String showroomName){//in case got the list from room
+  setCars(List<CarModel> cars,String showroomName,{bool paginated = false}){//in case got the list from room
     currentMakeName = showroomName;
+    currentCarsIsShowroom = paginated;
+    currentCarsIsSearch = false;
 
-    carsList = cars;
+    if (paginated) {
+      _showroomCarsCache = List<CarModel>.from(cars);
+      _showroomCarsVisibleCount = math.min(carsPageSize, _showroomCarsCache.length);
+      carsList = _showroomCarsCache.take(_showroomCarsVisibleCount).toList();
+      hasMoreCars = _showroomCarsVisibleCount < _showroomCarsCache.length;
+    } else {
+      _showroomCarsCache = [];
+      _showroomCarsVisibleCount = 0;
+      carsList = cars;
+      hasMoreCars = false;
+    }
     loadingMode= false;
+    loadingMoreCars = false;
     update();
 
   }
@@ -696,6 +815,7 @@ class BrandController extends GetxController{
       for(int i =0; i<body["Data"].length;i++){
         similarCars.add(CarModel(postId: body["Data"][i]["Post_ID"],
             pinToTop: body["Data"][i]["Pin_To_Top"],
+            endServiceDate: body["Data"][i]["EndServiceDate"]?.toString(),
             postCode:body["Data"][i]["Post_Code"],
             carNamePl:body["Data"][i]["Car_Name_PL"],
             postKind: "",
@@ -744,6 +864,7 @@ class BrandController extends GetxController{
       String time = convertToTimeAgo(context,body["Data"][i]["Created_DateTime"]);
       ownersAds.add(CarModel(postId: body["Data"][i]["Post_ID"],
           pinToTop: body["Data"][i]["Pin_To_Top"],
+          endServiceDate: body["Data"][i]["EndServiceDate"]?.toString(),
           ownerMobile: "",
           ownerEmail:"",
           ownerName: "",
@@ -879,6 +1000,7 @@ class BrandController extends GetxController{
             CarModel(
               postId: data[i]["Post_ID"] ?? 0,
               pinToTop: data[i]["Pin_To_Top"] ?? 0,
+              endServiceDate: data[i]["EndServiceDate"]?.toString(),
               postKind: data[i]["Post_Kind"] ?? "",
               postCode: data[i]["Post_Code"] ?? "",
               carNamePl: data[i]["Car_Name_PL"] ?? "",

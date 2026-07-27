@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,10 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class RentalCarsController extends GetxController {
   bool loadingMode = true;
+  bool loadingMoreCars = false;
+  bool hasMoreCars = true;
+  static const int carsPageSize = 20;
+  String currentSort = 'lb_Sort_By_Post_Date_Desc';
 
   switchLoading() {
     loadingMode = true;
@@ -19,6 +24,9 @@ class RentalCarsController extends GetxController {
   }
 
   List<RentalCar> rentalCars = [];
+  bool currentRentalCarsIsShowroom = false;
+  List<RentalCar> _showroomRentalCarsCache = [];
+  int _showroomRentalCarsVisibleCount = 0;
   List<Specifications> spec = [];
 
   /*
@@ -105,16 +113,30 @@ class RentalCarsController extends GetxController {
   fetchRentalCars({
     String sort = 'lb_Sort_By_Post_Date_Desc',
     required BuildContext context,
+    bool loadMore = false,
   }) async {
-    rentalCars = [];
-    spec = [];
-    rentalFavoriteStatus = {};
+    if (loadMore) {
+      if (loadingMode || loadingMoreCars || !hasMoreCars) return;
+      loadingMoreCars = true;
+    } else {
+      rentalCars = [];
+      spec = [];
+      rentalFavoriteStatus = {};
+      loadingMode = true;
+      hasMoreCars = true;
+      currentRentalCarsIsShowroom = false;
+      _showroomRentalCarsCache = [];
+      _showroomRentalCarsVisibleCount = 0;
+    }
+    currentSort = sort;
+    update();
 
     // body مع الفلتر
     final filterDetails = {
       'Source_Kind': 'All', // Or 'All' if you want to include all sources
 
-      'Limit': '100', // Number of items per page
+      'Offset': loadMore ? rentalCars.length : 0,
+      'Limit': carsPageSize,
       'Make_ID': '0', // Toyota's ID from your example
       'Class_ID': '0', // 0 for all classes, or specify if needed
       'Model_ID': '0', // 0 for all models, or specify if needed
@@ -133,8 +155,9 @@ class RentalCarsController extends GetxController {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
+      final List data = body["Data"] ?? [];
 
-      for (int i = 0; i < body["Data"].length; i++) {
+      for (int i = 0; i < data.length; i++) {
         final int postId = body["Data"][i]["Post_ID"];
 
         getCarSpec(postId);
@@ -223,11 +246,43 @@ class RentalCarsController extends GetxController {
       }
 
       loadingMode = false;
+      loadingMoreCars = false;
+      hasMoreCars = data.length == carsPageSize;
 
       update();
     } else {
+      loadingMode = false;
+      loadingMoreCars = false;
+      update();
       throw Exception("Failed to load cars: ${response.statusCode}");
     }
+  }
+
+  loadMoreRentalCars({required BuildContext context}) {
+    if (currentRentalCarsIsShowroom) {
+      if (loadingMode || loadingMoreCars || !hasMoreCars) return [];
+      loadingMoreCars = true;
+      update();
+
+      _showroomRentalCarsVisibleCount = math.min(
+        _showroomRentalCarsVisibleCount + carsPageSize,
+        _showroomRentalCarsCache.length,
+      );
+      rentalCars = _showroomRentalCarsCache
+          .take(_showroomRentalCarsVisibleCount)
+          .toList();
+      hasMoreCars =
+          _showroomRentalCarsVisibleCount < _showroomRentalCarsCache.length;
+      loadingMoreCars = false;
+      update();
+      return rentalCars;
+    }
+
+    return fetchRentalCars(
+      context: context,
+      sort: currentSort,
+      loadMore: true,
+    );
   }
 
   getCarSpec(id) async {
@@ -254,20 +309,36 @@ class RentalCarsController extends GetxController {
     }
   }
 
-  setRentalCars(List<RentalCar> cars) {
+  setRentalCars(List<RentalCar> cars, {bool paginated = false}) {
     //in case got the list from other
     rentalCars = [];
     rentalFavoriteStatus = {};
 
     print("cars gggg ${cars.length},, $cars");
 
-    rentalCars = cars;
+    currentRentalCarsIsShowroom = paginated;
+    if (paginated) {
+      _showroomRentalCarsCache = List<RentalCar>.from(cars);
+      _showroomRentalCarsVisibleCount =
+          math.min(carsPageSize, _showroomRentalCarsCache.length);
+      rentalCars = _showroomRentalCarsCache
+          .take(_showroomRentalCarsVisibleCount)
+          .toList();
+      hasMoreCars =
+          _showroomRentalCarsVisibleCount < _showroomRentalCarsCache.length;
+    } else {
+      _showroomRentalCarsCache = [];
+      _showroomRentalCarsVisibleCount = 0;
+      rentalCars = cars;
+      hasMoreCars = false;
+    }
 
-    for (final car in cars) {
+    for (final car in rentalCars) {
       rentalFavoriteStatus[car.postId] = rentalFavoriteStatus[car.postId] ?? false;
     }
 
     loadingMode = false;
+    loadingMoreCars = false;
     update();
   }
 }

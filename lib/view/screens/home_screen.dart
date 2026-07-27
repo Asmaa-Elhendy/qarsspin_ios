@@ -706,12 +706,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Obx(() {
-                  final count = notificationsController.notifications.length;
+                  // Use `notificationCount` (unread — backend + local) so
+                  // the badge properly drops after the user opens the
+                  // notifications page and `markAllAsRead()` runs.
+                  //
+                  // The badge is always visible — even when the count is 0 —
+                  // per product decision. To hide when empty, guard on
+                  // `count == 0` and return `SizedBox.shrink()` here.
+                  final count = notificationsController.notificationCount;
                   debugPrint('🔔 Notification count: $count');
-
-                  // if (count == 0) {
-                  //   return const SizedBox.shrink();
-                  // }
 
                   return Positioned(
                     right: 25.w,
@@ -1084,6 +1087,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Get.find<BrandController>().switchLoading();
                   // Get.find<BrandController>().getCars(make_id: 0, makeName: "Qars Spin Showrooms",  sourceKind: "Qars spin",
                   // );
+                  Get.find<BrandController>().switchLoading();
                   Get.find<ShowRoomsController>().fetchCarsOfShowRooms(
                     context: context,
                     showroomName: lc.qar_spin_showroom,

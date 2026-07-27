@@ -14,6 +14,7 @@ import '../../../controller/payments/payment_controller.dart';
 import '../../../controller/payments/payment_helper.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../model/payment/payment_method_model.dart';
+import '../../../services/local_notification_service.dart';
 import '../../screens/ads/create_new_ad.dart';
 import '../../widgets/my_ads/dialog.dart';
 import '../../widgets/my_ads/yellow_buttons.dart';
@@ -371,6 +372,19 @@ Widget MyAdCard(
                                  if (success == true) {
                                     // 🟢 نجاح الدفع
 
+                                    // 🔔 Local notification on confirmed backend success (once per paymentId).
+                                    // This branch handles the "Request 360" button, so the body names 360 explicitly.
+                                    // `paymentId!` is safe: `success == true` already implies non-null non-empty.
+                                    LocalNotificationService.instance
+                                        .notifyPaymentSuccessOnce(
+                                      paymentId: paymentId!,
+                                      title: lc.paymentSucceeded,
+                                      body:
+                                          '${lc.request_360} — ${lc.paymentWasCompleted}',
+                                      carId: ad.postId.toString(),
+                                      carImageUrl: ad.rectangleImageUrl,
+                                    );
+
                                       SuccessDialog.show(
                                         request: true,
                                         context: context,
@@ -600,6 +614,19 @@ Widget MyAdCard(
 
                               if (success == true) {
 
+                                // 🔔 Local notification on confirmed backend success (once per paymentId).
+                                // This branch handles the "Request Feature" button, so the body names Feature explicitly.
+                                // `paymentId!` is safe: `success == true` already implies non-null non-empty.
+                                LocalNotificationService.instance
+                                    .notifyPaymentSuccessOnce(
+                                  paymentId: paymentId!,
+                                  title: lc.paymentSucceeded,
+                                  body:
+                                      '${lc.feature_ad} — ${lc.paymentWasCompleted}',
+                                  carId: ad.postId.toString(),
+                                  carImageUrl: ad.rectangleImageUrl,
+                                );
+
                                   SuccessDialog.show(
                                     request: true,
                                     context: context,
@@ -779,12 +806,18 @@ Widget MyAdCard(
                                 title: lc.confirmation,
                                 message:
                                 lc.receive_request_msg,
-                                onClose: () {//l
-                                  // Refresh the ads list when the dialog is closed
-                                  print('🔄 [REFRESH] Closing dialog, refreshing ads...');
+                                onClose: () {
+                                  // Silent refresh — updates `myAds` in place
+                                  // without toggling `isLoadingMyAds`, so the
+                                  // parent screen does NOT flash its loading
+                                  // overlay when the success dialog closes.
+                                  // Prevents the "reload + broken" look the
+                                  // Publish button had (Request 360 / Feature
+                                  // paths already skip refresh entirely).
+                                  print('🔄 [REFRESH] Closing dialog, silently refreshing ads...');
                                   final myAdController = Get.find<MyAdCleanController>();
-                                  myAdController.fetchMyAds(userName: userName, ourSecret: ourSecret);
-                                  print('🔄 [REFRESH] Ads refresh initiated');//k
+                                  myAdController.silentRefreshMyAds();
+                                  print('🔄 [REFRESH] Silent refresh initiated');
                                 },
                                 onTappp: () {},
                               );
