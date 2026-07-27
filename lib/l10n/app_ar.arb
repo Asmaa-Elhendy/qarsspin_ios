@@ -1,5 +1,8 @@
 {
   "language": "عربي",
+  "@language":{
+    "description": "اللغة الحالية"
+  },
 
   "app_name": "Qars Spin",
   "navigation_home": "الرئيسية",
@@ -249,6 +252,14 @@
   "no_img": "لم يتم العثور على صور",
   "missing_info": "البيانات غير مكتملة",
   "please_fill_info": "يرجى استكمال البيانات المطلوبة",
+  "select_color": "اختر اللون",
+  "fuel_type_lbl": "نوع الوقود",
+  "cylinders_lbl": "عدد الاسطوانات",
+  "transmission_lbl": "ناقل الحركة",
+  "failed_to_create_ad": "فشل إنشاء الإعلان، برجاء المحاولة مرة أخرى لاحقاً.",
+  "failed_to_update_ad": "فشل تحديث الإعلان، برجاء المحاولة مرة أخرى لاحقاً.",
+  "please_accept_terms_msg": "برجاء قبول الشروط والأحكام",
+  "please_confirm_accuracy_msg": "برجاء تأكيد صحة البيانات المُدخلة",
   "specs_management": "إدارة المواصفات",
   "hidden": "(مخفي)",
   "full_name": "الاسم الكامل(*)",
@@ -505,7 +516,7 @@
    "failedToLoadPaymentMethods" : "فشل تحميل طرق الدفع",
 
    "paymentflowfailed" : "فشل تدفق الدفع:",
-  "wait_admin_approval": "لقد طلبت ذلك سابقاً، يرجى الانتظار حتى تتم الموافقة من قبل الإدارة.",
+  "waitadminapproval": "لقد طلبت ذلك سابقاً، يرجى الانتظار حتى تتم الموافقة من قبل الإدارة.",
   "appOutDated": "التطبيق قديم",
   "updateAppMessage": "يرجى تحديث التطبيق لمواصلة استخدام جميع الميزات.",
   "updateNow": "تحديث الآن",

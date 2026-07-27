@@ -37,10 +37,17 @@ class FormFieldsSection extends StatefulWidget {
   final TextEditingController fuelTypeController;
   final TextEditingController cylindersController;
   final TextEditingController transmissionController;
-  final Color exteriorColor;
-  final Color interiorColor;
-  final Function(Color) onExteriorColorSelected;
-  final Function(Color) onInteriorColorSelected;
+  // Nullable — the create-ad flow now leaves these unset until the
+  // user picks (no more Maroon/SteelBlue defaults). Edit mode passes
+  // the ad's saved colors. Both flows may pass null on first render.
+  final Color? exteriorColor;
+  final Color? interiorColor;
+  // Nullable — receives `null` when the user clears the field via the
+  // 'X' button in ColorPickerField. Parent's setState should assign
+  // whichever value it received (including null) so required-field
+  // validation catches "cleared and not re-picked" cases.
+  final Function(Color?) onExteriorColorSelected;
+  final Function(Color?) onInteriorColorSelected;
   final bool termsAccepted;
   final bool infoConfirmed;
   final bool isRequest360;
@@ -371,10 +378,11 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
 
         SizedBox(height: height * .01),
 
-        // Exterior Color Picker
+        // Exterior Color Picker — marked required with '(*)' to match
+        // the format used by every other required field on the page.
         ColorPickerField(
-          key: Key('exterior_color_${widget.exteriorColor.hashCode}'),
-          label: lc.exterior,
+          key: Key('exterior_color_${widget.exteriorColor?.hashCode ?? 0}'),
+          label: '${lc.exterior}(*)',
           initialColor: widget.exteriorColor,
           onColorSelected: widget.onExteriorColorSelected,
           isExterior: true, // Show exterior colors
@@ -382,10 +390,10 @@ class _FormFieldsSectionState extends State<FormFieldsSection> {
 
         SizedBox(height: height * .01),
 
-        // Interior Color Picker
+        // Interior Color Picker — marked required with '(*)'.
         ColorPickerField(
-          key: Key('interior_color_${widget.interiorColor.hashCode}'),
-          label: lc.interior,
+          key: Key('interior_color_${widget.interiorColor?.hashCode ?? 0}'),
+          label: '${lc.interior}(*)',
           initialColor: widget.interiorColor,
           onColorSelected: widget.onInteriorColorSelected,
           isExterior: false, // Show interior colors

@@ -89,6 +89,50 @@ class CustomDropDownTyping extends StatefulWidget {
 }
 
 class _CustomDropDownTypingState extends State<CustomDropDownTyping> {
+  // Tracks whichever FocusNode `TypeAheadField.builder` most recently
+  // handed us, so we can attach a single blur listener regardless of
+  // how many times the builder rebuilds.
+  FocusNode? _wiredFocusNode;
+
+  @override
+  void dispose() {
+    _wiredFocusNode?.removeListener(_handleBlur);
+    super.dispose();
+  }
+
+  void _wireFocus(FocusNode focusNode) {
+    if (identical(_wiredFocusNode, focusNode)) return;
+    _wiredFocusNode?.removeListener(_handleBlur);
+    _wiredFocusNode = focusNode;
+    focusNode.addListener(_handleBlur);
+  }
+
+  /// If the user typed something in the field but never picked a valid
+  /// suggestion from the dropdown, the internal text still holds their
+  /// stray input while the parent's underlying selection (e.g.
+  /// `brandController.selectedMake.value`) is null or stale — which is
+  /// exactly what causes the backend to reject the submission with
+  /// "Missing Parameter".
+  ///
+  /// On blur: if the current text is non-empty AND doesn't exactly
+  /// match one of the loaded options, wipe it. This forwards through
+  /// `onChanged('')` so the parent's own reset logic (which clears the
+  /// matching `selectedMake` / dependent dropdowns) fires the same way
+  /// it does when a user manually deletes the field contents.
+  void _handleBlur() {
+    if (_wiredFocusNode?.hasFocus ?? true) return;
+    if (!widget.enableSearch) return;
+    if (widget.options.isEmpty) return;
+    final String text = widget.controller.text.trim();
+    if (text.isEmpty) return;
+    final bool isValid = widget.options.any((o) => o == text);
+    if (isValid) return;
+
+    widget.controller.clear();
+    widget.onChanged?.call('');
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -130,6 +174,10 @@ class _CustomDropDownTypingState extends State<CustomDropDownTyping> {
             hideOnEmpty: true,
             hideOnError: true,
             builder: (context, controller, focusNode) {
+              // Wire up (or re-wire) our blur listener onto whichever
+              // FocusNode TypeAheadField is currently using. Idempotent
+              // — no-op if we've already attached to this exact node.
+              _wireFocus(focusNode);
               return Row(
                 children: [
                   Expanded(

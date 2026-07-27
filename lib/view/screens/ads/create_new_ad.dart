@@ -468,12 +468,12 @@ class _SellCarScreenState extends State<SellCarScreen> {
       }
     });
 
-    // Set default colors for new ads
-    if (widget.postData == null) {
-      _exteriorColor = const Color(0xff800000); // Maroon color
-      _interiorColor = const Color(0xff4682B4); // Steel blue color
-      print('🎨 [SELL_CAR] Default colors set for new ad: Exterior=Maroon (#800000), Interior=Steel Blue (#4682B4)');
-    }
+    // No default colors on create — the user must pick both exterior
+    // and interior explicitly (both fields are marked required with '*'
+    // in the form and will show a "Select color" hint until picked).
+    // Edit mode still pre-fills from the ad's stored colors earlier in
+    // initState (see the `postData['Color_Exterior']` / `Color_Interior`
+    // parsing above).
   }
 
   @override
@@ -506,28 +506,73 @@ class _SellCarScreenState extends State<SellCarScreen> {
 
   /// Validate form and submit ad
   Future<void> _validateAndSubmitForm({bool shouldPublish = false}) async {
-    var lc = AppLocalizations.of(context)!;
-    // Validate form using validation methods
+    final AppLocalizations lc = AppLocalizations.of(context)!;
+
+    // Read the BrandController's actual selected objects so we can
+    // catch the "user typed but never picked a valid suggestion" case.
+    // Without this, the submission would go out with an empty makeId
+    // / classId / etc. and the backend would reject with the cryptic
+    // "Missing Parameter" that customers can't understand.
+    final AdCleanController brandController = Get.find<AdCleanController>();
+    final bool makeSelected = brandController.selectedMake.value != null;
+    final bool classSelected = brandController.selectedClass.value != null;
+    final bool modelSelected = brandController.selectedModel.value != null;
+    final bool categorySelected =
+        brandController.selectedCategory.value != null;
+
+    // Build the missing-fields list HERE (not in ValidationMethods)
+    // so we can pull labels from `AppLocalizations` directly and get
+    // the correct language automatically. Each entry becomes a row
+    // in the missing-fields dialog.
+    //
+    // Make / Class / Model / Type: "missing" means EITHER the text
+    // is empty OR the user typed a value that never resolved to a
+    // valid dropdown selection (BrandController.selected* is null).
+    // Catching the second case prevents the raw backend "Missing
+    // Parameter" error at submit time.
+    final bool isCreate = widget.postData == null;
+    final List<String> missing = <String>[];
+    if (_make_controller.text.isEmpty || !makeSelected) {
+      missing.add(lc.choose_make);
+    }
+    if (_class_controller.text.isEmpty || !classSelected) {
+      missing.add(lc.choose_class);
+    }
+    if (_model_controller.text.isEmpty || !modelSelected) {
+      missing.add(lc.choose_model);
+    }
+    if (_type_controller.text.isEmpty || !categorySelected) {
+      missing.add(lc.choose_type);
+    }
+    if (_year_controller.text.isEmpty) missing.add(lc.manufacture_year);
+    if (_askingPriceController.text.isEmpty) missing.add(lc.price);
+    if (_mileageController.text.isEmpty) missing.add(lc.mileage);
+    if (_exteriorColor == null) missing.add(lc.exterior);
+    if (_interiorColor == null) missing.add(lc.interior);
+    // Fuel / Cylinders / Transmission are only required on create —
+    // matches the pre-existing edit-mode leniency where an existing
+    // ad might not re-supply these fields.
+    if (isCreate) {
+      if (fuelTypeController.text.isEmpty) missing.add(lc.fuel_type_lbl);
+      if (cylindersController.text.isEmpty) missing.add(lc.cylinders_lbl);
+      if (transmissionController.text.isEmpty) missing.add(lc.transmission_lbl);
+    }
+    if (missing.isNotEmpty) {
+      _showMissingFieldsList(missing);
+      return;
+    }
+
+    // Remaining checks (cover image, terms, accuracy) still live in
+    // ValidationMethods — we pass the localized copies of the
+    // consent-prompt strings so the class stays locale-agnostic.
     bool isValid = ValidationMethods.validateForm(
-      postData:widget.postData,
-      make: _make_controller.text,
-      carClass: _class_controller.text,
-      model: _model_controller.text,
-      type: _type_controller.text,
-      year: _year_controller.text,
-      askingPrice: _askingPriceController.text,
-      mileage: _mileageController.text,
-      description: _descriptionController.text,
       coverImage: _coverImage ?? '',
       termsAccepted: _termsAccepted,
       infoConfirmed: _infoConfirmed,
-      isRequest360:_isRequest360,
-      isFeaturedPost:_isFeauredPost,
       context: context,
-      fuelType:fuelTypeController.text,
-      cylinders:cylindersController.text,
-      transmission:transmissionController.text,
-      showMissingFieldsDialog: _showMissingFieldsAlert,
+      termsMessage: lc.please_accept_terms_msg,
+      accuracyMessage: lc.please_confirm_accuracy_msg,
+      showMissingFieldsDialog: _showMissingFieldsList,
       showMissingCoverImageDialog: _showMissingCoverImageAlert,
     );
 
@@ -706,6 +751,13 @@ class _SellCarScreenState extends State<SellCarScreen> {
     MissingFieldsDialog.show(context, [message]);
   }
 
+  /// Show alert for a batch of missing fields. Each entry becomes one
+  /// row in the dialog, so the user sees exactly what's still needed
+  /// (e.g. "Make", "Year", "Exterior") instead of a generic message.
+  void _showMissingFieldsList(List<String> fields) {
+    MissingFieldsDialog.show(context, fields);
+  }
+
   /// Show alert for missing cover image
   void _showMissingCoverImageAlert() {
     MissingCoverImageDialog.show(context);
@@ -785,8 +837,10 @@ class _SellCarScreenState extends State<SellCarScreen> {
       _images = []; // Create a new empty list to ensure UI updates
       _coverImage = null;
       _videoPath = null;
-      _exteriorColor = const Color(0xff800000); // Reset to default maroon
-      _interiorColor = const Color(0xff4682B4); // Reset to default steel blue
+      // No default colors on reset — same as initial create state.
+      // User will need to re-pick both.
+      _exteriorColor = null;
+      _interiorColor = null;
       _termsAccepted = false;
       _infoConfirmed = false;
       _isRequest360 = false;
@@ -882,6 +936,10 @@ class _SellCarScreenState extends State<SellCarScreen> {
         showErrorDialog: _showErrorAlert,
         hideLoadingDialog: _hideLoadingDialog,
         updateLoadingStatus: _updateLoadingStatus,
+        // Jump back to My Ads after a successful modify — previously
+        // the update-flow never called this and the user stayed on
+        // the modify form even after the success dialog.
+        navigateToMyAds: _navigateToMyAds,
       );
     } else {
       // Create mode
@@ -1040,8 +1098,14 @@ class _SellCarScreenState extends State<SellCarScreen> {
                             plateNumberController: _plateNumberController,
                             chassisNumberController: _chassisNumberController,
                             descriptionController: _descriptionController,
-                            exteriorColor: _exteriorColor ?? Colors.white,
-                            interiorColor: _interiorColor ?? Colors.white,
+                            // Pass null through when the user hasn't
+                            // picked yet (create mode) — ColorPickerField
+                            // now handles null by starting empty and
+                            // showing the "Select color" hint. The
+                            // submission path below still falls back to
+                            // white if the user submits without picking.
+                            exteriorColor: _exteriorColor,
+                            interiorColor: _interiorColor,
                             fuelTypeController: fuelTypeController,
                             transmissionController: transmissionController,
                             cylindersController: cylindersController,

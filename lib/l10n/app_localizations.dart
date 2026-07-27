@@ -1160,37 +1160,37 @@ abstract class AppLocalizations {
   /// No description provided for @make_360_first.
   ///
   /// In en, this message translates to:
-  /// **'Make Your Advertisement special by 360 session'**
+  /// **'Make your advertisement stand out with a 360° shooting session for only'**
   String get make_360_first;
 
   /// No description provided for @make_360_second.
   ///
   /// In en, this message translates to:
-  /// **'QAR only for full shooting session'**
+  /// **'QAR.'**
   String get make_360_second;
 
   /// No description provided for @pin_ad_first.
   ///
   /// In en, this message translates to:
-  /// **'Pin your advertisement at the top for '**
+  /// **'Pin your advertisement to the top for only '**
   String get pin_ad_first;
 
   /// No description provided for @pin_ad_second.
   ///
   /// In en, this message translates to:
-  /// **' QAR only'**
+  /// **' QAR.'**
   String get pin_ad_second;
 
   /// No description provided for @agreement.
   ///
   /// In en, this message translates to:
-  /// **'I agree to the Terms and Conditions'**
+  /// **'I agree to the Terms and Conditions.'**
   String get agreement;
 
   /// No description provided for @confirm_info.
   ///
   /// In en, this message translates to:
-  /// **'I confirm the accuracy of the information provided'**
+  /// **'I confirm that all the information provided is accurate.'**
   String get confirm_info;
 
   /// No description provided for @save_draft.
@@ -1418,7 +1418,7 @@ abstract class AppLocalizations {
   /// No description provided for @waiting_ad_approval.
   ///
   /// In en, this message translates to:
-  /// **'This ad is pending approval, Please wait \\n while we review your ad'**
+  /// **'This ad is pending approval.\nPlease wait while we review your ad.'**
   String get waiting_ad_approval;
 
   /// No description provided for @creation_date.
@@ -1564,6 +1564,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill in the following required fields'**
   String get please_fill_info;
+
+  /// No description provided for @select_color.
+  ///
+  /// In en, this message translates to:
+  /// **'Select color'**
+  String get select_color;
+
+  /// No description provided for @fuel_type_lbl.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Type'**
+  String get fuel_type_lbl;
+
+  /// No description provided for @cylinders_lbl.
+  ///
+  /// In en, this message translates to:
+  /// **'Cylinders'**
+  String get cylinders_lbl;
+
+  /// No description provided for @transmission_lbl.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmission'**
+  String get transmission_lbl;
+
+  /// No description provided for @failed_to_create_ad.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create ad, please try again later.'**
+  String get failed_to_create_ad;
+
+  /// No description provided for @failed_to_update_ad.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update ad, please try again later.'**
+  String get failed_to_update_ad;
+
+  /// No description provided for @please_accept_terms_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept the Terms and Conditions'**
+  String get please_accept_terms_msg;
+
+  /// No description provided for @please_confirm_accuracy_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm the accuracy of the information provided'**
+  String get please_confirm_accuracy_msg;
 
   /// No description provided for @specs_management.
   ///

@@ -669,7 +669,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get info => 'Information';
 
   @override
-  String get waiting_ad_approval => 'This ad is pending approval, Please wait \\n while we review your ad';
+  String get waiting_ad_approval => 'This ad is pending approval.\nPlease wait while we review your ad.';
 
   @override
   String get creation_date => 'Creation Date:';
@@ -742,6 +742,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get please_fill_info => 'Please fill in the following required fields';
+
+  @override
+  String get select_color => 'Select color';
+
+  @override
+  String get fuel_type_lbl => 'Fuel Type';
+
+  @override
+  String get cylinders_lbl => 'Cylinders';
+
+  @override
+  String get transmission_lbl => 'Transmission';
+
+  @override
+  String get failed_to_create_ad => 'Failed to create ad, please try again later.';
+
+  @override
+  String get failed_to_update_ad => 'Failed to update ad, please try again later.';
+
+  @override
+  String get please_accept_terms_msg => 'Please accept the Terms and Conditions';
+
+  @override
+  String get please_confirm_accuracy_msg => 'Please confirm the accuracy of the information provided';
 
   @override
   String get specs_management => 'Specs Management';

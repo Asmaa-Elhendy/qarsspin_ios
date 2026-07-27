@@ -115,7 +115,11 @@ class AdSubmissionService {
       );
     } catch (e) {
       hideLoadingDialog();
-      showErrorDialog('An error occurred while submitting your ad. Please try again.');
+      log('❌ submitAd wrapper crashed: $e');
+      final AppLocalizations lc = AppLocalizations.of(context)!;
+      showErrorDialog(
+        postId == null ? lc.failed_to_create_ad : lc.failed_to_update_ad,
+      );
     }
   }
 
@@ -149,6 +153,11 @@ class AdSubmissionService {
     required Function(String) showErrorDialog,
     required Function() hideLoadingDialog,
     Function(String)? updateLoadingStatus,
+    // Optional — after a successful update, jumps the user back to
+    // My Ads (short delay so the success dialog is visible first).
+    // If omitted (older callers), navigation is skipped and the user
+    // stays on the modify page, which is the previous behavior.
+    Function()? navigateToMyAds,
   }) async {
     try {
       showLoadingDialog();
@@ -254,17 +263,34 @@ class AdSubmissionService {
               String publishErrorMessage = "$successMessage\n\n⚠️ Error sending publish request.";
               showSuccessDialog(publishErrorMessage, postId, isPublished: true);
             }
+
+            // Jump back to My Ads after the (re-)publish request completes
+            // and the success dialog has had a moment to render, so the
+            // user isn't left staring at the modify form.
+            Future.delayed(const Duration(milliseconds: 500), () {
+              navigateToMyAds?.call();
+            });
           });
         } else {
           showSuccessDialog(successMessage, postId, isPublished: false);
+          // Same rationale — leave the user on My Ads after a plain
+          // (non-publish) update instead of stranding them on the form.
+          Future.delayed(const Duration(milliseconds: 500), () {
+            navigateToMyAds?.call();
+          });
         }
       } else {
-        String errorMessage = response['Desc'] ?? 'Failed to update ad';
-        showErrorDialog(errorMessage);
+        // Log the backend's raw `Desc` for debugging, but show the
+        // user a clean action-oriented message instead of technical
+        // jargon like "Missing Parameter".
+        final String rawError = response['Desc']?.toString() ?? '';
+        log('❌ Backend rejected update: $rawError');
+        showErrorDialog(AppLocalizations.of(context)!.failed_to_update_ad);
       }
     } catch (e) {
       hideLoadingDialog();
-      showErrorDialog('An error occurred while updating your ad. Please try again.');
+      log('❌ Update ad crashed: $e');
+      showErrorDialog(AppLocalizations.of(context)!.failed_to_update_ad);
     }
   }
 
@@ -401,10 +427,18 @@ class AdSubmissionService {
       log('API Response: $response');
 
       if (!(response['Code'] == 'OK' || response['Code']?.toString().toLowerCase() == 'ok')) {
-        final errorMessage =
-            response['Desc'] ?? 'Failed to ${postId == null ? 'create' : 'update'} ad';
+        // Backend rejected the request. Log the raw `Desc` for us to
+        // trace real issues (e.g. "Missing Parameter" when the
+        // frontend validation missed a case, or genuine 500s), but
+        // show the user a friendly action-oriented message instead of
+        // leaking backend jargon they can't act on.
+        final String rawError = response['Desc']?.toString() ?? '';
+        log('❌ Backend rejected ${postId == null ? 'create' : 'update'}: $rawError');
         hideLoaderOnce();
-        showErrorDialog(errorMessage);
+        final AppLocalizations lc = AppLocalizations.of(context)!;
+        showErrorDialog(
+          postId == null ? lc.failed_to_create_ad : lc.failed_to_update_ad,
+        );
         return;
       }
 
@@ -696,8 +730,11 @@ class AdSubmissionService {
       }
     } catch (e) {
       hideLoadingDialog();
-      log('Error submitting ad: $e');
-      showErrorDialog('An error occurred while submitting your ad. Please try again.');
+      log('❌ ${postId == null ? 'Submit' : 'Update'} ad crashed: $e');
+      final AppLocalizations lc = AppLocalizations.of(context)!;
+      showErrorDialog(
+        postId == null ? lc.failed_to_create_ad : lc.failed_to_update_ad,
+      );
     }
   }
 

@@ -3,74 +3,42 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class ValidationMethods {
+  /// Validates the non-field-list parts of the form — cover image,
+  /// terms consent, accuracy confirmation. The field-list check
+  /// (make / class / model / type / year / price / mileage / colors /
+  /// fuel / cylinders / transmission) lives in the parent screen
+  /// (`_validateAndSubmitForm`) so it can pull localized labels
+  /// directly from `AppLocalizations` — this class stays pure and
+  /// doesn't need locale awareness.
+  ///
+  /// The `termsMessage` and `accuracyMessage` params are the exact
+  /// user-facing strings to show; the parent passes localized copies
+  /// (Arabic or English) based on the app's current locale.
   static bool validateForm({
-    required String make,
-    required String carClass,
-    required String model,
-    required String type,
-    required String year,
-    required String askingPrice,
-    required String mileage,
-    required String description,
     required String coverImage,
     required bool termsAccepted,
     required bool infoConfirmed,
     required BuildContext context,
-    required bool  isRequest360,
-    required bool  isFeaturedPost,
-    required String fuelType,
-    required String cylinders,
-    required String transmission,
-    required Function(String) showMissingFieldsDialog,
-    required Function() showMissingCoverImageDialog, required postData,
+    required String termsMessage,
+    required String accuracyMessage,
+    required Function(List<String>) showMissingFieldsDialog,
+    required Function() showMissingCoverImageDialog,
   }) {
-    // Check if all mandatory fields are filled
-    if(postData==null){  if (make.isEmpty ||
-        carClass.isEmpty ||
-        model.isEmpty ||
-        type.isEmpty ||
-        year.isEmpty ||
-        askingPrice.isEmpty ||
-        mileage.isEmpty||
-        fuelType.isEmpty||
-        cylinders.isEmpty||
-        transmission.isEmpty
-    //  ||  description.isEmpty
-    ) {
-      showMissingFieldsDialog("Please fill all (*)  mandatory fields");
-      return false;
-    }}else{
-      if (make.isEmpty ||
-          carClass.isEmpty ||
-          model.isEmpty ||
-          type.isEmpty ||
-          year.isEmpty ||
-          askingPrice.isEmpty ||
-          mileage.isEmpty
-
-      //  ||  description.isEmpty
-      ) {
-        showMissingFieldsDialog("Please fill all (*)  mandatory fields");
-        return false;
-      }
-    }
-
-
     // Check if cover image is selected
     if (coverImage.isEmpty) {
       showMissingCoverImageDialog();
       return false;
-    }//k
+    }
 
     // Check if terms are accepted
     if (!termsAccepted) {
-      showMissingFieldsDialog("Please accept the Terms and Conditions");
+      showMissingFieldsDialog([termsMessage]);
       return false;
     }
 
     // Check if info is confirmed
     if (!infoConfirmed) {
-      showMissingFieldsDialog("Please confirm the accuracy of the information provided");
+      showMissingFieldsDialog([accuracyMessage]);
       return false;
     }
 

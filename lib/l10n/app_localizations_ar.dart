@@ -744,6 +744,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get please_fill_info => 'يرجى استكمال البيانات المطلوبة';
 
   @override
+  String get select_color => 'اختر اللون';
+
+  @override
+  String get fuel_type_lbl => 'نوع الوقود';
+
+  @override
+  String get cylinders_lbl => 'عدد الاسطوانات';
+
+  @override
+  String get transmission_lbl => 'ناقل الحركة';
+
+  @override
+  String get failed_to_create_ad => 'فشل إنشاء الإعلان، برجاء المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get failed_to_update_ad => 'فشل تحديث الإعلان، برجاء المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get please_accept_terms_msg => 'برجاء قبول الشروط والأحكام';
+
+  @override
+  String get please_confirm_accuracy_msg => 'برجاء تأكيد صحة البيانات المُدخلة';
+
+  @override
   String get specs_management => 'إدارة المواصفات';
 
   @override
@@ -1092,7 +1116,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentflowfailed => 'فشل تدفق الدفع:';
 
   @override
-  String get waitadminapproval => 'You requested before, please wait Admin Approval';
+  String get waitadminapproval => 'لقد طلبت ذلك سابقاً، يرجى الانتظار حتى تتم الموافقة من قبل الإدارة.';
 
   @override
   String get appOutDated => 'التطبيق قديم';
