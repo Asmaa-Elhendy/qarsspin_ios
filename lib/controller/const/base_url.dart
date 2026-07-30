@@ -1,9 +1,9 @@
 
 
 import '../../model/specs.dart';
-//  "https://qarsspinapp.smartvillageqatar.com";  Production
+//  "https://qarsspinapp.smartvillageqatar.com";  Production mobile
 //  "https://qarsspintest.smartvillageqatar.com/QarsSpinAPI"; //test
-String base_url = "https://qarsspintest.smartvillageqatar.com/QarsSpinAPI";
+String base_url = "https://qarsspinapp.smartvillageqatar.com";
 
 /// Partner_ID of the official "Qars Spin" partner account. Any car or
 /// showroom carrying this id is treated as a Qars Spin entity for chip
@@ -59,7 +59,7 @@ String resolveCarSourceKind(dynamic data) {
   return (data['Source_Kind'] ?? '').toString();
 }
 
- const String baseUrlWeb ='https://qarspartnersportalapitest.smartvillageqatar.com';
+ const String baseUrlWeb ='https://qarsspinportal.smartvillageqatar.com';
  //   'https://qarspartnersportalapitest.smartvillageqatar.com';// test
 //      https://qarsspinportal.smartvillageqatar.com production web
 

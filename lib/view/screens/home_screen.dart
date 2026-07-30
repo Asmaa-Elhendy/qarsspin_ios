@@ -640,8 +640,13 @@ class _HomeScreenState extends State<HomeScreen> {
       }).catchError((error) {
         debugPrint('🔔 HomeScreen - Error loading notifications: $error');
       });
-      // ✅ Check App Update
-      //    _checkAppUpdate();
+      // ✅ Check App Update — compares the current app version against
+      // the App Store / Play Store version. Routes the user to
+      // `UpdateRequiredScreen` only when the store is strictly newer
+      // (see `AppUpdateService.isUpdateAvailable` for the semver
+      // comparison). Runs in the background — if the network call fails
+      // or the store returns no version, the app just continues.
+      _checkAppUpdate();
     });
   }
 
