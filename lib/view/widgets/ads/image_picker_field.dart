@@ -6,6 +6,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import 'dart:async';
 
 import '../../../l10n/app_localizations.dart';
+import 'car_photo_cropper.dart';
 
 class ImagePickerField extends StatefulWidget {
   final List<String> imagePaths;
@@ -152,15 +153,30 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
           // Limit the number of images to remaining slots
           int imagesToAdd = selectedImages.length > remainingSlots ? remainingSlots : selectedImages.length;
 
+          // Walk the user through the cropper for each picked image
+          // sequentially, enforcing the 4:3 landscape guideline. If
+          // the user cancels a specific crop, that image is skipped
+          // but the others still process.
+          final List<String> croppedPaths = <String>[];
+          for (int i = 0; i < imagesToAdd; i++) {
+            if (!context.mounted) break;
+            final String? croppedPath = await CarPhotoCropper.cropToCarRatio(
+              context: context,
+              sourcePath: selectedImages[i].path,
+            );
+            if (croppedPath != null) croppedPaths.add(croppedPath);
+          }
+
+          if (croppedPaths.isEmpty) return;
+
           setState(() {
-            for (int i = 0; i < imagesToAdd; i++) {
-              String imagePath = selectedImages[i].path;
-              _images.add(imagePath);
-              widget.onImageSelected(imagePath);
+            for (final String path in croppedPaths) {
+              _images.add(path);
+              widget.onImageSelected(path);
 
               // If this is the first media item, set it as cover
               if (widget.coverImage == null && _images.length == 1 && _videoPath == null) {
-                widget.onCoverChanged?.call(imagePath);
+                widget.onCoverChanged?.call(path);
               }
             }
           });

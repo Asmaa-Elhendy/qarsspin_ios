@@ -312,6 +312,7 @@
 // //
 // // }
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -387,22 +388,46 @@ class _CarImageState extends State<CarImage> {
                           borderRadius: BorderRadius.circular(12),
                           child: isVideo(imageUrl)
                               ? VideoItem(url: imageUrl)
-                              : Image.network(
-                            imageUrl,
-                            width: double.infinity,
-                            height: height,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
+                              // Light color-wash blur backdrop + sharp
+                              // contain foreground.
+                              : SizedBox(
                                   width: double.infinity,
                                   height: height,
-                                  color: Colors.grey.shade200,
-                                  alignment: Alignment.center,
-                                  child: const Icon(
-                                      Icons.image_not_supported,
-                                      color: Colors.grey),
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      ImageFiltered(
+                                        imageFilter: ui.ImageFilter.blur(
+                                          sigmaX: 3,
+                                          sigmaY: 3,
+                                        ),
+                                        child: Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) =>
+                                              Container(
+                                            color: Colors.grey.shade200,
+                                          ),
+                                        ),
+                                      ),
+                                      Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, __, ___) =>
+                                            Container(
+                                          width: double.infinity,
+                                          height: height,
+                                          color: Colors.grey.shade200,
+                                          alignment: Alignment.center,
+                                          child: const Icon(
+                                            Icons.image_not_supported,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                          ),
                         );
                       },
                     ),

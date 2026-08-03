@@ -747,6 +747,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select_color => 'Select color';
 
   @override
+  String get crop_to_ratio_title => 'Crop to 4:3';
+
+  @override
   String get fuel_type_lbl => 'Fuel Type';
 
   @override

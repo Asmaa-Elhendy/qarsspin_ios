@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
@@ -113,14 +115,42 @@ class ShowroomCard extends StatelessWidget {
                   ),
 
 
-                  child: Image.network(
-
-                    showroom.logoUrl,
-                    fit: BoxFit.fill,
+                  // Two-layer treatment (same pattern as car cards): a
+                  // lightly-blurred `cover` copy tints the backdrop
+                  // with the logo's own colors so there's no plain
+                  // white letterbox, and a sharp `contain` copy on top
+                  // shows the WHOLE logo without stretching. Fixes the
+                  // previous `BoxFit.fill` which was warping wide
+                  // showroom logos horizontally.
+                  child: SizedBox(
                     height: 130.h,
-
-                    width:double.infinity,
-
+                    width: double.infinity,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        ImageFiltered(
+                          imageFilter: ui.ImageFilter.blur(
+                            sigmaX: 8,
+                            sigmaY: 8,
+                          ),
+                          child: Image.network(
+                            showroom.logoUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              color: Colors.grey.shade200,
+                            ),
+                          ),
+                        ),
+                        Image.network(
+                          showroom.logoUrl,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, __, ___) => const Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(

@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -82,22 +84,58 @@ Widget carCard({
                   height: 117.h,
                   child: Stack(
                     children: [
+                      // Two-layer preview: a very lightly blurred `cover`
+                      // copy tints the backdrop with the car's own colors
+                      // so there's no white letterbox, and a sharp
+                      // `contain` copy on top shows the WHOLE car.
+                      // Sigma is intentionally small (3-4) so the
+                      // backdrop reads as a soft color wash, not as a
+                      // recognizable frosted-glass effect.
                       ClipRRect(
-
                         borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
-                        child: CachedNetworkImage(
-                          imageUrl: car.rectangleImageUrl.isNotEmpty
-                              ? car.rectangleImageUrl
-                              : "https://via.placeholder.com/150",
+                        child: SizedBox(
                           height: tooSmall
                               ? 90.h
                               : large
                               ? 150.h
                               : 124.9.h,
                           width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                          child: car.rectangleImageUrl.isEmpty
+                              ? Container(
+                                  color: Colors.grey.shade200,
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    ImageFiltered(
+                                      imageFilter: ui.ImageFilter.blur(
+                                        sigmaX: 3,
+                                        sigmaY: 3,
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: car.rectangleImageUrl,
+                                        fit: BoxFit.cover,
+                                        errorWidget: (_, __, ___) =>
+                                            Container(color: Colors.grey.shade200),
+                                      ),
+                                    ),
+                                    CachedNetworkImage(
+                                      imageUrl: car.rectangleImageUrl,
+                                      fit: BoxFit.contain,
+                                      errorWidget: (_, __, ___) => const Icon(
+                                        Icons.broken_image,
+                                        size: 50,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                         ),
                       ),
                       car.tag!="No Tag"?

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../car_photo_cropper.dart';
 import '../image_picker_field.dart';
 import '../video_player_widget.dart';
 
@@ -89,13 +90,26 @@ class _ImageUploadSectionState extends State<ImageUploadSection> {
                     print('DEBUG: Cover photo tapped in modify mode');
                     final ImagePicker _picker = ImagePicker();
                     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-                    if (image != null) {
-                      print('DEBUG: Image selected: ${image.path}');
-                      widget.onCoverChanged(image.path);
-                      widget.onCoverPhotoChanged(true);
-                    } else {
+                    if (image == null) {
                       print('DEBUG: No image selected');
+                      return;
                     }
+                    // Enforce the 4:3 landscape guideline — the user
+                    // is walked through a cropper with a locked aspect
+                    // ratio before the photo becomes the cover.
+                    if (!context.mounted) return;
+                    final String? croppedPath =
+                        await CarPhotoCropper.cropToCarRatio(
+                      context: context,
+                      sourcePath: image.path,
+                    );
+                    if (croppedPath == null) {
+                      print('DEBUG: Cropping cancelled');
+                      return;
+                    }
+                    print('DEBUG: Cover photo cropped: $croppedPath');
+                    widget.onCoverChanged(croppedPath);
+                    widget.onCoverPhotoChanged(true);
                   } : null,
                   child: _isVideo(widget.coverImage!)
                       ? Container(

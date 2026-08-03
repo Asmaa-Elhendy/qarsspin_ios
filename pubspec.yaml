@@ -2,7 +2,7 @@ name: qarsspin
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 2.5.0+231
+version: 2.5.1+232
 
 environment:
   sdk: ^3.8.1
@@ -30,6 +30,7 @@ dependencies:
   flutter_typeahead: ^5.2.0
   image_editor_plus: ^1.0.6
   pro_image_editor: ^11.3.0
+  image_cropper: ^8.0.2
   myfatoorah_flutter: ^3.2.3
   timeago: ^3.6.0
   url_launcher: ^6.3.0

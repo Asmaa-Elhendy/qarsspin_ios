@@ -250,6 +250,7 @@
   "missing_info": "Missing Information",
   "please_fill_info": "Please fill in the following required fields",
   "select_color": "Select color",
+  "crop_to_ratio_title": "Crop to 4:3",
   "fuel_type_lbl": "Fuel Type",
   "cylinders_lbl": "Cylinders",
   "transmission_lbl": "Transmission",

@@ -1571,6 +1571,12 @@ abstract class AppLocalizations {
   /// **'Select color'**
   String get select_color;
 
+  /// No description provided for @crop_to_ratio_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Crop to 4:3'**
+  String get crop_to_ratio_title;
+
   /// No description provided for @fuel_type_lbl.
   ///
   /// In en, this message translates to:

@@ -747,6 +747,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get select_color => 'اختر اللون';
 
   @override
+  String get crop_to_ratio_title => 'قص الصورة 4:3';
+
+  @override
   String get fuel_type_lbl => 'نوع الوقود';
 
   @override

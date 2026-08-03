@@ -253,6 +253,7 @@
   "missing_info": "البيانات غير مكتملة",
   "please_fill_info": "يرجى استكمال البيانات المطلوبة",
   "select_color": "اختر اللون",
+  "crop_to_ratio_title": "قص الصورة 4:3",
   "fuel_type_lbl": "نوع الوقود",
   "cylinders_lbl": "عدد الاسطوانات",
   "transmission_lbl": "ناقل الحركة",

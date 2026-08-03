@@ -52,6 +52,18 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/launcher_icon" />
 
+        <!--
+            Required registration for the `image_cropper` plugin (uses
+            UCrop under the hood on Android). Without this activity
+            declared, opening the cropper fails at runtime with an
+            ActivityNotFoundException. Portrait-locked to match the
+            rest of the app.
+        -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
     </application>
 
 </manifest>

@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,22 +48,40 @@ class FavouriteCarCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Car Image
+            // Car Image — light color-wash blur backdrop + sharp
+            // contain foreground so the whole car is visible and the
+            // backdrop stays close to the car's actual colors.
             ClipRRect(
               borderRadius: BorderRadius.circular(6.r),
-              child: Image.network(
-                imageUrl,
+              child: SizedBox(
                 width: 130.w,
                 height: 100.h,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.network(
-                    imageUrl,
-                    width: 130.w,
-                    height: 100.h,
-                    fit: BoxFit.cover,
-                  );
-                },
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ImageFiltered(
+                      imageFilter: ui.ImageFilter.blur(
+                        sigmaX: 3,
+                        sigmaY: 3,
+                      ),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: Colors.grey.shade200,
+                        ),
+                      ),
+                    ),
+                    Image.network(
+                      imageUrl,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(width: 12.w),

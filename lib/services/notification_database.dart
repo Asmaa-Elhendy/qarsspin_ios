@@ -6,7 +6,7 @@ import 'package:qarsspin/controller/const/base_url.dart';
 class NotificationDatabase {
   static final NotificationDatabase _instance = NotificationDatabase._internal();
 
-  factory NotificationDatabase() => _instance;//k
+  factory NotificationDatabase() => _instance;
   NotificationDatabase._internal();
 //j
   Future<Map<String, dynamic>> fetchNotificationsFromAPI({
