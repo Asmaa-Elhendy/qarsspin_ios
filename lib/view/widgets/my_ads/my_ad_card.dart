@@ -16,6 +16,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../model/payment/payment_method_model.dart';
 import '../../../services/local_notification_service.dart';
 import '../../screens/ads/create_new_ad.dart';
+import '../../screens/ads/sell_your_car_v2.dart';
 import '../../widgets/my_ads/dialog.dart';
 import '../../widgets/my_ads/yellow_buttons.dart';
 import 'package:qarsspin/view/widgets/payments/payment_methods_dialog.dart';
@@ -725,8 +726,19 @@ Widget MyAdCard(
                         context: context,
                         title: lc.modify,
                         onTap: () {
+                          // Get.to(
+                          //   SellCarScreen(
+                          //     postData: {
+                          //       'postId': ad.postId.toString(),
+                          //       'postKind': ad.postKind ?? 'CarForSale',
+                          //       'isModifyMode': true,
+                          //       'userName': ad.userName,
+                          //       'PostStatus':ad.postStatus
+                          //     },
+                          //   ),
+                          // );
                           Get.to(
-                            SellCarScreen(
+                            SellYourCarV2(
                               postData: {
                                 'postId': ad.postId.toString(),
                                 'postKind': ad.postKind ?? 'CarForSale',

@@ -172,6 +172,83 @@ class BannerService {
     return [];
   }
 
+  /// Collect up to [maxCount] banners for a page/type combo, walking
+  /// the same 4-step priority order used by [getBannerByPriority]:
+  ///   (1) type + page  (2) type + global
+  ///   (3) filler + page  (4) filler + global
+  ///
+  /// Each step is shuffled and appended into the result until we hit
+  /// [maxCount]. Duplicate banner IDs are skipped so the same banner
+  /// can't appear twice if it matches more than one bucket.
+  ///
+  /// Priority is enforced strictly — no catch-all. If the four
+  /// buckets don't produce enough banners for a full slider, the
+  /// widget shows whatever came back (possibly just one slide). A
+  /// banner targeted at "Home Page" never leaks into a listing
+  /// page's slider.
+  ///
+  /// Used by the big-banner slider on the home / listing pages so the
+  /// user sees a rotating 3-slot carousel. Small banners still use
+  /// the single-banner path.
+  List<BannerModel> getBannersByPriority(
+    List<BannerModel> banners,
+    String page,
+    String type, {
+    int maxCount = 3,
+  }) {
+    if (banners.isEmpty) return const <BannerModel>[];
+
+    final lowerType = type.toLowerCase();
+    final lowerPage = page.toLowerCase();
+
+    final priorityOrder = [
+      {'type': lowerType, 'target': lowerPage},
+      {'type': lowerType, 'target': 'global'},
+      {'type': '${lowerType}filler', 'target': lowerPage},
+      {'type': '${lowerType}filler', 'target': 'global'},
+    ];
+
+    final List<BannerModel> collected = <BannerModel>[];
+    final Set<int> seenIds = <int>{};
+
+    log('🎯 slider lookup — page="$page" type="$type" '
+        'available=${banners.length}');
+
+    for (final priority in priorityOrder) {
+      final matches = banners.where((b) {
+        final bannerType = b.bannerType.toLowerCase();
+        final bannerTarget = b.targetType.toLowerCase();
+        final priorityType = priority['type']!.toLowerCase();
+        final priorityTarget = priority['target']!.toLowerCase();
+        return bannerType == priorityType &&
+            bannerTarget.contains(priorityTarget);
+      }).toList()
+        ..shuffle();
+
+      log('   step ${priority['type']} / ${priority['target']}'
+          ' → ${matches.length} match(es)'
+          '${matches.isEmpty ? '' : ' ids=${matches.map((b) => b.bannerId).toList()}'}');
+
+      for (final m in matches) {
+        if (seenIds.add(m.bannerId)) {
+          collected.add(m);
+          if (collected.length >= maxCount) {
+            log('   ↳ collected ${collected.length}/$maxCount — stopping');
+            return collected;
+          }
+        }
+      }
+    }
+
+    // No catch-all: types must be respected strictly. If a page has
+    // no target-specific banner, no global banner, and no filler,
+    // the slider shows whatever the 4 priorities produced (possibly
+    // just 1 slide, or none). Better to surface less content than
+    // to bleed a Home-Page banner into an unrelated page.
+    log('   ↳ collected ${collected.length}/$maxCount total');
+    return collected;
+  }
+
   BannerModel? getBannerByPriority(List<BannerModel> banners, String page, String type) {
     if (banners.isEmpty) return null;
 

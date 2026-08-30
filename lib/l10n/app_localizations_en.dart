@@ -1141,4 +1141,189 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get update_app_message => 'Please update the app to continue using all features.';
+
+  @override
+  String get v2_section_photos => 'Photos';
+
+  @override
+  String get v2_section_vehicle => 'Vehicle';
+
+  @override
+  String get v2_section_price => 'Price';
+
+  @override
+  String get v2_section_specifications => 'Specifications';
+
+  @override
+  String get v2_section_boost => 'Boost your ad';
+
+  @override
+  String get v2_boost_optional => 'Optional';
+
+  @override
+  String get v2_boost_360_title => '360° session';
+
+  @override
+  String get v2_boost_360_subtitle => 'Stand out with immersive photos';
+
+  @override
+  String get v2_boost_feature_title => 'Feature at the top';
+
+  @override
+  String get v2_boost_feature_subtitle => 'Pin your ad to page 1';
+
+  @override
+  String get v2_body_type_label => 'Body type';
+
+  @override
+  String get v2_field_make => 'Make';
+
+  @override
+  String get v2_field_class => 'Class';
+
+  @override
+  String get v2_field_model => 'Model';
+
+  @override
+  String get v2_field_year => 'Year';
+
+  @override
+  String get v2_field_exterior => 'Exterior';
+
+  @override
+  String get v2_field_interior => 'Interior';
+
+  @override
+  String get v2_field_asking_price => 'Asking price';
+
+  @override
+  String get v2_field_min_bid => 'Min bid';
+
+  @override
+  String get v2_field_qar => 'QAR';
+
+  @override
+  String get v2_field_exterior_color => 'Exterior color';
+
+  @override
+  String get v2_field_interior_color => 'Interior color';
+
+  @override
+  String get v2_field_fuel => 'Fuel';
+
+  @override
+  String get v2_field_cylinders => 'Cylinders';
+
+  @override
+  String get v2_field_transmission => 'Transmission';
+
+  @override
+  String get v2_terms_missing => 'Terms & Conditions';
+
+  @override
+  String get v2_info_missing => 'Information accuracy';
+
+  @override
+  String get v2_warranty_title => 'Under warranty';
+
+  @override
+  String get v2_warranty_subtitle => 'Manufacturer or extended';
+
+  @override
+  String get v2_consent_terms => 'I agree to the Terms & Conditions';
+
+  @override
+  String get v2_consent_info => 'All information provided is accurate';
+
+  @override
+  String get v2_cover_badge => 'Cover';
+
+  @override
+  String get v2_cover_photo_hint => 'First photo is your cover · drag to reorder';
+
+  @override
+  String v2_photos_counter(int count) {
+    return '$count of 15 · +1 video';
+  }
+
+  @override
+  String get v2_submit_button => 'Submit';
+
+  @override
+  String get summary_title => 'Summary';
+
+  @override
+  String get payandpublish => 'Pay & Publish';
+
+  @override
+  String get summary_listed_vehicle => 'Listed Vehicle';
+
+  @override
+  String get summary_vehicle_price => 'Vehicle Price';
+
+  @override
+  String get summary_selected_addons => 'Selected Add-ons';
+
+  @override
+  String get summary_payment_title => 'Payment Summary';
+
+  @override
+  String get summary_year => 'Year';
+
+  @override
+  String get summary_mileage => 'Mileage';
+
+  @override
+  String get summary_color => 'Color';
+
+  @override
+  String get summary_location => 'Location';
+
+  @override
+  String get summary_location_value => 'Doha, Qatar';
+
+  @override
+  String get summary_addon_360 => '360° Photography';
+
+  @override
+  String get summary_addon_feature => 'Featured Listing';
+
+  @override
+  String get summary_subtotal => 'Subtotal';
+
+  @override
+  String get summary_total_due => 'Total Amount Due';
+
+  @override
+  String get summary_vat_note => 'All prices include VAT';
+
+  @override
+  String get summary_qar => 'QAR';
+
+  @override
+  String get contact_section_title => 'Contact';
+
+  @override
+  String get contact_call_us => 'Call Us';
+
+  @override
+  String get contact_whatsapp => 'WhatsApp';
+
+  @override
+  String get contact_whatsapp_subtitle => 'Chat with us instantly';
+
+  @override
+  String get contact_business_inquiries => 'Business Inquiries';
+
+  @override
+  String get contact_social_facebook => 'Facebook';
+
+  @override
+  String get contact_social_twitter => 'X (Twitter)';
+
+  @override
+  String get contact_social_instagram => 'Instagram';
+
+  @override
+  String get contact_social_tiktok => 'TikTok';
 }

@@ -2362,6 +2362,372 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please update the app to continue using all features.'**
   String get update_app_message;
+
+  /// No description provided for @v2_section_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get v2_section_photos;
+
+  /// No description provided for @v2_section_vehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle'**
+  String get v2_section_vehicle;
+
+  /// No description provided for @v2_section_price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get v2_section_price;
+
+  /// No description provided for @v2_section_specifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Specifications'**
+  String get v2_section_specifications;
+
+  /// No description provided for @v2_section_boost.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost your ad'**
+  String get v2_section_boost;
+
+  /// No description provided for @v2_boost_optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get v2_boost_optional;
+
+  /// No description provided for @v2_boost_360_title.
+  ///
+  /// In en, this message translates to:
+  /// **'360° session'**
+  String get v2_boost_360_title;
+
+  /// No description provided for @v2_boost_360_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stand out with immersive photos'**
+  String get v2_boost_360_subtitle;
+
+  /// No description provided for @v2_boost_feature_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature at the top'**
+  String get v2_boost_feature_title;
+
+  /// No description provided for @v2_boost_feature_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin your ad to page 1'**
+  String get v2_boost_feature_subtitle;
+
+  /// No description provided for @v2_body_type_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Body type'**
+  String get v2_body_type_label;
+
+  /// No description provided for @v2_field_make.
+  ///
+  /// In en, this message translates to:
+  /// **'Make'**
+  String get v2_field_make;
+
+  /// No description provided for @v2_field_class.
+  ///
+  /// In en, this message translates to:
+  /// **'Class'**
+  String get v2_field_class;
+
+  /// No description provided for @v2_field_model.
+  ///
+  /// In en, this message translates to:
+  /// **'Model'**
+  String get v2_field_model;
+
+  /// No description provided for @v2_field_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get v2_field_year;
+
+  /// No description provided for @v2_field_exterior.
+  ///
+  /// In en, this message translates to:
+  /// **'Exterior'**
+  String get v2_field_exterior;
+
+  /// No description provided for @v2_field_interior.
+  ///
+  /// In en, this message translates to:
+  /// **'Interior'**
+  String get v2_field_interior;
+
+  /// No description provided for @v2_field_asking_price.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking price'**
+  String get v2_field_asking_price;
+
+  /// No description provided for @v2_field_min_bid.
+  ///
+  /// In en, this message translates to:
+  /// **'Min bid'**
+  String get v2_field_min_bid;
+
+  /// No description provided for @v2_field_qar.
+  ///
+  /// In en, this message translates to:
+  /// **'QAR'**
+  String get v2_field_qar;
+
+  /// No description provided for @v2_field_exterior_color.
+  ///
+  /// In en, this message translates to:
+  /// **'Exterior color'**
+  String get v2_field_exterior_color;
+
+  /// No description provided for @v2_field_interior_color.
+  ///
+  /// In en, this message translates to:
+  /// **'Interior color'**
+  String get v2_field_interior_color;
+
+  /// No description provided for @v2_field_fuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get v2_field_fuel;
+
+  /// No description provided for @v2_field_cylinders.
+  ///
+  /// In en, this message translates to:
+  /// **'Cylinders'**
+  String get v2_field_cylinders;
+
+  /// No description provided for @v2_field_transmission.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmission'**
+  String get v2_field_transmission;
+
+  /// No description provided for @v2_terms_missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get v2_terms_missing;
+
+  /// No description provided for @v2_info_missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Information accuracy'**
+  String get v2_info_missing;
+
+  /// No description provided for @v2_warranty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Under warranty'**
+  String get v2_warranty_title;
+
+  /// No description provided for @v2_warranty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manufacturer or extended'**
+  String get v2_warranty_subtitle;
+
+  /// No description provided for @v2_consent_terms.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the Terms & Conditions'**
+  String get v2_consent_terms;
+
+  /// No description provided for @v2_consent_info.
+  ///
+  /// In en, this message translates to:
+  /// **'All information provided is accurate'**
+  String get v2_consent_info;
+
+  /// No description provided for @v2_cover_badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover'**
+  String get v2_cover_badge;
+
+  /// No description provided for @v2_cover_photo_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'First photo is your cover · drag to reorder'**
+  String get v2_cover_photo_hint;
+
+  /// No description provided for @v2_photos_counter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 15 · +1 video'**
+  String v2_photos_counter(int count);
+
+  /// No description provided for @v2_submit_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get v2_submit_button;
+
+  /// No description provided for @summary_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary_title;
+
+  /// No description provided for @payandpublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay & Publish'**
+  String get payandpublish;
+
+  /// No description provided for @summary_listed_vehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed Vehicle'**
+  String get summary_listed_vehicle;
+
+  /// No description provided for @summary_vehicle_price.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Price'**
+  String get summary_vehicle_price;
+
+  /// No description provided for @summary_selected_addons.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Add-ons'**
+  String get summary_selected_addons;
+
+  /// No description provided for @summary_payment_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Summary'**
+  String get summary_payment_title;
+
+  /// No description provided for @summary_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get summary_year;
+
+  /// No description provided for @summary_mileage.
+  ///
+  /// In en, this message translates to:
+  /// **'Mileage'**
+  String get summary_mileage;
+
+  /// No description provided for @summary_color.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get summary_color;
+
+  /// No description provided for @summary_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get summary_location;
+
+  /// No description provided for @summary_location_value.
+  ///
+  /// In en, this message translates to:
+  /// **'Doha, Qatar'**
+  String get summary_location_value;
+
+  /// No description provided for @summary_addon_360.
+  ///
+  /// In en, this message translates to:
+  /// **'360° Photography'**
+  String get summary_addon_360;
+
+  /// No description provided for @summary_addon_feature.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Listing'**
+  String get summary_addon_feature;
+
+  /// No description provided for @summary_subtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get summary_subtotal;
+
+  /// No description provided for @summary_total_due.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount Due'**
+  String get summary_total_due;
+
+  /// No description provided for @summary_vat_note.
+  ///
+  /// In en, this message translates to:
+  /// **'All prices include VAT'**
+  String get summary_vat_note;
+
+  /// No description provided for @summary_qar.
+  ///
+  /// In en, this message translates to:
+  /// **'QAR'**
+  String get summary_qar;
+
+  /// No description provided for @contact_section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contact_section_title;
+
+  /// No description provided for @contact_call_us.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Us'**
+  String get contact_call_us;
+
+  /// No description provided for @contact_whatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get contact_whatsapp;
+
+  /// No description provided for @contact_whatsapp_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with us instantly'**
+  String get contact_whatsapp_subtitle;
+
+  /// No description provided for @contact_business_inquiries.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Inquiries'**
+  String get contact_business_inquiries;
+
+  /// No description provided for @contact_social_facebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook'**
+  String get contact_social_facebook;
+
+  /// No description provided for @contact_social_twitter.
+  ///
+  /// In en, this message translates to:
+  /// **'X (Twitter)'**
+  String get contact_social_twitter;
+
+  /// No description provided for @contact_social_instagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram'**
+  String get contact_social_instagram;
+
+  /// No description provided for @contact_social_tiktok.
+  ///
+  /// In en, this message translates to:
+  /// **'TikTok'**
+  String get contact_social_tiktok;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

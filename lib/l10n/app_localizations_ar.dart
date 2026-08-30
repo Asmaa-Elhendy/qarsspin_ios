@@ -1141,4 +1141,189 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get update_app_message => 'يرجى تحديث التطبيق لمواصلة استخدام جميع الميزات.';
+
+  @override
+  String get v2_section_photos => 'الصور';
+
+  @override
+  String get v2_section_vehicle => 'السيارة';
+
+  @override
+  String get v2_section_price => 'السعر';
+
+  @override
+  String get v2_section_specifications => 'المواصفات';
+
+  @override
+  String get v2_section_boost => 'روّج إعلانك';
+
+  @override
+  String get v2_boost_optional => 'اختياري';
+
+  @override
+  String get v2_boost_360_title => 'جلسة تصوير 360°';
+
+  @override
+  String get v2_boost_360_subtitle => 'تميّز بصور غامرة';
+
+  @override
+  String get v2_boost_feature_title => 'تمييز في المقدمة';
+
+  @override
+  String get v2_boost_feature_subtitle => 'ثبّت إعلانك في الصفحة الأولى';
+
+  @override
+  String get v2_body_type_label => 'نوع الهيكل';
+
+  @override
+  String get v2_field_make => 'الماركة';
+
+  @override
+  String get v2_field_class => 'الفئة';
+
+  @override
+  String get v2_field_model => 'الموديل';
+
+  @override
+  String get v2_field_year => 'السنة';
+
+  @override
+  String get v2_field_exterior => 'الخارجي';
+
+  @override
+  String get v2_field_interior => 'الداخلي';
+
+  @override
+  String get v2_field_asking_price => 'السعر المطلوب';
+
+  @override
+  String get v2_field_min_bid => 'أقل مزايدة';
+
+  @override
+  String get v2_field_qar => 'ر.ق';
+
+  @override
+  String get v2_field_exterior_color => 'اللون الخارجي';
+
+  @override
+  String get v2_field_interior_color => 'اللون الداخلي';
+
+  @override
+  String get v2_field_fuel => 'الوقود';
+
+  @override
+  String get v2_field_cylinders => 'السلندرات';
+
+  @override
+  String get v2_field_transmission => 'ناقل الحركة';
+
+  @override
+  String get v2_terms_missing => 'الشروط والأحكام';
+
+  @override
+  String get v2_info_missing => 'تأكيد صحة البيانات';
+
+  @override
+  String get v2_warranty_title => 'تحت الضمان';
+
+  @override
+  String get v2_warranty_subtitle => 'ضمان الوكيل أو ممتد';
+
+  @override
+  String get v2_consent_terms => 'أوافق على الشروط والأحكام';
+
+  @override
+  String get v2_consent_info => 'أؤكد أن كل البيانات المُدخلة صحيحة';
+
+  @override
+  String get v2_cover_badge => 'الغلاف';
+
+  @override
+  String get v2_cover_photo_hint => 'الصورة الأولى هي غلاف الإعلان · اسحب لإعادة الترتيب';
+
+  @override
+  String v2_photos_counter(int count) {
+    return '$count من 15 · +1 فيديو';
+  }
+
+  @override
+  String get v2_submit_button => 'التالي';
+
+  @override
+  String get summary_title => 'الملخص';
+
+  @override
+  String get payandpublish => 'ادفع و انشر';
+
+  @override
+  String get summary_listed_vehicle => 'سيارة معروضة';
+
+  @override
+  String get summary_vehicle_price => 'سعر السيارة';
+
+  @override
+  String get summary_selected_addons => 'الإضافات المختارة';
+
+  @override
+  String get summary_payment_title => 'ملخص الدفع';
+
+  @override
+  String get summary_year => 'السنة';
+
+  @override
+  String get summary_mileage => 'المسافة المقطوعة';
+
+  @override
+  String get summary_color => 'اللون';
+
+  @override
+  String get summary_location => 'الموقع';
+
+  @override
+  String get summary_location_value => 'الدوحة، قطر';
+
+  @override
+  String get summary_addon_360 => 'تصوير 360°';
+
+  @override
+  String get summary_addon_feature => 'إعلان مميز';
+
+  @override
+  String get summary_subtotal => 'المجموع الفرعي';
+
+  @override
+  String get summary_total_due => 'الإجمالي المستحق';
+
+  @override
+  String get summary_vat_note => 'جميع الأسعار شاملة الضريبة';
+
+  @override
+  String get summary_qar => 'ر.ق';
+
+  @override
+  String get contact_section_title => 'التواصل';
+
+  @override
+  String get contact_call_us => 'اتصل بنا';
+
+  @override
+  String get contact_whatsapp => 'واتساب';
+
+  @override
+  String get contact_whatsapp_subtitle => 'تحدث معنا مباشرة';
+
+  @override
+  String get contact_business_inquiries => 'استفسارات الأعمال';
+
+  @override
+  String get contact_social_facebook => 'فيسبوك';
+
+  @override
+  String get contact_social_twitter => 'X (تويتر)';
+
+  @override
+  String get contact_social_instagram => 'إنستغرام';
+
+  @override
+  String get contact_social_tiktok => 'تيك توك';
 }

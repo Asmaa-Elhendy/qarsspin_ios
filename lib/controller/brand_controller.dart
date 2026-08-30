@@ -812,7 +812,13 @@ class BrandController extends GetxController{
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
-      for(int i =0; i<body["Data"].length;i++){
+      // Guard: the API returns `Data: null` when there are no similar
+      // cars for the given post/make/class (mirrors the notifications
+      // and other endpoints that return the same shape). Reading
+      // `.length` on null threw NoSuchMethodError and crashed
+      // navigation into the detail page.
+      final List data = (body["Data"] is List) ? body["Data"] as List : const [];
+      for(int i =0; i<data.length;i++){
         similarCars.add(CarModel(postId: body["Data"][i]["Post_ID"],
             pinToTop: body["Data"][i]["Pin_To_Top"],
             endServiceDate: body["Data"][i]["EndServiceDate"]?.toString(),

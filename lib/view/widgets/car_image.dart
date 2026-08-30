@@ -316,6 +316,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:qarsspin/view/widgets/car_image_gallery.dart';
 import 'package:qarsspin/view/widgets/video_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -384,7 +385,7 @@ class _CarImageState extends State<CarImage> {
                       itemCount: widget.allImages.length - 1,
                       itemBuilder: (context, index) {
                         final imageUrl = widget.allImages[index + 1];
-                        return ClipRRect(
+                        final tile = ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: isVideo(imageUrl)
                               ? VideoItem(url: imageUrl)
@@ -429,6 +430,16 @@ class _CarImageState extends State<CarImage> {
                                   ),
                                 ),
                         );
+                        // Tap a photo → push the full-screen gallery
+                        // opened at the same index. Skip the tap
+                        // on video tiles so the play/pause controls
+                        // still work.
+                        if (isVideo(imageUrl)) return tile;
+                        return GestureDetector(
+                          onTap: () => _openFullScreenGallery(
+                              context, index + 1),
+                          child: tile,
+                        );
                       },
                     ),
                   ),
@@ -470,6 +481,30 @@ class _CarImageState extends State<CarImage> {
         url.toLowerCase().endsWith(".mov") ||
         url.toLowerCase().endsWith(".avi") ||
         url.toLowerCase().endsWith(".webm");
+  }
+
+  /// Open the full-screen zoomable gallery.
+  ///
+  /// `widget.allImages[0]` is the 360° WebView URL (skipped — its own
+  /// full-screen toggle lives on the detail page). Everything from
+  /// index 1 onwards is regular photos/videos, which is what the
+  /// gallery pages through.
+  ///
+  /// [pageIndex] is the tapped index inside `widget.allImages` (i.e.
+  /// already ≥ 1). We shift it to the gallery's 0-based space.
+  void _openFullScreenGallery(BuildContext context, int pageIndex) {
+    final gallery =
+        widget.allImages.length > 1 ? widget.allImages.sublist(1) : const <String>[];
+    if (gallery.isEmpty) return;
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (_) => CarImageGallery(
+          images: gallery,
+          initialIndex: (pageIndex - 1).clamp(0, gallery.length - 1),
+        ),
+      ),
+    );
   }
 }
 

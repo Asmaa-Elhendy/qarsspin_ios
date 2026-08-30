@@ -13,6 +13,7 @@ import '../../widgets/main_card.dart';
 import '../auth/my_account.dart';
 import '../general/main_menu.dart';
 import 'create_new_ad.dart';//j
+import 'sell_your_car_v2.dart';
 
 class CreateNewAdOptions extends StatefulWidget {
   @override
@@ -181,10 +182,16 @@ class _CreateNewAdOptionsState extends State<CreateNewAdOptions> {
                 },
                 onPersonalAdPressed: () {
                   if(authController.registered){
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => SellCarScreen(),
+                    //   ),
+                    // );
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SellCarScreen(),
+                        builder: (context) => SellYourCarV2(),
                       ),
                     );}
                   else{

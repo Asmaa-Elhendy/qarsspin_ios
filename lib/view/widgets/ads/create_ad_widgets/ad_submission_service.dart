@@ -516,13 +516,14 @@ class AdSubmissionService {
       // =========================
       // ✅ 5) PAYMENT AFTER ALL UPLOADS
       // =========================
-      if ((isRequest360 || isFeaturedPost) && responsePostId.isNotEmpty) {
+      if (shouldPublish&&(isRequest360 || isFeaturedPost) && responsePostId.isNotEmpty) {
         updateLoadingStatus?.call(_stageText('payment'));
         final paymentController = Get.find<PaymentController>();
 
         double amount = 0;
         if (isRequest360) amount += (paymentController.request360ServicePrice ?? 0);
         if (isFeaturedPost) amount += (paymentController.featuredServicePrice ?? 0);
+        // hideLoaderOnce(); // ✅ اقفل اللودر قبل ما تفتح أي دايالوج تاني
 
         final contactInfo = await ContactInfoDialog.show(
           req360Amount: paymentController.request360ServicePrice ?? 0,
